@@ -1,0 +1,47 @@
+# CLAUDE.md
+
+<one-paragraph project description: what this is, what stack, what state
+it's in, where the canonical plan lives if there is one>
+
+## Commands
+
+- Run: `<how to run the thing>`
+- Tests: `<test command>` — <what the suite expects: offline? fixtures?>
+- <build / deploy / other routine commands>
+
+## Layout
+
+- <dir>/ — <one line on what lives there>
+- <dir>/ — <one line>
+
+## Conventions
+
+- <the project's own rules: style, patterns, hard constraints>
+- Agent party (`.claude/agents/`): `fighter` (Opus high) is the default
+  builder for substantial implementation tasks — small fixes stay in the
+  main session. When fighter finishes, ALWAYS spawn `cleric` (Fable high)
+  with fighter's build report to review, fix, and verify the build.
+  `wizard` (read-only, Fable xhigh) handles deep review, hard debugging,
+  and approach calls — use it directly whenever a second, stronger set of
+  eyes would help. Subagents can't call each other; the main session is
+  the relay: an agent ending its turn with a `NEEDS_WIZARD:` block gets
+  that question packaged off to wizard, then resumed via SendMessage with
+  the answer (its context is preserved).
+
+## Project memory
+
+@.claude/architecture.md
+@.claude/gotchas.md
+@.claude/decisions.md
+
+Curated files above are auto-loaded every session — keep them small; remove
+stale entries. Append-only log: .claude/learnings.md (NOT imported — read it
+when context suggests a past learning is relevant; distill durable items
+into the curated files periodically).
+
+When a session surfaces something non-obvious — a trap hit and diagnosed, a
+wrong assumption corrected, a design insight, user feedback on approach —
+append it to .claude/learnings.md (dated, append-only) without being asked.
+New gotchas discovered in the codebase also get a 1–2 line entry in
+gotchas.md. Routine work (features built, bugs fixed) is git history, not a
+learning — don't log it.
