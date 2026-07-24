@@ -58,6 +58,20 @@ Planning is deliberately **not** a party member: planning is a dialogue
 with the human, and subagents can't talk to the human. The quest gets
 written at the DM's table; the party executes it.
 
+## Session Zero
+
+How quests get written at that table is itself part of the framework: the
+**session-zero** skill (in `skills/`). It encodes a collaborative
+quest-shaping dialogue for the DM to run *before* plan mode or code —
+built for users who are smart and opinionated but didn't grow up in app
+development. Its core moves: options **with** a recommendation (and the
+strongest case against it), trade-offs taught in plain language where
+they're used, clarifying questions batched early and only when the answer
+changes the plan, musings answered with assessment rather than action —
+and every landed decision recorded with its why in the project's
+decisions file, so the learning compounds. The user makes the calls,
+informed.
+
 ## The memory system
 
 Agents are only as good as what the project tells them. The party reads
@@ -85,9 +99,10 @@ Into any Claude Code project:
 1. Copy `agents/*.md` into your repo's `.claude/agents/`.
 2. Copy `memory/architecture.md`, `gotchas.md`, `decisions.md`, and
    `learnings.md` into `.claude/`.
-3. Adapt `memory/CLAUDE.md.template` into your repo's `CLAUDE.md` (or
-   merge the party-protocol and project-memory sections into an existing
-   one).
+3. Copy `skills/session-zero/` into `.claude/skills/`.
+4. Adapt `memory/CLAUDE.md.template` into your repo's `CLAUDE.md` (or
+   merge the party-protocol, session-zero, and project-memory sections
+   into an existing one).
 
 New sessions in that project will list fighter/cleric/wizard as available
 agents and load the memory files automatically.

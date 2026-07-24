@@ -10,14 +10,16 @@ own framework while developing it.
 - agents/ — THE PRODUCT: fighter, cleric, wizard agent definitions
 - memory/ — THE PRODUCT: memory-system shell (architecture/gotchas/
   decisions/learnings templates + CLAUDE.md.template)
+- skills/ — THE PRODUCT: session-zero (quest-shaping dialogue skill)
 - .claude/ — live install of the product, used to develop this repo itself
 
 ## Dogfood rule
 
-`agents/` and `memory/` are the shareable artifact; `.claude/` is a live
-install of them. Any change to a file in `agents/` MUST be mirrored to its
-copy in `.claude/agents/` (and vice versa) in the same commit — check with
-`diff -r agents .claude/agents`. The live memory files in `.claude/`
+`agents/`, `memory/`, and `skills/` are the shareable artifact; `.claude/`
+is a live install of them. Any change to a file in `agents/` or `skills/`
+MUST be mirrored to its copy under `.claude/` (and vice versa) in the same
+commit — check with `diff -r agents .claude/agents` and
+`diff -r skills .claude/skills`. The live memory files in `.claude/`
 deliberately DIVERGE from the `memory/` shells: the shells stay clean and
 empty of this repo's content; the live copies accumulate this repo's real
 notes.
@@ -35,6 +37,10 @@ notes.
   approach calls. Subagents can't call each other; the main session is
   the relay: an agent ending its turn with a `NEEDS_WIZARD:` block gets
   that question packaged off to wizard, then resumed via SendMessage.
+- Session Zero (`.claude/skills/session-zero`): invoke when scoping new
+  work or weighing approaches, BEFORE plan mode — collaborative
+  quest-shaping dialogue (options + recommendation, plain-language
+  trade-offs, the user makes the calls).
 
 ## Project memory
 
