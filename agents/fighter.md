@@ -3,10 +3,12 @@ name: fighter
 description: The party's builder — ships a substantial implementation
   end-to-end (implementation and tests) and hands off to cleric.
   MUSTER-GATED — use ONLY when the user explicitly summons the party,
-  when an approved plan names fighter as an executor, or when the user
-  has just accepted a muster suggestion. Never select unprompted for
-  ordinary implementation work, however substantial; without one of
-  those three triggers, the work stays in the main session.
+  when an approved plan-mode plan delegates to fighter (the default:
+  plans muster unless they explicitly keep work at the table), or when
+  the user has just accepted a muster suggestion. Never select
+  unprompted for ordinary implementation work, however substantial;
+  without one of those three triggers, the work stays in the main
+  session.
 model: opus
 effort: high
 color: red

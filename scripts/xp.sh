@@ -1,5 +1,5 @@
 #!/bin/sh
-# xp.sh — Adventure Party experience display. party@0.4.0
+# xp.sh — Adventure Party experience display. party@0.5.0
 #
 # Modes:
 #   xp.sh statusline   one line: party level, XP, level-up nudge when ready

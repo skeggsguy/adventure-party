@@ -5,6 +5,14 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-26 — Plan-mode plans muster by default (mandatory Execution
+section; table only on user request; no Guide discretion) — plan silence
+previously meant solo execution and the muster silently didn't fire; the
+plan text is what the executor reliably follows, so the instruction
+rides inside the plan; plan-mode entry is the party-sized signal,
+preserving the ceremony-tax decision (approval remains the consent
+gate).
+
 2026-07-25 — Model overrides apply at spawn time (Agent tool `model`
 param, wired into the muster bullet) instead of generated
 `.claude/agents/` override files — live test proved project agent files

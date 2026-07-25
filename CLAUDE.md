@@ -45,27 +45,32 @@ is no build. The repo doubles as its own marketplace
   them). The main session is "the Guide".
 - `*.sh` stays LF (`.gitattributes` enforces); xp.sh must degrade
   gracefully on every failure path — it runs on every prompt render.
-<!-- party@0.4.0 -->
+<!-- party@0.5.0 -->
 - **The party musters on command, not by default.** The main session
   (the Guide) does the ordinary work itself — including substantial
   work. The party rides out only when: (a) the user explicitly summons
-  it, (b) an approved plan names party members as executors, or (c) the
-  user accepts the Guide's muster suggestion. The Guide MAY suggest,
-  once and in one line, when work looks party-sized ("this looks
-  party-sized — summon them?") — and takes no for an answer. Once
-  mustered: fighter builds, and when fighter finishes, ALWAYS spawn
-  `party:cleric` with its build report — not conditional on the build
-  looking clean. `party:wizard` (read-only) is on call when explicitly
-  asked, or after two failed attempts at the same problem. When
-  spawning a party member, check `.claude/party.json` for a `models`
-  override and pass it as the Agent tool's `model` parameter (absent =
-  the member's default).
-- **Plans name their executor when they delegate.** A plan is free to
-  keep work at the table. When a plan DOES propose party execution, its
-  steps name which member executes each phase — and the final step is
-  always "spawn `party:cleric` with fighter's build report." Approving
-  such a plan is approving the muster; the user can strike the
-  delegation from a plan and keep the rest.
+  it, (b) a plan-mode plan is approved (plans muster by default — next
+  bullet), or (c) the user accepts the Guide's muster suggestion. The
+  Guide MAY suggest, once and in one line, when work looks party-sized
+  ("this looks party-sized — summon them?") — and takes no for an
+  answer. Once mustered: fighter builds, and when fighter finishes,
+  ALWAYS spawn `party:cleric` with its build report — not conditional
+  on the build looking clean. `party:wizard` (read-only) is on call
+  when explicitly asked, or after two failed attempts at the same
+  problem. When spawning a party member, check `.claude/party.json`
+  for a `models` override and pass it as the Agent tool's `model`
+  parameter (absent = the member's default).
+- **Plan-mode plans muster the party by default.** Entering plan mode
+  is the signal that work is party-sized. Every plan ends with an
+  Execution section naming who runs each phase — by default fighter
+  builds, and the final step is always "spawn `party:cleric` with
+  fighter's build report." A plan silent on execution is a party plan.
+  Work stays at the table only when the user asked for that during
+  planning, and the plan must say so explicitly. A plan may name wizard
+  at a specific checkpoint when a consult should be guaranteed rather
+  than left to fighter's judgment — allowed, never required. Approving
+  the plan is approving the muster; the user can strike the delegation
+  and keep the rest.
 - Party mechanics: fighter and cleric spawn their own read-only helpers
   (recon before, verification after) and call wizard mid-encounter, while
   writing every edit themselves; wizard never delegates. Nesting is capped
@@ -76,13 +81,13 @@ is no build. The repo doubles as its own marketplace
   `/party:setup` writes the setting that enables nesting
   (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH: "2"` in
   `.claude/settings.json`); it takes effect on the next session start.
-<!-- party@0.4.0 -->
+<!-- party@0.5.0 -->
 - Session Zero (`/party:session-zero`): invoke when scoping new work or
   weighing approaches, BEFORE plan mode — collaborative quest-shaping
   dialogue (options + recommendation, plain-language trade-offs, the user
   makes the calls).
 
-<!-- party@0.4.0 -->
+<!-- party@0.5.0 -->
 ## Project memory — the party's experience
 
 @.claude/architecture.md

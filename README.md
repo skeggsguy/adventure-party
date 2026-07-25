@@ -101,13 +101,17 @@ per-invocation model outranks the agent file's default).
 
 **The party musters on command, not by default.** The Guide does
 ordinary work itself — including substantial work. The party rides out
-only when:
+only on one of three triggers:
 
-- you explicitly summon it,
-- an approved plan-mode plan names party members as executors (when a
-  plan delegates, its steps name who executes each phase, and the final
-  step is always cleric — approving the plan is approving the muster), or
-- you accept the Guide's suggestion — it may offer, once and in one
+- You explicitly summon it.
+- A plan-mode plan is approved — **plans muster by default**: every plan
+  ends with an Execution section naming who runs each phase, fighter
+  building and cleric reviewing unless you said otherwise while planning,
+  and a plan silent on execution is a party plan. Work stays at the table
+  only when you asked for that during planning and the plan says so.
+  Approving the plan is approving the muster; strike the delegation to
+  keep the plan without the party.
+- You accept the Guide's suggestion — it may offer, once and in one
   line, when work looks party-sized, and takes no for an answer.
 
 Once mustered: fighter builds and calls for aid as it goes (`Explore`
@@ -262,7 +266,7 @@ only as good as what the project tells it.
   reports about what wasn't verified.
 - The protocol is convention, not enforcement — the muster-gated agent
   descriptions, the Guide's CLAUDE.md section, and the
-  plans-name-their-executor rule are what keep it followed. It's a
+  plans-muster-by-default rule are what keep it followed. It's a
   strong nudge, deliberately not a hard block. Nothing stops an agent
   with tool access from delegating in ways its definition doesn't
   describe, either.

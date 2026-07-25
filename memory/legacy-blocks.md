@@ -81,3 +81,33 @@ New gotchas discovered in the codebase also get a 1–2 line entry in
 gotchas.md. Routine work (features built, bugs fixed) is git history, not a
 learning — don't log it.
 ```
+
+## 0.4.x — the muster + executor Conventions bullets
+
+In installed files these two bullets are preceded by a `<!-- party@0.4.0 -->`
+marker line, which is the cheapest fingerprint. The `- Party mechanics:`
+companion that follows them is **unchanged** in 0.5.0 — leave it alone; it
+needs no migration.
+
+```markdown
+- **The party musters on command, not by default.** The main session
+  (the Guide) does the ordinary work itself — including substantial
+  work. The party rides out only when: (a) the user explicitly summons
+  it, (b) an approved plan names party members as executors, or (c) the
+  user accepts the Guide's muster suggestion. The Guide MAY suggest,
+  once and in one line, when work looks party-sized ("this looks
+  party-sized — summon them?") — and takes no for an answer. Once
+  mustered: fighter builds, and when fighter finishes, ALWAYS spawn
+  `party:cleric` with its build report — not conditional on the build
+  looking clean. `party:wizard` (read-only) is on call when explicitly
+  asked, or after two failed attempts at the same problem. When
+  spawning a party member, check `.claude/party.json` for a `models`
+  override and pass it as the Agent tool's `model` parameter (absent =
+  the member's default).
+- **Plans name their executor when they delegate.** A plan is free to
+  keep work at the table. When a plan DOES propose party execution, its
+  steps name which member executes each phase — and the final step is
+  always "spawn `party:cleric` with fighter's build report." Approving
+  such a plan is approving the muster; the user can strike the
+  delegation from a plan and keep the rest.
+```

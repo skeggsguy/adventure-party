@@ -49,3 +49,59 @@ mechanism was deleted before it ever shipped. Meta-lesson: the
 adversary flagged the override design as fragile, but only the live
 sentinel test caught that it was *impossible* — test the load-bearing
 platform assumption before building the machinery on it.
+
+## 2026-07-25 — Serving a WSL2 web app to the tailnet (iPad dogfooding)
+
+Tailscale runs on the Windows host, not inside WSL, so tailnet devices
+reach Windows only — nothing listening in WSL is directly visible. The
+bridge that works with zero config: WSL binds a port (Windows forwards
+its own localhost into WSL automatically), then `tailscale.exe serve
+--bg <port>` run FROM WSL drives the host daemon and proxies
+`https://desktop-cd4mc0o.tail032cd2.ts.net/` → host localhost → WSL.
+HTTPS cert comes free; no firewall rules, no netsh portproxy. Turn off
+with `tailscale.exe serve --https=443 off`. Also: `gh` and `jq` aren't
+installed in this WSL — python3 stands in for jq; git pushes go over
+SSH (the HTTPS remote can't prompt for credentials in a session).
+
+## 2026-07-25 — Smoke-testing a canvas game with zero test tooling
+
+This WSL has no node, no pip, no chromium-cli — but google-chrome is
+installed. One-shot `--headless=new --dump-dom --virtual-time-budget=N`
+can't click, so interaction needs a same-origin harness: a smoke.html
+that iframes the app, dispatches synthetic MouseEvents into it, then
+verdicts by sampling canvas pixels for known colors (getImageData) and
+capturing iframe window.onerror — verdict written into <title> for
+grep. Virtual time fast-forwards setTimeout/rAF, so a 2.5s scripted
+rally finishes instantly. Top-level `const` in a page script is NOT on
+the iframe's window, so state can't be read directly — pixel sampling
+is the reliable oracle. Pair with --screenshot and actually look at it.
+
+## 2026-07-25 — First real cleric muster: independent review earns its cost
+
+Dogfood data point. The Guide solo-built the tennis running-players
+feature, smoke-tested it green (headless pixel harness, screenshot,
+zero JS errors) — and cleric, summoned afterward, still confirmed and
+fixed 4 real bugs: a clobbered game-win message, any-tap-fires-the-serve
+(broke the receiver-positioning mechanic the feature exists for), a
+falsy-zero resize teleport, and portrait rotation playing on blind.
+Two were first-minutes-of-play visible. Lesson for the muster
+calculus: "the build looks verified" is exactly the condition the
+unconditional fighter→cleric handoff was designed for, and it holds
+for Guide solo builds too — a passing smoke test measures rendering,
+not gameplay. Cleric also modeled good verification: fuzz the real
+extracted logic (5000-point scoring fuzz with invariants), not a
+reimplementation.
+
+## 2026-07-26 — Instructions that must fire at execution time belong in the plan text
+
+The silent-muster failure: an approved plan was executed solo even
+though the party rule lived in CLAUDE.md. Nothing misfired — the old
+rule made plan-silence mean "keep it at the table", and CLAUDE.md is
+loaded once at session start and then competes with everything else in
+context by the time execution begins. The fix that generalizes: an
+instruction that must fire at a specific later moment goes into the
+artifact that is in context at that moment — here, a mandatory Execution
+section in the plan itself. CLAUDE.md sets the default that shapes the
+plan; the plan carries the instruction to the point of use. Corollary
+for defaults: silence should mean the behavior you want, because silence
+is the most common case.

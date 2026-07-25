@@ -136,12 +136,24 @@ what's missing.
 
 **5a. Migration — fingerprinted party blocks from older plugin
 versions.** Older setups wired their era's protocol text verbatim, and
-that text now contradicts the current rules (it commanded auto-summoning,
-and its memory section predates the experience/XP system). Because it
+that text now contradicts the current rules (the oldest variants
+commanded auto-summoning, 0.4.x made plan silence mean solo execution,
+and old memory sections predate the experience/XP system). Because it
 was inserted verbatim, it is exact-matchable: the complete legacy blocks
 ship in `${CLAUDE_PLUGIN_ROOT}/memory/legacy-blocks.md` — read that
 file; do not reconstruct old text from memory. Look for:
 
+- The 0.4.x Conventions bullets (opening `**The party musters on
+  command, not by default.**` with the old trigger (b), "an approved
+  plan names party members as executors", plus its `**Plans name their
+  executor when they delegate.**` companion). Fingerprint them by the
+  preceding `<!-- party@0.4.0 -->` marker line, or by exact body match
+  against legacy-blocks.md. Their `- Party mechanics:` companion is
+  unchanged in 0.5.0 — leave it in place. Note this bullet's opening
+  line is identical in 0.5.0, so the opening line alone proves nothing:
+  a block preceded by a `<!-- party@0.5.0 -->` marker, or whose body
+  matches the current template, is already current — skip it silently
+  rather than reporting it as hand-modified.
 - The 0.3.x Conventions bullets (opening `**Summon the party — don't
   build alone.**`, plus the `**Plans name their executor.**` and
   `- Party mechanics:` companions)
@@ -166,8 +178,8 @@ version-marker comment line, `<!-- party@<version> -->`, so future
 setups can fingerprint it by lookup instead of forensics:
 
 1. **The muster bullet** — the "The party musters on command" bullet
-   from the template's Conventions section (plus its companions "Plans
-   name their executor when they delegate" and "Party mechanics").
+   from the template's Conventions section (plus its companions
+   "Plan-mode plans muster the party by default" and "Party mechanics").
    Consider them present if the file mentions `party:fighter` — but
    only after 5a has had its chance to migrate old text.
 2. **The Session Zero bullet** — likewise from Conventions. Present if

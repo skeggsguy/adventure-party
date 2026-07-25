@@ -6,6 +6,9 @@
 party.bat
 party.sh
 
+# local test-app sandbox for dogfooding the plugin
+tennis/
+
 # per-user experience-display copy written by /party:setup
 .claude/party/
 
