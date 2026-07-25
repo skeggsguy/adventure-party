@@ -1,5 +1,13 @@
-# local Claude Code settings
+# local Claude Code settings (and dated backups of them)
 .claude/settings.local.json
+.claude/settings.local.json.bak-*
+
+# local dogfood launchers
+party.bat
+party.sh
+
+# per-user experience-display copy written by /party:setup
+.claude/party/
 
 # OS / editor
 .DS_Store

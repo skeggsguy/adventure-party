@@ -17,29 +17,45 @@ it's in, where the canonical plan lives if there is one>
 ## Conventions
 
 - <the project's own rules: style, patterns, hard constraints>
-- Agent party (from the `party` plugin): `party:fighter` (Opus high) is
-  the default builder for substantial implementation tasks — small fixes
-  stay in the main session. When fighter finishes, ALWAYS spawn
-  `party:cleric` (Fable high) with fighter's build report to review, fix,
-  and verify the build. `party:wizard` (read-only, Fable xhigh) handles
-  deep review, hard debugging, and approach calls — use it directly
-  whenever a second, stronger set of eyes would help. Fighter and cleric
-  delegate too: they spawn read-only helpers (recon before, verification
-  after) and call wizard directly mid-encounter, while writing every edit
-  themselves. Wizard never delegates. Nesting is capped at depth 2, so
-  those helpers are leaves. Where nesting is off, fighter and cleric
-  degrade to the relay: the agent ends its turn with a `NEEDS_WIZARD:`
-  block, the main session packages that question off to wizard and
-  resumes the agent via SendMessage with the answer (its context is
-  preserved). `/party:setup` writes the setting that enables nesting
+<!-- party@0.4.0 -->
+- **The party musters on command, not by default.** The main session
+  (the Guide) does the ordinary work itself — including substantial
+  work. The party rides out only when: (a) the user explicitly summons
+  it, (b) an approved plan names party members as executors, or (c) the
+  user accepts the Guide's muster suggestion. The Guide MAY suggest,
+  once and in one line, when work looks party-sized ("this looks
+  party-sized — summon them?") — and takes no for an answer. Once
+  mustered: fighter builds, and when fighter finishes, ALWAYS spawn
+  `party:cleric` with its build report — not conditional on the build
+  looking clean. `party:wizard` (read-only) is on call when explicitly
+  asked, or after two failed attempts at the same problem. When
+  spawning a party member, check `.claude/party.json` for a `models`
+  override and pass it as the Agent tool's `model` parameter (absent =
+  the member's default).
+- **Plans name their executor when they delegate.** A plan is free to
+  keep work at the table. When a plan DOES propose party execution, its
+  steps name which member executes each phase — and the final step is
+  always "spawn `party:cleric` with fighter's build report." Approving
+  such a plan is approving the muster; the user can strike the
+  delegation from a plan and keep the rest.
+- Party mechanics: fighter and cleric spawn their own read-only helpers
+  (recon before, verification after) and call wizard mid-encounter, while
+  writing every edit themselves; wizard never delegates. Nesting is capped
+  at depth 2, so those helpers are leaves. Where nesting is off, fighter
+  and cleric degrade to the relay — the agent ends its turn with a
+  `NEEDS_WIZARD:` block, the Guide puts that question to wizard and
+  resumes the agent via SendMessage with the answer (context preserved).
+  `/party:setup` writes the setting that enables nesting
   (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH: "2"` in
   `.claude/settings.json`); it takes effect on the next session start.
+<!-- party@0.4.0 -->
 - Session Zero (`/party:session-zero`): invoke when scoping new work or
   weighing approaches, BEFORE plan mode — collaborative quest-shaping
   dialogue (options + recommendation, plain-language trade-offs, the user
   makes the calls).
 
-## Project memory
+<!-- party@0.4.0 -->
+## Project memory — the party's experience
 
 @.claude/architecture.md
 @.claude/gotchas.md
@@ -47,8 +63,8 @@ it's in, where the canonical plan lives if there is one>
 
 Curated files above are auto-loaded every session — keep them small; remove
 stale entries. Append-only log: .claude/learnings.md (NOT imported — read it
-when context suggests a past learning is relevant; distill durable items
-into the curated files periodically).
+when context suggests a past learning is relevant; distilled into the
+curated files by the Long Rest, `/party:level-up`).
 
 When a session surfaces something non-obvious — a trap hit and diagnosed, a
 wrong assumption corrected, a design insight, user feedback on approach —
@@ -56,3 +72,9 @@ append it to .claude/learnings.md (dated, append-only) without being asked.
 New gotchas discovered in the codebase also get a 1–2 line entry in
 gotchas.md. Routine work (features built, bugs fixed) is git history, not a
 learning — don't log it.
+
+Experience points: each dated entry in learnings.md is one XP, and the
+party levels up at thresholds (see `/party:level-up`). XP counts entries,
+but junk entries are dead weight the party carries — a padded log
+distills into bloated curated files that cost context every session.
+Log genuine learnings; let the level come.

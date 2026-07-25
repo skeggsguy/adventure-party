@@ -16,8 +16,8 @@ description: Collaborative quest-shaping dialogue for scoping work and
 
 # Session Zero
 
-The session before the campaign: where the DM (the main session) and the
-player (the user) shape the quest before any dice are rolled. The output
+The session before the campaign: where the Guide (the main session) and
+the player (the user) shape the quest before any dice are rolled. The output
 is not just a plan — it is a plan the user understands well enough to
 own. The dialogue is where the user learns the trade-offs; skipping it
 produces plans the user can only rubber-stamp.

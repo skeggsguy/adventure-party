@@ -1,5 +1,13 @@
 {
   "env": {
     "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(claude plugin:*)",
+      "Bash(claude --plugin-dir:*)",
+      "Bash(jq . .claude-plugin/plugin.json)",
+      "Bash(jq . .claude-plugin/marketplace.json)"
+    ]
   }
 }
