@@ -1,0 +1,15 @@
+{
+  "name": "adventure-party",
+  "owner": {
+    "name": "Tomo"
+  },
+  "description": "Single-plugin marketplace for Adventure Party: an agent party and project-memory framework for Claude Code.",
+  "plugins": [
+    {
+      "name": "party",
+      "source": "./",
+      "description": "Fighter builds, cleric reviews and fixes, wizard advises — plus Session Zero and a four-file project-memory system.",
+      "category": "workflow"
+    }
+  ]
+}

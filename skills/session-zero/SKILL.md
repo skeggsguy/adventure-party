@@ -1,11 +1,17 @@
 ---
 name: session-zero
-description: Collaborative quest-shaping dialogue before planning or
-  building. Use when the user is scoping new work, weighing approaches,
-  or thinking out loud ("what's your view", "should I…", "I'm thinking
-  about…") — BEFORE entering plan mode or writing code. Teaches while it
-  plans - plain-language trade-offs, options with a recommendation, the
-  user makes the calls.
+description: Collaborative quest-shaping dialogue for scoping work and
+  weighing approaches — plain-language trade-offs, options with a
+  recommendation, the user makes the calls. Re-evaluate this trigger
+  EVERY turn, not just at the start of a conversation — invoke as soon
+  as the current turn is scoping or choosing an approach, including when
+  a conversation that began as something else has drifted into design.
+  Triggers — "what's your view", "should I…", "I'm thinking about…",
+  weighing options, proposing changes to a project's own design, or any
+  turn where you are about to recommend what the user should do. NOT a
+  trigger — factual lookups and how-does-X-work questions, which you
+  answer directly. The follow-up asking what to DO about that answer IS
+  a trigger. Invoke before planning or building, not after.
 ---
 
 # Session Zero

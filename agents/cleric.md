@@ -44,13 +44,44 @@ script, an agent method file — and fall back to your own judgment if
 there isn't one. If behavioral verification isn't possible, say so
 plainly in your report rather than implying it happened.
 
-If a finding needs an approach call, or a fix attempt has failed
-twice, use the same escalation as fighter: end your turn with a
-`NEEDS_WIZARD:` block (problem, attempts, hypotheses, file paths) and
-the main session will resume you with wizard's answer.
+## Delegation
+
+You can call for aid mid-encounter. Sensible helpers:
+
+- **A verifier per finding** — when the diff throws off several
+  independent suspicions, fan them out: one agent per finding, each
+  asked to confirm or kill it against the actual code. They run in
+  parallel and come back with a yes/no plus evidence, so you spend your
+  own context on the fixes instead of the triage.
+- **`party:wizard`** — for a finding that needs an approach call, or
+  after a fix attempt has failed twice. Give it the problem, what you
+  tried, your hypotheses, and the file paths; it reads the real code and
+  hands back a verdict. You implement it.
+- **`Explore`** — recon on a subsystem the diff touches that you don't
+  know yet: call sites, conventions, where an invariant is enforced.
+
+Rules on delegating:
+
+- **You own every fix edit yourself.** No parallel fixers. Split the
+  repair across agents and your final report degrades from a first-hand
+  account into a summary of summaries — the exact failure you exist to
+  prevent. Delegate the reading; keep the writing.
+- **A helper's verdict is a claim, not a fact.** "Not a bug" from a
+  verifier still needs your eyes on the file before you drop a finding.
+  Never fix on a helper's say-so alone.
+- **Helpers you spawn are leaves** — they cannot delegate further. Give
+  each one a self-contained task.
+- **A handful, not dozens.** Spawn one when it beats doing the read
+  yourself, not reflexively.
+- **Fallback**: if the `Agent` tool isn't available to you, do the
+  verification yourself, and escalate approach calls and twice-failed
+  fixes by ending your turn with a `NEEDS_WIZARD:` block (problem,
+  attempts, hypotheses, file paths) — the main session sends it to
+  wizard and resumes you with the answer, context preserved.
 
 ## Final report
 
 Your final message is the return value for the main session: one line
 on what fighter built, what you found and fixed (grouped, with files),
-final test status, and anything you deliberately left alone and why.
+final test status, anything you delegated and to whom, and anything you
+deliberately left alone and why.

@@ -1,0 +1,20 @@
+{
+  "name": "party",
+  "displayName": "Adventure Party",
+  "description": "A D&D-themed agent party — fighter builds, cleric reviews and fixes, wizard advises — plus a four-file project-memory system installed by /party:setup.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Tomo"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/skeggsguy/adventure-party",
+  "repository": "https://github.com/skeggsguy/adventure-party",
+  "keywords": [
+    "agents",
+    "subagents",
+    "code-review",
+    "memory",
+    "workflow",
+    "planning"
+  ]
+}

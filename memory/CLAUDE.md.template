@@ -17,20 +17,27 @@ it's in, where the canonical plan lives if there is one>
 ## Conventions
 
 - <the project's own rules: style, patterns, hard constraints>
-- Agent party (`.claude/agents/`): `fighter` (Opus high) is the default
-  builder for substantial implementation tasks — small fixes stay in the
-  main session. When fighter finishes, ALWAYS spawn `cleric` (Fable high)
-  with fighter's build report to review, fix, and verify the build.
-  `wizard` (read-only, Fable xhigh) handles deep review, hard debugging,
-  and approach calls — use it directly whenever a second, stronger set of
-  eyes would help. Subagents can't call each other; the main session is
-  the relay: an agent ending its turn with a `NEEDS_WIZARD:` block gets
-  that question packaged off to wizard, then resumed via SendMessage with
-  the answer (its context is preserved).
-- Session Zero (`.claude/skills/session-zero`): invoke when scoping new
-  work or weighing approaches, BEFORE plan mode — collaborative
-  quest-shaping dialogue (options + recommendation, plain-language
-  trade-offs, the user makes the calls).
+- Agent party (from the `party` plugin): `party:fighter` (Opus high) is
+  the default builder for substantial implementation tasks — small fixes
+  stay in the main session. When fighter finishes, ALWAYS spawn
+  `party:cleric` (Fable high) with fighter's build report to review, fix,
+  and verify the build. `party:wizard` (read-only, Fable xhigh) handles
+  deep review, hard debugging, and approach calls — use it directly
+  whenever a second, stronger set of eyes would help. Fighter and cleric
+  delegate too: they spawn read-only helpers (recon before, verification
+  after) and call wizard directly mid-encounter, while writing every edit
+  themselves. Wizard never delegates. Nesting is capped at depth 2, so
+  those helpers are leaves. Where nesting is off, fighter and cleric
+  degrade to the relay: the agent ends its turn with a `NEEDS_WIZARD:`
+  block, the main session packages that question off to wizard and
+  resumes the agent via SendMessage with the answer (its context is
+  preserved). `/party:setup` writes the setting that enables nesting
+  (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH: "2"` in
+  `.claude/settings.json`); it takes effect on the next session start.
+- Session Zero (`/party:session-zero`): invoke when scoping new work or
+  weighing approaches, BEFORE plan mode — collaborative quest-shaping
+  dialogue (options + recommendation, plain-language trade-offs, the user
+  makes the calls).
 
 ## Project memory
 
