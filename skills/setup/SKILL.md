@@ -154,6 +154,14 @@ file; do not reconstruct old text from memory. Look for:
   a block preceded by a `<!-- party@0.5.0 -->` marker, or whose body
   matches the current template, is already current — skip it silently
   rather than reporting it as hand-modified.
+- The 0.5.0 Session Zero bullet — the variant whose body opens "invoke
+  when scoping new work or weighing approaches" and calls the dialogue
+  "collaborative quest-shaping". The 0.6.0
+  replacement describes exploration/chat mode and the no-self-initiated-
+  plan-mode rule, which the old three-line body doesn't cover. Its
+  `<!-- party@0.5.0 -->` marker is **not** a fingerprint on its own —
+  0.5.0 also marked the muster and experience blocks, which are current
+  — so match on the body against legacy-blocks.md.
 - The 0.3.x Conventions bullets (opening `**Summon the party — don't
   build alone.**`, plus the `**Plans name their executor.**` and
   `- Party mechanics:` companions)
@@ -183,7 +191,8 @@ setups can fingerprint it by lookup instead of forensics:
    Consider them present if the file mentions `party:fighter` — but
    only after 5a has had its chance to migrate old text.
 2. **The Session Zero bullet** — likewise from Conventions. Present if
-   the file already mentions `/party:session-zero`.
+   the file already mentions `/party:session-zero` — again, only after
+   5a has had its chance to migrate the old variant.
 3. **The experience section** — the whole `## Project memory — the
    party's experience` block, including the `@.claude/architecture.md`,
    `@.claude/gotchas.md`, and `@.claude/decisions.md` imports, the

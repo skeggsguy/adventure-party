@@ -41,25 +41,6 @@ re-run/refreshed on upgrade, which will bite the first time the script's
 *logic* changes. Look at setup's copy step: does it skip when the file
 already exists? If so it needs a version check, or an explicit refresh.
 
-## 2026-07-26 — Session Zero: release chores deferred from the second pass
-
-The shipped Conventions bullet changed in `CLAUDE.md` +
-`memory/CLAUDE.md.template`, which by the step-5a convention makes the
-0.5.0 variant a migration fingerprint. Cleric confirmed nothing breaks
-today (5a's candidate list never included the Session Zero bullet, so no
-code path reads its marker; the loss to existing installs is
-under-specification, not wrong instructions). Do all three together at
-the next version bump:
-
-1. Bump `.claude-plugin/plugin.json` (0.5.0 → 0.6.0).
-2. Append a `## 0.5.0 — Session Zero bullet` section to
-   `memory/legacy-blocks.md` with the exact outgoing body.
-3. Add a Session Zero case to `skills/setup/SKILL.md` step 5a.
-
-**Time-sensitive:** the outgoing bullet text is recoverable from
-`git show HEAD:CLAUDE.md` now, and won't be after the next commits land.
-Capture it before then if the bump is far off.
-
 ## 2026-07-26 — Session Zero: judgement calls cleric left for the author
 
 - **The state diagram is the file's weakest visual.** The sentence above

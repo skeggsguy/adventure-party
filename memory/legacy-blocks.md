@@ -111,3 +111,17 @@ needs no migration.
   such a plan is approving the muster; the user can strike the
   delegation from a plan and keep the rest.
 ```
+
+## 0.5.0 — the Session Zero bullet (Conventions)
+
+In installed files this bullet is preceded by a `<!-- party@0.5.0 -->`
+marker line. Note that marker alone does not identify it: 0.5.0 also
+marked the muster and experience blocks, both of which are **unchanged**
+in 0.6.0. Match on the body.
+
+```markdown
+- Session Zero (`/party:session-zero`): invoke when scoping new work or
+  weighing approaches, BEFORE plan mode — collaborative quest-shaping
+  dialogue (options + recommendation, plain-language trade-offs, the user
+  makes the calls).
+```

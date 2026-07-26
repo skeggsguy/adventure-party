@@ -81,7 +81,7 @@ is no build. The repo doubles as its own marketplace
   `/party:setup` writes the setting that enables nesting
   (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH: "2"` in
   `.claude/settings.json`); it takes effect on the next session start.
-<!-- party@0.5.0 -->
+<!-- party@0.6.0 -->
 - Session Zero (`/party:session-zero`): exploration and chat mode —
   invoke when scoping work, weighing approaches, or explaining what a
   tool or framework actually is, BEFORE plan mode. Iterative dialogue:
