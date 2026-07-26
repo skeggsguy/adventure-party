@@ -37,8 +37,9 @@ blank page to tailor per project.
 ## The workflow
 
 1. **Session Zero** — a real multi-turn conversation shapes every
-   change before any code: options with a recommendation, plain-language
-   trade-offs, you make the calls (`/party:session-zero`).
+   change before any code: what the options actually are, plain-language
+   trade-offs, options with a recommendation, you make the calls
+   (`/party:session-zero`). It runs as long as you're still thinking.
 2. **Plan mode** — "let's plan mode this." The technical design, where
    you can and should orchestrate adversarial agents to challenge it
    (a UI challenge, a database-design challenge…).
@@ -137,16 +138,28 @@ written at the Guide's table; the party executes it.
 ## Session Zero
 
 How quests get written at that table is itself part of the framework:
-the **`/party:session-zero`** skill. It encodes a collaborative
-quest-shaping dialogue for the Guide to run *before* plan mode or code —
-built for users who are smart and opinionated but didn't grow up in app
-development. Its core moves: options **with** a recommendation (and the
-strongest case against it), trade-offs taught in plain language where
-they're used, clarifying questions batched early and only when the answer
-changes the plan, musings answered with assessment rather than action —
-and every landed decision recorded with its why in the project's
-decisions file, so the learning compounds. The user makes the calls,
-informed.
+the **`/party:session-zero`** skill. It is exploration and chat mode — an
+iterative dialogue the Guide runs *before* plan mode or code, built for
+users who are smart and opinionated but didn't grow up in app
+development.
+
+Its core moves: options **with** a recommendation (and the strongest case
+against it); what a tool or framework *actually is* before any verdict on
+using it — the category, the problem it was built for, and which
+decisions it takes off your plate in exchange for its opinions; YAGNI
+held as the default, because a wrong abstraction is a rewrite where
+duplicated code is only a refactor; tables and ASCII sketches where they
+carry structure prose carries badly; every term defined the first time
+it appears; clarifying questions batched early and only when the answer
+changes something; musings answered with assessment rather than action.
+
+Depth tracks **stakes × reversibility** — a naming question gets a
+sentence, a dependency you'll build on gets the full treatment. The
+dialogue has no exit condition except your word: the Guide never moves
+to plan mode on its own initiative, and circling back to the same call
+from a new angle is the mode working as intended. Every landed decision
+is recorded with its why in the project's decisions file, so the
+learning compounds. The user makes the calls, informed.
 
 ## The experience system
 
@@ -217,11 +230,35 @@ Once, to add the marketplace and install the plugin:
 /plugin install party@adventure-party
 ```
 
-That gives you `party:fighter`, `party:cleric`, `party:wizard`,
-`/party:session-zero`, `/party:setup`, `/party:config`, and
-`/party:level-up` in every project.
+That installs at the **user level** (the default): `party:fighter`,
+`party:cleric`, `party:wizard`, `/party:session-zero`, `/party:setup`,
+`/party:config`, and `/party:level-up` become available in every
+project. That's the right choice for solo work and for trying the party
+out — it's on call everywhere but rides nowhere, because nothing
+project-specific exists until you run setup in a repo.
 
-Then, once per project you want the experience system in:
+For a **team repo**, install at the project level instead, so the
+party ships with the repo: pick "Project" when `/plugin install` asks
+for a scope, or check this into the repo's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "adventure-party": {
+      "source": { "source": "github", "repo": "skeggsguy/adventure-party" }
+    }
+  },
+  "enabledPlugins": {
+    "party@adventure-party": true
+  }
+}
+```
+
+Teammates opening the repo are prompted once to add the marketplace;
+after that the plugin loads automatically for them.
+
+Either way, the second step is the same and is **always per-project** —
+once per project you want the experience system in:
 
 ```
 /party:setup
@@ -260,6 +297,10 @@ only as good as what the project tells it.
   Windows-native Claude Code, setup declines it honestly; WSL is fine.
   `party.json` IS a committed project file — model choices are a
   team-level call.
+- On a team repo, most of what `/party:setup` writes is committed —
+  the experience files, `party.json`, the spawn-depth setting in
+  `.claude/settings.json`, the CLAUDE.md wiring — so run it on a branch
+  and let the team review the diff like any other change.
 - The agents discover project specifics (test command, pinned invariants,
   verification method) from your CLAUDE.md. A well-documented repo gets
   their best behavior; a bare repo gets honest judgment and honest

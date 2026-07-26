@@ -105,3 +105,56 @@ section in the plan itself. CLAUDE.md sets the default that shapes the
 plan; the plan carries the instruction to the point of use. Corollary
 for defaults: silence should mean the behavior you want, because silence
 is the most common case.
+
+## 2026-07-26 — Plugin install scope: setup is the gate, not the install
+
+Design question ("should the plugin be project-level?") dissolved on
+inspection: install scope is the installer's choice in Claude Code, not
+the plugin author's, and because every piece of project state is written
+by `/party:setup` rather than shipped by the plugin, the install scope
+was never the per-project opt-in — setup is. Verified mechanics against
+official docs (v2.1.195): `/plugin install` offers user/project/local
+scopes (CLI `--scope`, default `user`); team enablement is
+`extraKnownMarketplaces` + `enabledPlugins` in a checked-in
+`.claude/settings.json`, and teammates get prompted once to add the
+marketplace, after which the plugin auto-loads. One honest cost of
+user-level install: the agents and session-zero appear in every
+project's lists even where setup never ran — inert by the muster rule,
+but visible.
+
+## 2026-07-26 — Skill examples should teach form, not content
+
+Deciding whether Session Zero should ship examples surfaced a general
+rule for authoring skills: models imitate examples strongly, so whatever
+a skill shows becomes the target shape. A full worked dialogue would
+have carried its topic and its length into every unrelated invocation —
+a CSS question answered in database metaphors, at transcript length. A
+5-line skeleton (`| Option | What it is | Costs you | Pick when |`) leaks
+only the shape, which is the part we actually want copied. Cost was ~20
+lines instead of ~60. Corollary: an instruction like "use diagrams"
+without any shape attached reliably produces either nothing or something
+bad — the skeleton is what makes the instruction fire.
+
+## 2026-07-26 — A convergence clause is what makes a dialogue skill rush
+
+Session Zero read as an exploration skill but behaved like a funnel, and
+the cause was one subordinate clause: "run the dialogue below, then hand
+off to plan mode." Everything else in the file invited open-ended
+thinking; that half-line set an exit condition, and an exit condition is
+what a model optimizes toward. Removing it — and stating explicitly that
+the loop ends only on the user's word, with re-opening a settled-looking
+question named as the mode working correctly — was the whole fix.
+Generalizes: in prose-as-product, check what the instructions imply
+about *when to stop*, not just about what to do.
+
+## 2026-07-26 — Explainability needs a governor, not just a mandate
+
+Pushing hard on high explanation (define every term, explain what the
+framework actually is, diagram the trade-offs) has an obvious failure
+mode the mandate alone doesn't prevent: an 800-word answer to "should
+this be `user` or `users`". The fix that kept both halves was a
+calibration ladder — depth tracks stakes × reversibility, lean high when
+genuinely unsure, one line when the choice undoes in seconds. Also
+repositioned the pre-existing "think deep" gate: depth is now the
+default for consequential calls, so that phrase became an override for
+the cheap tiers rather than the switch that turns depth on.

@@ -17,3 +17,17 @@ and delete entries once the underlying cause is fixed.
 - Skills with `disable-model-invocation: true` don't appear in the
   model's skill list — a headless "list your skills" smoke test shows
   only session-zero; that's correct, not a packaging bug.
+- No `jq` and no `gh` in this WSL — CLAUDE.md's documented manifest
+  check can't run as written; validate with `python3 -m json.tool`
+  instead. Git pushes go over SSH (an HTTPS remote can't prompt for
+  credentials mid-session).
+- Examples in a skill get imitated wholesale, topic and length included
+  — ship skeletons of form (`| Option | What it is | Costs you |`), never
+  a worked transcript, or a database example turns up in a CSS answer.
+- Audit shipped instructions for what they imply about *when to stop*
+  and for mandates with no governor — one stray "then hand off to plan
+  mode" made a whole exploration skill rush, and "explain everything"
+  with no depth ladder buries trivial questions.
+- Test a load-bearing platform assumption with a live sentinel before
+  building machinery on it. Adversarial review called the agent-override
+  design "fragile"; only the live test showed it was impossible.
