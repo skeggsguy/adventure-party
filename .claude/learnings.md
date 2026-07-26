@@ -158,3 +158,43 @@ genuinely unsure, one line when the choice undoes in seconds. Also
 repositioned the pre-existing "think deep" gate: depth is now the
 default for consequential calls, so that phrase became an override for
 the cheap tiers rather than the switch that turns depth on.
+
+## 2026-07-26 — "Unsupported platform" was a guess wearing a fact's clothes
+
+`/party:config` declined the XP display on Windows-native, stating that
+`bash`/`sh` "isn't resolvable" there. Both halves were wrong. Git for
+Windows ships `sh.exe`, and it ran `xp.sh` correctly — exit 0, right
+output — including from a `\wsl.localhost\...` UNC working directory,
+which is the case MSYS tools are supposed to choke on. Meanwhile `bash`
+*is* resolvable on Windows, as `system32\bash.exe`, the WSL shim: the
+skill's stated test would have passed while proving nothing about the
+POSIX shell it actually needed. A pre-check can be wrong in both
+directions at once, and this one was.
+
+The deeper trap took three probes to see. `sh` resolved fine in the live
+session, which made the decline look purely spurious — but only because
+this PowerShell was opened with a Git-Bash-flavoured PATH.
+`Git\usr\bin` is absent from the persistent (machine + user) PATH, so
+the same machine, launched from the Start menu, has no `sh` at all.
+PATH on Windows describes the launch chain, not the computer. Anything
+executed as a subprocess on every prompt render must therefore be wired
+with an absolute interpreter path; a PATH-dependent one works until the
+user opens their terminal differently, then fails silently and
+untraceably.
+
+Fix was to stop detecting and start proving: try `/bin/sh`, then the
+known Git for Windows locations, then a git-anchored guess, then bare
+`sh` — and require exit 0 *and* non-empty output before writing one in.
+One ladder covers all four platforms with no OS branch. Two smaller
+things fell out: deriving `sh.exe` from `where git` is unreliable
+(`git.exe` lives in `cmd\` or `mingw64\bin\` depending on who asks, so
+a fixed number of `..` hops lands nowhere), and the decline message now
+has to name what was tried and what would fix it — the original told
+the user their platform was unsupported, which is both false and
+unactionable.
+
+Method note: the repo's own gotcha — test a load-bearing platform
+assumption with a live sentinel — applied cleanly, and was cheap here
+because the sentinel *is* the feature. Running `xp.sh` is the whole
+test. Worth reaching for that shape whenever the thing in doubt is
+already executable.

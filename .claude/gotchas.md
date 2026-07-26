@@ -31,3 +31,11 @@ and delete entries once the underlying cause is fixed.
 - Test a load-bearing platform assumption with a live sentinel before
   building machinery on it. Adversarial review called the agent-override
   design "fragile"; only the live test showed it was impossible.
+- On Windows, `bash` on PATH is `C:\WINDOWS\system32\bash.exe` — the WSL
+  shim, not Git Bash (`uname` says Linux). "Is bash resolvable?" is
+  therefore never a valid POSIX-shell check there.
+- Git Bash on Windows PATH is a property of the *launch chain*, not the
+  machine: `Git\usr\bin` is absent from the persistent PATH but present
+  in a terminal opened from Git Bash. Wire subprocess commands
+  (statusline, hooks) with absolute interpreter paths — a PATH-dependent
+  one dies silently when the user launches differently.

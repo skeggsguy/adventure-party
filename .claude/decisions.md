@@ -5,6 +5,17 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-26 — The XP display's shell is chosen by probing candidates and
+requiring exit 0 + non-empty output (`/bin/sh`, then Git for Windows
+locations, bare `sh` last), never by platform detection — one probe
+covers macOS/Linux/WSL/Windows-native with no OS branch, and it replaces
+two wrong beliefs at once: that Windows-native has no POSIX shell (Git
+Bash works, verified, even from a UNC cwd) and that `bash` resolving
+proves one exists (it's the WSL shim). Windows gets the *absolute* path
+even when `sh` is on PATH, because there PATH reflects the launch chain,
+not the machine. Declining names what was tried and the fix — an
+unactionable "unsupported platform" is the failure being fixed.
+
 2026-07-26 — Session Zero is exploration/chat mode with no exit
 condition but the user's word (plan mode never Guide-initiated), and
 explainability is calibrated by stakes × reversibility rather than

@@ -94,14 +94,66 @@ then land all of it or none of it, and report which.
 
 Pre-checks:
 
-- **Platform**: `bash` (or `sh`) must be resolvable. On Windows-native
-  Claude Code it isn't — decline with one honest sentence ("the
-  experience display needs a POSIX shell; on Windows-native Claude Code
-  it would error on every prompt, so it was not installed") and skip
-  the whole block. WSL is fine.
+- **Shell interpreter**: find one by *proving* it, never by detecting
+  the platform — see "Choosing the interpreter" below. If nothing
+  proves out, decline the whole block with the exact message given
+  there. This runs on macOS, Linux, WSL, and Windows-native alike.
 - **Existing statusline**: if the user already has a `statusLine` in
   any settings file, do not replace it — decline that piece, say so,
   and still offer the SessionStart banner alone.
+
+#### Choosing the interpreter
+
+The statusline runs as a subprocess on *every prompt render*, so a
+wrong interpreter is an error the user sees continuously. Do not infer
+one from the operating system, and do not trust a bare `sh` resolving
+in your own shell: on Windows, whether Git Bash is on `PATH` is a
+property of how the terminal was launched, not of the machine, so a
+statusline that works today dies silently when the user opens Claude
+Code a different way tomorrow.
+
+Probe against the plugin's own `${CLAUDE_PLUGIN_ROOT}/scripts/xp.sh`,
+not the project copy — the pre-check must be able to fail before
+anything has been written. Try these candidates **in order**, and take
+the first that genuinely works:
+
+1. `/bin/sh` — POSIX systems (macOS, Linux, WSL) always have it
+2. `C:\Program Files\Git\usr\bin\sh.exe` — Git for Windows, default
+3. `C:\Program Files (x86)\Git\usr\bin\sh.exe` — 32-bit install
+4. `%LOCALAPPDATA%\Programs\Git\usr\bin\sh.exe` — per-user install
+5. the `usr\bin\sh.exe` sibling of whatever `where.exe git` reports,
+   resolved from the Git install root (`git.exe` may sit in either
+   `cmd\` or `mingw64\bin\`, so walk up to the root — don't assume a
+   fixed number of levels)
+6. bare `sh` — last resort only
+
+"Genuinely works" means: run `<candidate>
+${CLAUDE_PLUGIN_ROOT}/scripts/xp.sh statusline` from the project
+directory with empty input, and require **exit code 0 and non-empty
+output**. A candidate that exits 0 with no output has not proved
+anything. Give each probe a short timeout and treat a hang as a
+failure. Prefer an absolute path over a bare name whenever one proves
+out — absolute paths do not depend on the environment the subprocess
+inherits.
+
+Write the winning candidate into both commands below, quoted if it
+contains spaces. **In JSON, every backslash in a Windows path must be
+escaped** (`C:\\Program Files\\Git\\usr\\bin\\sh.exe`); an unescaped
+path is either invalid JSON or a silently mangled command.
+
+If every candidate fails, decline the whole block and say exactly what
+was tried and what would fix it:
+
+> The experience display needs a POSIX shell to run `xp.sh`, and I
+> couldn't find one that works here. I tried `/bin/sh`, the standard
+> Git for Windows locations, and the `git` on your `PATH`. Installing
+> Git for Windows (which bundles the shell) and re-running
+> `/party:config` will wire it up. Everything else in the party works
+> without it — the display is cosmetic; the experience files are the
+> substance.
+
+Never decline with a bare "unsupported platform": the user cannot act
+on that. Name what was tried, name the fix, and say what still works.
 
 Steps:
 
@@ -118,7 +170,7 @@ Steps:
    {
      "statusLine": {
        "type": "command",
-       "command": "sh .claude/party/xp.sh statusline"
+       "command": "<SH> .claude/party/xp.sh statusline"
      },
      "hooks": {
        "SessionStart": [
@@ -126,7 +178,7 @@ Steps:
            "hooks": [
              {
                "type": "command",
-               "command": "sh \"$CLAUDE_PROJECT_DIR\"/.claude/party/xp.sh banner"
+               "command": "<SH> \"$CLAUDE_PROJECT_DIR\"/.claude/party/xp.sh banner"
              }
            ]
          }
@@ -134,6 +186,11 @@ Steps:
      }
    }
    ```
+
+   `<SH>` is the interpreter the pre-check proved — `/bin/sh` on POSIX,
+   or a quoted, backslash-escaped absolute path on Windows, e.g.
+   `\"C:\\Program Files\\Git\\usr\\bin\\sh.exe\"`. Never write the
+   literal `<SH>`.
 
    The path forms differ deliberately: the statusline command runs with
    the project as its working directory (and the script falls back to
@@ -152,5 +209,7 @@ wiring with `enabled` later set false) does nothing.
   override configured (applied at spawn time); any bare-name doubles
   flagged; whether the CLAUDE.md muster wiring is present.
 - **Experience**: enabled or not; each piece wired, declined (and why),
-  or repaired; whether a restart is needed.
+  or repaired; which interpreter the pre-check proved (name the actual
+  path, so a later silent failure is traceable); whether a restart is
+  needed.
 - **Config problems**: any validation stop, with the exact key.

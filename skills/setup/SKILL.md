@@ -213,8 +213,10 @@ committed), and removable. [yes/no]"*
 - **Yes** → set `"enabled": true` in `.claude/party.json`, then read
   `${CLAUDE_PLUGIN_ROOT}/skills/config/SKILL.md` and perform its
   "Applying `experience`" section exactly — that skill owns the wiring
-  (pre-checks, atomicity, the Windows-native decline, the
-  existing-statusline decline). Don't reimplement it from memory here.
+  (pre-checks, atomicity, the proved-interpreter choice and its
+  decline, the existing-statusline decline). Don't reimplement it from
+  memory here, and in particular don't decline on your own read of the
+  platform — the interpreter is chosen by probing, not by detection.
 
 ### 7. Report
 
