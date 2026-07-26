@@ -1,22 +1,16 @@
 ---
 name: session-zero
-description: Exploration and chat mode — an iterative, plain-language
-  dialogue for scoping work, weighing approaches, and understanding the
-  technology involved. Explains what frameworks and tools actually are,
-  their trade-offs, and whether to adopt or abstract at all. Options with
-  a recommendation; the user makes the calls; plan mode only when the
-  user asks for it. Re-evaluate this trigger EVERY turn, not just at the
-  start of a conversation — invoke as soon as the current turn is
-  exploring, scoping, or choosing an approach, including when a
-  conversation that began as something else has drifted into design.
-  Triggers — "what's your view", "should I…", "I'm thinking about…",
-  "what is X and do I need it", weighing options, comparing tools or
-  frameworks, proposing changes to a project's own design, or any turn
-  where you are about to recommend what the user should do. NOT a
-  trigger — a one-shot fact with no decision behind it ("what port does
-  Postgres use"), which you answer directly. If the answer's purpose is
-  a decision, it IS a trigger. Invoke before planning or building, not
-  after.
+description: Exploration and chat mode — iterative, plain-language
+  dialogue for scoping work, weighing approaches, and explaining what a
+  tool or framework actually is before deciding whether to adopt it.
+  Re-evaluate EVERY turn, not just at the start — invoke as soon as a
+  turn is exploring, scoping, or choosing an approach, including when a
+  conversation drifts into design. Triggers — "what's your view",
+  "should I…", "what is X and do I need it", comparing tools, proposing
+  changes to the project's own design, or any turn where you are about
+  to recommend what the user should do. NOT a trigger — a one-shot fact
+  with no decision behind it; but if the answer's purpose is a decision,
+  it IS a trigger.
 ---
 
 # Session Zero

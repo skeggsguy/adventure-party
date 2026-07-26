@@ -73,12 +73,16 @@ a structured handoff to the Guide.
 | --------------- | ----------------------- | ----- | ------ | ---------------------- | ------------------------------------------------- |
 | `party:fighter` | Builder                 | Opus  | high   | full tools             | `Explore` recon, `party:wizard`, verifiers        |
 | `party:cleric`  | Reviewer + fixer        | Fable | high   | full tools             | a verifier per finding, `party:wizard`, `Explore` |
-| `party:wizard`  | Advisor (deep judgment) | Fable | xhigh  | read-only + own memory | nobody — deliberately                             |
+| `party:wizard`  | Advisor (deep judgment) | Fable | xhigh  | read-only (no writes)  | nobody — deliberately                             |
 
 **Fighter** takes a substantial implementation task and ships it
 end-to-end — implementation and tests, running the project's suite as it
-goes. Deliberately loose instructions: it's a powerhorse, not a
-checklist-follower. It ends with a build report.
+goes. Tests are written red-first: a test it has never seen fail isn't
+evidence. In a repo with no suite at all it writes the first test file
+and records the command in your CLAUDE.md — one file and one command, so
+the project ends up more testable than it started. Deliberately loose
+otherwise: it's a powerhorse, not a checklist-follower. It ends with a
+labeled build report, including what it did *not* verify.
 
 **Cleric** always runs after fighter. It reviews the actual diff (never
 just the report), then directly fixes what it finds — bugs, pinned-invariant
@@ -86,12 +90,23 @@ violations, test gaps, convention drift, needless complexity — and leaves
 the tree green. If the change has a user-facing surface, cleric drives it
 the way a user would before calling it done.
 
+Every real bug it fixes gets a test that fails without the fix, and it
+checks fighter's tests by inverting the logic they cover rather than by
+reading them — a test that passes both ways is a green light wired to
+nothing. It stays inside the change and its blast radius: a build that
+needs rebuilding rather than repairing comes back as `NEEDS_REBUILD:`
+for you to call, not a silent redesign.
+
 **Wizard** is the party's high-effort judgment: deep review, hard
-debugging (2+ failed attempts), and which-approach calls. Read-only — it
-diagnoses and advises; the caller implements. It keeps its own memory of
-traps diagnosed and verdicts proven right or wrong. It is the one party
-member that delegates nothing: one deep context reading the real code is
-the whole point of calling it.
+debugging (2+ failed attempts), and which-approach calls. Read-only for
+real — it holds no write tools at all, so it diagnoses and advises while
+the caller implements. It is the one party member that delegates
+nothing: one deep context reading the real code is the whole point of
+calling it. Being read-only it can also run nothing — so callers paste
+the actual diff and error output, and where the answer turns on
+something it can't see, it names the command that would settle the
+question instead of guessing. Anything durable it learns leaves in its
+`LEARNED:` line, into your experience files rather than a private store.
 
 Default models are set per agent; to change them, put overrides in
 `.claude/party.json` and run `/party:config` to validate and apply
@@ -182,6 +197,12 @@ The split matters: curated files stay small because they cost context on
 every prompt; the append-only log can grow forever because it's read on
 demand.
 
+The party feeds this too. A subagent's context dies with its turn, so
+every party report ends with a `LEARNED:` line when a muster turned up
+something genuinely non-obvious — a trap diagnosed, an assumption
+corrected — which the Guide then appends. Without it, the hardest-won
+knowledge of a build evaporates inside the agent that earned it.
+
 **Every dated entry in `learnings.md` is one experience point.** XP
 never goes down — the log is append-only by law — and the party levels
 up at thresholds (10, 25, 50, 100, then every 100). One honest warning,
@@ -191,7 +212,7 @@ party carries. Routine work is git history, not XP.
 Opt in during setup and you get the display, both pieces local shell
 scripts costing zero tokens:
 
-- a **statusline** — `⚔ Party Lv.3 · 34/50 XP` — that flips to
+- a **statusline** — `📜 Party Lv.3 · 34/50 XP` — that flips to
   `⬆ LEVEL UP — /party:level-up` when the party has earned it, and
 - a one-line **banner** at session start when a level-up is waiting.
 

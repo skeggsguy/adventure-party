@@ -198,3 +198,131 @@ assumption with a live sentinel — applied cleanly, and was cheap here
 because the sentinel *is* the feature. Running `xp.sh` is the whole
 test. Worth reaching for that shape whenever the thing in doubt is
 already executable.
+
+## 2026-07-26 — A skill description is a router, and prose frontmatter has a YAML trap
+
+Trimming session-zero's `description` (1083 → 689 chars) turned on a
+question worth reusing: what is this text *for*? It is the only part of
+a model-invocable skill that is always in the model's list, so its job
+is to decide whether to fire — not to summarize the skill. Everything
+in it that described *behavior* ("options with a recommendation", "the
+user makes the calls", "plan mode only when the user asks") was already
+in the Session Zero bullet in `memory/CLAUDE.md.template`, which is
+always-loaded in any set-up project. The description was paying twice
+for the same instruction. Test to apply next time: for each clause, ask
+"does this change whether the skill fires?" — if not, the body or
+CLAUDE.md owns it.
+
+Corollary about the other three skills: they are
+`disable-model-invocation: true`, so they are invoked by name and their
+descriptions route nothing. Their 245–394 char length is not a
+convention this skill was violating; matching it would have been
+cadence copied without its cause.
+
+The YAML trap: a plain (unquoted) scalar cannot contain `": "`. The
+first draft opened "Exploration and chat mode: iterative, …" and would
+have failed to parse with "mapping values are not allowed here" — the
+whole skill silently unloadable. Descriptions here are long prose in
+plain scalars, so this is a live hazard: colon-space, and a leading
+`- `/`? `/`#` on any line, are the characters to keep out. Parse the
+frontmatter after editing rather than eyeballing it.
+
+## 2026-07-26 — A rule stated only in the intro is flavor, and a gotcha's scope decides what gets audited
+
+Reviewing the three agent files turned up two durable things and one
+gap.
+
+Fighter was supposed to write tests, and its opening line said so
+("implementation and tests, built end-to-end") — but the only operative
+bullet under "the few rules that matter" was about *running* the suite.
+A model satisfies that by running whatever exists; the intro clause is
+flavor, and flavor loses to the rules section. Anything actually
+required goes in the rules with a mechanism attached: "write tests" is a
+wish, "a test you have never seen fail is not evidence" is an
+instruction. The same trap's other half: "run the suite, or find the
+obvious runner" had no branch for a repo with no suite at all — the
+common case for this plugin's audience — so honest compliance produced
+no tests. Fix included a capped ladder (first test file + the `Tests:`
+line in CLAUDE.md, "not a testing strategy, not CI") so the escape from
+untested code doesn't become a framework install.
+
+The YAML frontmatter gotcha, logged after it bit a *skill*, was written
+as "skill frontmatter descriptions…" — so `agents/` was never audited
+against it, and two of the three agent files were sitting broken:
+cleric on a literal `": "`, fighter on a colon at end of line, which the
+gotcha's wording doesn't name either. A gotcha describes a *class* of
+mistake; scoping its wording to the file type where you first met it
+quietly exempts every other file. Both halves fixed — widen the entry,
+and make the check runnable rather than remembered (`python3` + pyyaml,
+which this WSL has even though it lacks jq).
+
+The gap: the party had no path into the experience system at all. A
+subagent's context dies with its turn, so anything not in its final
+message is lost — every trap diagnosed mid-muster evaporated, and
+wizard's insights went to a private memory dir the project never sees.
+Hence a `LEARNED:` line in all three report contracts, worded to match
+the Guide's existing append rule so no new machinery (and no template
+migration) was needed. Two members' reports are the transport; the Guide
+is still the only writer, which keeps the log single-voiced and puts a
+junk entry in front of the user before it becomes XP.
+
+## 2026-07-26 — A capability flag can widen a tool allowlist
+
+Wizard shipped with `tools: Read, Grep, Glob` plus `memory: project`,
+which read as belt-and-braces — a narrow allowlist and a private
+scratchpad. The docs say otherwise: enabling `memory` "automatically
+enables" Read, Write and Edit so the agent can manage its memory files.
+So the frontmatter had two possible readings and both were broken.
+Either the flag widens the allowlist, and the READ-ONLY guarantee
+asserted in the agent's own body was false — the precise failure we had
+just rejected `Bash` to avoid — or `tools:` wins and the memory feature
+was inert. Nothing was ever written at either scope, so it may have been
+inert all along (which also corrects the entry above: wizard's insights
+weren't going to a private dir, they were going nowhere). Deleting the
+one line resolved it without needing to know which, and that's the
+useful shape — when two readings of a config are both bad, the fix is
+the line, not the diagnosis.
+
+Generalises past this field: a permission surface is not only what the
+allowlist says. A capability flag elsewhere in the same frontmatter can
+grant tools as a side effect, so "read-only" is a claim about the union
+of everything declared. Read the field docs for anything that sounds
+like a feature rather than a permission.
+
+Second-order, and specific to this repo: `memory: project` writes a
+checked-in `.claude/agent-memory/<agent>/`, which would have been a
+second un-curated project memory store competing with the experience
+files this plugin exists to maintain — and invisible to the Long Rest. A
+plugin whose product IS a memory system should be suspicious of platform
+features that quietly add another one.
+
+## 2026-07-26 — A governor can be cheaper to satisfy than the behavior it governs
+
+Two rounds of user pushback on the same draft, both landing on one
+authoring mistake in two forms.
+
+Cleric got a scope governor — stay inside the diff, plus a
+`NEEDS_REBUILD:` escape for a build that needs rebuilding rather than
+repairing — and the question came straight back: does this stop her
+fixing obvious problems? The rule itself didn't; its gate was
+defect-vs-preference, not size. The escape hatch did. Declaring
+`NEEDS_REBUILD:` was *cheaper* than performing a large repair, so an
+agent whose entire job is review-and-repair had been handed a legitimate
+way to stop working — and cleric runs on a cheaper tier than fighter,
+which is exactly where that incentive bites. Fix was to price it: high
+bar, and raising it does not excuse fixing everything separably fixable.
+Rule to carry: having added any governor to an agent, ask what the
+cheapest way to satisfy it is, and whether that is the behavior you
+wanted. Sibling of the convergence-clause learning — same failure, one
+verb apart: that one told an agent when to stop, this one told it how.
+
+The second was ordering, not content. Wizard's new paragraph opened with
+what it cannot do (no shell, no tests, no `git diff`) before saying it
+may read the entire repo unprompted — and was read as a boundary on
+everything, which drew "are we hamstringing wizard too?". Nothing in it
+said that; the limit simply came first, and in prose-as-product first
+means framing. Capability before constraint: "read the whole repo at
+will — the paths in the prompt are a starting point, not a boundary" now
+leads, and the runtime limits follow. Worth checking on any agent file
+whose role is defined partly by a restriction, because the restriction
+is the tempting thing to lead with.

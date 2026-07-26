@@ -1,4 +1,6 @@
 {
+  "//": "To change a party member's model, add it under \"models\" — fighter, cleric, or wizard, set to opus, sonnet, haiku, or fable — then run /party:config. Empty or absent means the plugin's default.",
+  "models": {},
   "experience": {
     "enabled": true
   }

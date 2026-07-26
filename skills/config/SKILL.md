@@ -18,6 +18,7 @@ state or refresh stale generated files after a plugin update.
 
 ```json
 {
+  "//": "To change a party member's model, add it under \"models\" — fighter, cleric, or wizard, set to opus, sonnet, haiku, or fable — then run /party:config. Empty or absent means the plugin's default.",
   "models": {
     "fighter": "opus",
     "cleric": "fable",
@@ -32,7 +33,16 @@ state or refresh stale generated files after a plugin update.
 Every key is optional. **An absent key means "plugin default"** — the
 defaults live in the plugin's agent files, never snapshotted into
 party.json, so a plugin update can change a default without stale pins
-here. `{}` is a valid config meaning "all defaults, experience off".
+here. `{}` is a valid config meaning "all defaults, experience off",
+and so is `"models": {}` — which is what `/party:setup` ships, since
+JSON has no comment syntax and an empty block plus the `"//"` note is
+how the file documents itself without pinning anything.
+
+The `models` values above are illustrative of the *shape*, not text to
+write into a user's file. `models` accepts model **tiers**, not model
+IDs — `opus`, `sonnet`, `haiku`, `fable`. Those four names are stable
+across model releases: a config saying `opus` follows whatever the
+current Opus is. There is nothing here for a user to keep up to date.
 
 ## Validation — before touching anything
 
@@ -47,7 +57,13 @@ not valid JSON, stop and report — never guess or repair it.
 - `models` keys must be `fighter`, `cleric`, or `wizard`.
 - Unknown top-level keys or unknown keys inside `experience` (e.g.
   `experiance`): stop and report them. Silent-inert config is how typos
-  hide.
+  hide. **Exactly one exception**: a top-level `"//"` key is the file's
+  comment (JSON has no comment syntax) — ignore it by name and never
+  report it. The exception is that literal two-character key alone;
+  `"///"`, `"//models"`, or a `"//"` nested inside `models` are unknown
+  keys and stop the run like any other. Do not rewrite or "correct" a
+  `"//"` whose text has drifted from the shipped wording — it is the
+  user's file.
 
 ## Applying `models` — spawn-time overrides, no generated files
 

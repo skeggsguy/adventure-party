@@ -45,9 +45,9 @@ READY=0
 case "${1:-statusline}" in
   statusline)
     if [ "$READY" -eq 1 ]; then
-      printf '⚔ Party Lv.%s · %s XP · ⬆ LEVEL UP — /party:level-up\n' "$CHRON" "$XP"
+      printf '📜 Party Lv.%s · %s XP · ⬆ LEVEL UP — /party:level-up\n' "$CHRON" "$XP"
     else
-      printf '⚔ Party Lv.%s · %s/%s XP\n' "$LEVEL" "$XP" "$NEXT"
+      printf '📜 Party Lv.%s · %s/%s XP\n' "$LEVEL" "$XP" "$NEXT"
     fi
     ;;
   banner)

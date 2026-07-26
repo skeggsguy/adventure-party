@@ -9,8 +9,13 @@ is no build. The repo doubles as its own marketplace
 
 ## Commands
 
-- Validate manifests: `jq . .claude-plugin/plugin.json` and
-  `jq . .claude-plugin/marketplace.json`
+- Validate manifests (stdlib only — no `jq`, which is absent on stock
+  macOS/Linux/WSL): `python3 -m json.tool .claude-plugin/plugin.json` and
+  `python3 -m json.tool .claude-plugin/marketplace.json`
+- Validate frontmatter (agents + skills; silence means valid, and a
+  broken description silently unloads the file; needs PyYAML —
+  `pip install pyyaml`, not bundled with python3 on Debian/Ubuntu):
+  `python3 -c "import re,glob,yaml;[yaml.safe_load(re.match(r'^---\n(.*?)\n---\n',open(p,encoding='utf-8').read(),re.S).group(1)) for p in glob.glob('agents/*.md')+glob.glob('skills/*/SKILL.md')]"`
 - Dogfood locally: `claude --plugin-dir .` (agents `party:fighter/cleric/wizard`,
   skills `/party:session-zero`, `/party:setup`, `/party:config`,
   `/party:level-up` should all list)

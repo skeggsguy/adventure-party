@@ -5,6 +5,82 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-26 — The manifest check swaps `jq` for `python3 -m json.tool`,
+and the frontmatter check keeps PyYAML with an install note — rather
+than a probe-and-run wrapper or a stdlib-only `scripts/validate.py`.
+`jq` is preinstalled on no mainstream platform, while python3 was
+already a hard dependency of the frontmatter check, so one interpreter
+covers both and `json.tool` is stdlib everywhere python3 is real. The
+xp.sh probe pattern was rejected deliberately: probing earns its
+complexity in shipped code that runs on users' machines every prompt
+render, not in a hand-run pre-commit check. A stdlib-only validator was
+rejected too — replacing a real YAML parser with regex to dodge one
+`pip install` trades a stronger check for a new shipped artifact.
+Portability floor recorded in gotchas: stdlib is free, everything above
+it needs an install note.
+
+2026-07-26 — Wizard stays read-only with no `Bash` (turn cap raised
+15 → 25 instead), and callers paste the diff and error output — a shell
+is a write primitive, so granting one would downgrade "READ-ONLY" from a
+structural guarantee to a promise, and that guarantee is why fighter and
+cleric can call wizard mid-encounter without risk. A wizard that can run
+tests also drifts toward iterating instead of reasoning, which is the
+opposite of what xhigh effort is bought for. The real constraint on its
+depth was never the toolset but the turn cap, so that is what moved; the
+number is named in Method step 5 as well, since a model can't read its
+own `maxTurns`. Diff-blindness is fixed at the caller's end, where a
+shell already exists. `memory: project` went the same way and for the
+same reason — the docs have it auto-enable Read/Write/Edit, so it either
+falsified READ-ONLY or was inert, and it would have written a checked-in
+`.claude/agent-memory/wizard/`: a second un-curated project memory store
+competing with the experience files, invisible to the Long Rest.
+
+2026-07-26 — The party reaches the experience system through a `LEARNED:`
+line in each member's report, not by writing memory files itself — a
+subagent's context dies with its turn, so the final message is the only
+carrier, and the Guide's existing "append what surfaced" rule already
+fires on it (matching wording deliberately, so no `CLAUDE.md.template`
+change and no new migration fingerprint in setup step 5a). Keeping the
+Guide as sole writer keeps the append-only log single-voiced and puts
+every candidate in front of the user before it counts as XP; "usually
+none" and "not routine work" are the governors against three reports a
+session padding the log.
+
+2026-07-26 — Cleric's repair scope is the change and its blast radius,
+with `NEEDS_REBUILD:` as a high bar that does not excuse it from fixing
+what is separably fixable — an unbounded "fix everything you find" lets
+a reviewer redo working code to taste and triple the user's diff, while
+an easy rebuild verdict would quietly turn cleric back into the
+findings-report agent its file says it isn't. Defect vs. preference is
+the gate, never size: "a defect is a defect however large, and 'large' is
+never why you leave one."
+
+2026-07-26 — session-zero's `description` is a router, not a summary:
+cut to 689 chars (from 1083) by dropping every behavior clause (options
++ recommendation, user makes the calls, never self-initiate plan mode)
+and keeping only routing — every-turn re-evaluation, mid-conversation
+drift, trigger phrases, and the fact-vs-decision tie-break. The dropped
+clauses are already in the shipped `memory/CLAUDE.md.template` Session
+Zero bullet, which is always-loaded in any set-up project, so the
+description was paying twice. Not cut to sibling length (~250) — the
+other three skills are `disable-model-invocation: true` and are invoked
+by name, so their descriptions route nothing; symmetry with them is a
+false target. A compact identity clause stays because the plugin ships
+nothing project-specific: in a repo that never ran `/party:setup` there
+is no CLAUDE.md bullet to lean on.
+
+2026-07-26 — `/party:setup` ships party.json with a `"//"` comment key
+and an empty `"models": {}`, rather than snapshotting the real defaults
+or leaving the file silent — the file is the one thing users are told
+to edit, and it said nothing about `models`, so the key was
+undiscoverable from it (the author hit this). Empty means what absent
+means, so the no-stale-pins rule survives intact; snapshotting
+`"cleric": "fable"` would silently outlive any future default change.
+Cost accepted: `/party:config`'s unknown-top-level-key stop — which
+exists to catch `experiance` typos — now carves out exactly the literal
+`"//"`. Note `models` takes stable tiers (opus/sonnet/haiku/fable), not
+model IDs, so new model releases never require a config edit.
+
 2026-07-26 — The XP display's shell is chosen by probing candidates and
 requiring exit 0 + non-empty output (`/bin/sh`, then Git for Windows
 locations, bare `sh` last), never by platform detection — one probe

@@ -14,13 +14,24 @@ and delete entries once the underlying cause is fixed.
   `party:<name>` — they coexist, and namespaced spawns always get the
   plugin copy (verified 2026-07-25). Model overrides must ride the Agent
   tool's per-invocation `model` param instead.
+- Agent AND skill frontmatter descriptions are plain YAML scalars: a
+  literal `": "` or a line-ending colon breaks parsing ("mapping values
+  are not allowed here") and silently unloads the file. Use em dashes,
+  and run the frontmatter check (CLAUDE.md Commands) over `agents/` too
+  — scoping this gotcha to skills is why two agents shipped broken.
+- An agent's `memory:` scope auto-enables Read/Write/Edit for its memory
+  dir, so it silently widens a deliberately read-only `tools:` allowlist
+  — or is inert if `tools:` wins; both bad. Wizard dropped it; durable
+  insight rides its `LEARNED:` line into the experience files instead.
 - Skills with `disable-model-invocation: true` don't appear in the
   model's skill list — a headless "list your skills" smoke test shows
   only session-zero; that's correct, not a packaging bug.
-- No `jq` and no `gh` in this WSL — CLAUDE.md's documented manifest
-  check can't run as written; validate with `python3 -m json.tool`
-  instead. Git pushes go over SSH (an HTTPS remote can't prompt for
-  credentials mid-session).
+- No `gh` in this WSL, and git pushes go over SSH (an HTTPS remote can't
+  prompt for credentials mid-session).
+- A documented dev command is only real if it runs on a stock machine:
+  `jq` ships nowhere by default, and PyYAML is a separate package on
+  Debian/Ubuntu. Python's *stdlib* (`json.tool`, `re`) is the portable
+  floor; anything above it needs an install note.
 - Examples in a skill get imitated wholesale, topic and length included
   — ship skeletons of form (`| Option | What it is | Costs you |`), never
   a worked transcript, or a database example turns up in a CSS answer.
@@ -28,9 +39,11 @@ and delete entries once the underlying cause is fixed.
   and for mandates with no governor — one stray "then hand off to plan
   mode" made a whole exploration skill rush, and "explain everything"
   with no depth ladder buries trivial questions.
-- Test a load-bearing platform assumption with a live sentinel before
-  building machinery on it. Adversarial review called the agent-override
-  design "fragile"; only the live test showed it was impossible.
+- Before building on a platform assumption, read the field reference AND
+  sentinel-test it — docs settle what a field *does* (`memory:` quietly
+  enables write tools), live tests settle composition (docs claimed
+  project agents override plugin ones; only the sentinel showed they
+  coexist).
 - On Windows, `bash` on PATH is `C:\WINDOWS\system32\bash.exe` — the WSL
   shim, not Git Bash (`uname` says Linux). "Is bash resolvable?" is
   therefore never a valid POSIX-shell check there.

@@ -76,15 +76,35 @@ If it doesn't exist, create it as:
 
 ```json
 {
+  "//": "To change a party member's model, add it under \"models\" — fighter, cleric, or wizard, set to opus, sonnet, haiku, or fable — then run /party:config. Empty or absent means the plugin's default.",
+  "models": {},
   "experience": {
     "enabled": false
   }
 }
 ```
 
-If it exists, leave it exactly as it is. This is the user's one config
-file — model overrides and the experience display live here; `/party:config`
-applies it. Absent keys mean plugin defaults.
+JSON has no comments, so the `"//"` key is the comment: an inert string
+`/party:config` ignores by name. It ships because the file was
+otherwise silent about `models` — a user with no reason to suspect the
+key exists has no way to discover it from the file they're told is the
+one they edit.
+
+`"models": {}` is deliberately empty, and empty means exactly what
+absent means: every member resolves to the plugin's own default. Never
+write the current defaults in as values — a snapshotted `"cleric":
+"fable"` is a silent pin that survives a plugin update that changes
+that default. The empty object shows the user where an override goes
+without committing them to one.
+
+**If it exists**, leave the existing keys exactly as they are. One
+additive exception: if the file has neither a `"//"` key nor a `models`
+key, it predates this text and is missing the pointer — show the user
+the `"//"` line and add it on their confirmation, changing nothing
+else. Declining is fine; say `/party:config` reports the lineup either
+way. This is the user's one config file — model overrides and the
+experience display live here; `/party:config` applies it. Absent keys
+mean plugin defaults.
 
 ### 4. Enable nested delegation
 
