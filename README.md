@@ -90,6 +90,9 @@ wielding it.
    off the commit.
 5. **New adventure, new session** — and the experience system carries
    what was learned.
+6. **Level up** — learnings are captured in every session. On level up
+   you long rest and learnings are sorted into architecture, decisions
+   and gotchas which are readable by Claude. You level up, AI levels up.
 
 ## The party
 
@@ -97,12 +100,10 @@ One agent doing everything means one context doing everything: the model
 that wrote the code reviews the code, believes its own report, and moves
 on. Splitting the work across specialized agents buys real separation —
 the reviewer reads the actual diff instead of trusting the builder's
-summary (on this framework's first-ever smoke test, the reviewer caught a
-genuine parsing bug the builder had shipped green). 
+summary.
 
-The main session is
-**the Guide**: it runs the dialogue, assigns the quests, and is the only
-one that talks to you.
+The main session is **the Guide**: it runs the dialogue, assigns the quests, and 
+is the only one that talks to you.
 
 | Agent           | Role                    | Model | Effort | Access                 | May call                                          |
 | --------------- | ----------------------- | ----- | ------ | ---------------------- | ------------------------------------------------- |
@@ -113,19 +114,14 @@ one that talks to you.
 **Fighter** ships a substantial implementation end-to-end —
 implementation and tests, running the project's suite as it goes. In
 a repo with no suite at all it writes the first test file and records
-the command in your CLAUDE.md, so the project ends up more testable
-than it started. Deliberately loose otherwise — it's a powerhorse, not
-a checklist-follower.
+the command in your CLAUDE.md. Deliberately loose otherwise — it's a 
+powerhorse, not a checklist-follower.
 
 **Cleric** always runs after fighter, it reviews the actual diff
 and the report from fighter, then directly heals what it finds — 
 bugs, pinned-invariant violations, test gaps, convention drift, 
 needless complexity — and leaves the tree green, driving any user-facing 
 surface the way a user would. 
-
-It stays inside the change and its blast radius: a build that
-needs rebuilding from scratch rather than repairing comes back as 
-`NEEDS_REBUILD:` for you to call, not a silent redesign.
 
 **Wizard** is the party's high-effort judgment: deep review, hard
 debugging (2+ failed attempts), and which-approach calls. Wizard
@@ -141,10 +137,7 @@ ordinary work itself. The party rides out only on one of three triggers:
 - A plan-mode plan is approved — **plans muster by default**: every plan
   ends with an Execution section naming who runs each phase, fighter
   building and cleric reviewing unless you said otherwise while
-  planning, and a plan silent on execution is a party plan. Work stays
-  at the table only when you asked for that during planning and the
-  plan says so. Approving the plan is approving the muster; strike the
-  delegation to keep the plan without the party.
+  planning.
 - You accept the Guide's suggestion — it may offer, once and in one
   line, when work looks party-sized, and takes no for an answer.
 
@@ -203,31 +196,10 @@ The split matters: curated files stay small because they cost context on
 every prompt; the append-only log can grow forever because it's read on
 demand.
 
-The party feeds this too. A subagent's context dies with its turn, so
-every party report ends with a `LEARNED:` line when a muster turned up
-something genuinely non-obvious — a trap diagnosed, an assumption
-corrected — which the Guide then appends. Without it, the hardest-won
-knowledge of a build evaporates inside the agent that earned it.
-
-**Every dated entry in `learnings.md` is one experience point.** XP
-never goes down — the log is append-only by law — and the party levels
-up at thresholds (10, 25, 50, 100, then every 100). One honest warning,
-straight from the files themselves: junk entries are dead weight the
-party carries. Routine work is git history, not XP.
-
-Opt in during setup and you get the display, both pieces local shell
-scripts costing zero tokens:
-
-- a **statusline** — `📜 Party Lv.3 · 34/50 XP` — that flips to
-  `⬆ LEVEL UP — /party:level-up` when the party has earned it, and
-- a one-line **banner** at session start when a level-up is waiting.
-
 ## Leveling up — the Long Rest
 
 `/party:level-up` is the ceremony, and it is not fireworks: a Long Rest
-is the moment the party *trains*. In plain terms (it will tell you this
-itself, along with the price — it uses real tokens and edits your
-experience files):
+is the moment the party *trains*.
 
 1. It distills the learnings log — only entries since the last rest —
    into the curated files that load every session, and prunes gotchas
@@ -235,10 +207,7 @@ experience files):
    better-informed party.
 2. It appends the level to **`CHRONICLE.md`**: your project's saga in
    plain language — what was built, what was conquered, what *you*
-   learned. Half quest log, half learning journal; the chronicle is
-   also the system's only level record, so it survives clones, reverts,
-   and second machines by riding the same git history as everything
-   else.
+   learned.
 3. It awards the party a title — seeded from your repo's name and the
    level, so it is deterministic: *your* project's Level 3 party is
    always, say, the Wardens of the Unbroken Build. Their name, not a
@@ -262,8 +231,7 @@ whole framework exists to build.
 - **The Thief** — red team: sets up local experiment, plants secrets and
   attempts to steal your app's data and reports how it got in. Test your
   security for real.
-- **The Artificer** — refactors, optimizes, and prepares you
-  for production.
+- **The Artificer** — refactors, optimizes, and prepares you for production.
 
 ## License
 
