@@ -326,3 +326,31 @@ will — the paths in the prompt are a starting point, not a boundary" now
 leads, and the runtime limits follow. Worth checking on any agent file
 whose role is defined partly by a restriction, because the restriction
 is the tempting thing to lead with.
+
+## 2026-07-27 — A guarded script is a bad oracle for its own dependencies
+
+The Windows interpreter probe was right in shape and wrong in
+strictness. Wiring the XP display into a real project picked
+`Git\usr\bin\sh.exe` — it passed the spec's test (exit 0, non-empty
+output) and then printed `tail: command not found` / `sed: command not
+found` on every prompt render. `usr\bin\sh.exe` is the bare shell
+binary; only the `bin\sh.exe` wrapper puts Git's coreutils on PATH
+first. The ladder had never listed the wrapper at all.
+
+What let it through is the more transferable half. `xp.sh` guards its
+utility calls (`2>/dev/null` on the grep, an empty `CHRON` pipeline
+falling through), so on a project whose `learnings.md` is still empty a
+coreutils-less shell produces exactly the same exit code and plausible
+output as a working one. The probe couldn't fail until the thing it was
+protecting had real data — i.e. never at setup time, always later, on
+someone's actual repo. Testing a program that swallows its own errors
+tells you the program is robust, not that its environment is sound: exit
+status proves the interpreter *started*, and stderr is the only cheap
+evidence it *worked*. Any probe whose subject has error guards needs a
+channel those guards don't cover.
+
+Also worth noting how it was found — not by review, but by running
+`/party:setup` project-scoped and watching the statusline. The 2026-07-26
+entry above fixed this same area by dogfooding too, and left a subtler
+bug behind. One pass of dogfooding finds the failure that fires
+immediately; the deferred one needs the second pass.

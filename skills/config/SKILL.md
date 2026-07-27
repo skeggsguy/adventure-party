@@ -134,21 +134,37 @@ anything has been written. Try these candidates **in order**, and take
 the first that genuinely works:
 
 1. `/bin/sh` — POSIX systems (macOS, Linux, WSL) always have it
-2. `C:\Program Files\Git\usr\bin\sh.exe` — Git for Windows, default
-3. `C:\Program Files (x86)\Git\usr\bin\sh.exe` — 32-bit install
-4. `%LOCALAPPDATA%\Programs\Git\usr\bin\sh.exe` — per-user install
-5. the `usr\bin\sh.exe` sibling of whatever `where.exe git` reports,
-   resolved from the Git install root (`git.exe` may sit in either
-   `cmd\` or `mingw64\bin\`, so walk up to the root — don't assume a
-   fixed number of levels)
-6. bare `sh` — last resort only
+2. `C:\Program Files\Git\bin\sh.exe` — Git for Windows, default
+3. `C:\Program Files\Git\usr\bin\sh.exe` — same install, bare binary
+4. `C:\Program Files (x86)\Git\bin\sh.exe` — 32-bit install
+5. `C:\Program Files (x86)\Git\usr\bin\sh.exe` — same, bare binary
+6. `%LOCALAPPDATA%\Programs\Git\bin\sh.exe` — per-user install
+7. `%LOCALAPPDATA%\Programs\Git\usr\bin\sh.exe` — same, bare binary
+8. the `bin\sh.exe` then `usr\bin\sh.exe` siblings of whatever
+   `where.exe git` reports, resolved from the Git install root
+   (`git.exe` may sit in either `cmd\` or `mingw64\bin\`, so walk up to
+   the root — don't assume a fixed number of levels)
+9. bare `sh` — last resort only
+
+Each Git for Windows location is tried `bin\` first, `usr\bin\` second,
+and the order matters: `bin\sh.exe` is a wrapper that puts Git's
+coreutils on `PATH` before handing off, while `usr\bin\sh.exe` is the
+bare shell binary and runs without them — so `xp.sh` loses `grep`,
+`tail`, and `sed`. Keep the `usr\bin\` entries anyway; on some installs
+they are all there is.
 
 "Genuinely works" means: run `<candidate>
 ${CLAUDE_PLUGIN_ROOT}/scripts/xp.sh statusline` from the project
-directory with empty input, and require **exit code 0 and non-empty
-output**. A candidate that exits 0 with no output has not proved
-anything. Give each probe a short timeout and treat a hang as a
-failure. Prefer an absolute path over a bare name whenever one proves
+directory with empty input, and require **exit code 0, non-empty
+stdout, and empty stderr** — all three. A candidate that exits 0 with no
+output has not proved anything, and neither has one that printed
+`command not found` on the way. Stderr is not optional here: `xp.sh`
+guards its utility calls, so a shell that can't find `grep`/`tail`/`sed`
+still exits 0 with plausible output on a project whose `learnings.md` is
+empty, and only starts reporting the wrong XP once there are entries to
+count. Exit status proves the shell *started*; empty stderr is the only
+probe-time evidence it actually *worked*. Give each probe a short
+timeout and treat a hang as a failure. Prefer an absolute path over a bare name whenever one proves
 out — absolute paths do not depend on the environment the subprocess
 inherits.
 

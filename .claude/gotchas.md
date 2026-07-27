@@ -52,3 +52,7 @@ and delete entries once the underlying cause is fixed.
   in a terminal opened from Git Bash. Wire subprocess commands
   (statusline, hooks) with absolute interpreter paths — a PATH-dependent
   one dies silently when the user launches differently.
+- A shell resolving is not its coreutils resolving: `Git\bin\sh.exe`
+  wraps and sets PATH, `Git\usr\bin\sh.exe` is the bare binary and loses
+  `grep`/`tail`/`sed`. Probing a script that guards its utility calls
+  (like xp.sh) can't tell them apart by exit code — check stderr too.

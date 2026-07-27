@@ -5,6 +5,21 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-27 — The interpreter probe's success predicate gains **empty
+stderr** alongside exit 0 and non-empty stdout, and each Git for Windows
+location is tried `bin\sh.exe` before `usr\bin\sh.exe` — amending, not
+reversing, the 2026-07-26 probe decision below, which still governs
+(prove, never detect). What was wrong was the strictness, not the shape:
+`usr\bin\sh.exe` is the bare shell binary, so it runs xp.sh without
+Git's coreutils, yet passed the old predicate because xp.sh guards its
+`grep`/`tail`/`sed` calls and a project with an empty `learnings.md`
+therefore still exits 0 with plausible output. The bug surfaced only
+later, as a wrong XP count plus `command not found` on every prompt
+render. Exit status measured that the shell started; stderr is what
+measures that it worked. The `usr\bin\` candidates stay in the ladder
+below their `bin\` siblings — on some installs they are all there is,
+and the strengthened predicate now rejects them when they're crippled.
+
 2026-07-26 — The manifest check swaps `jq` for `python3 -m json.tool`,
 and the frontmatter check keeps PyYAML with an install note — rather
 than a probe-and-run wrapper or a stdlib-only `scripts/validate.py`.
