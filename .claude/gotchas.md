@@ -47,6 +47,17 @@ and delete entries once the underlying cause is fixed.
 - On Windows, `bash` on PATH is `C:\WINDOWS\system32\bash.exe` — the WSL
   shim, not Git Bash (`uname` says Linux). "Is bash resolvable?" is
   therefore never a valid POSIX-shell check there.
+- Same trap, different name: `convert` on Windows PATH is
+  `System32\convert.exe` (the filesystem converter), NOT ImageMagick —
+  it fails with "Invalid Parameter". `command -v` finding a name proves
+  nothing about what it is. PIL is present and is the reliable image
+  tool here; note `python3` is win32, so it does not share Git Bash's
+  `/tmp`.
+- `marketplace.json` sets `"source": "./"`, so the plugin is the whole
+  repo and `/plugin install` clones it — `assets/` and every superseded
+  binary blob ship to every user. Size binaries at commit time (README
+  hero renders at width 480, so 960px is the ceiling); there is no
+  package step to catch it later.
 - Git Bash on Windows PATH is a property of the *launch chain*, not the
   machine: `Git\usr\bin` is absent from the persistent PATH but present
   in a terminal opened from Git Bash. Wire subprocess commands

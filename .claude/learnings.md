@@ -463,3 +463,39 @@ explicit instruction to open the learnings log, which is coherent, since
 it's the member you call when the cheap always-loaded context already
 failed. So "is this file worth its size" is really a question about
 every agent in the party at once, not just the Guide.
+
+## 2026-07-27 — The repo is its own distribution channel, so `assets/` is not free
+
+A 7.5 MB replacement for `assets/party.png` landed in the working tree
+and the instinct was "it's not in the plugin, nobody downloads it."
+That premise is wrong in a way worth writing down: `marketplace.json`
+declares `"source": "./"`, so the plugin *is* the repo root. There is
+no packaging step, no ignore list, no artifact build — `/plugin
+install` git-clones this whole tree, and every user pays for the full
+blob history, not just the checkout.
+
+The general shape: **when the distribution mechanism is a clone, every
+tracked byte is a shipped byte, including deleted ones.** That makes
+binary assets a one-way door — the superseded 2.6 MB blob is permanent
+now, and no future cleanup short of a history rewrite touches it. The
+lesson is not "compress images," it's that the usual mental separation
+between "source" and "release artifact" doesn't exist here, so the
+checks that normally happen at package time have to happen at commit
+time instead.
+
+Sizing rule that fell out of it: the README renders the hero at
+`width=480`, so 960px is the honest target (2x for retina) and
+everything above that is pure freight. 1792px was 3.7x oversampled.
+Palette-quantized to 646 KB from 7.5 MB with no visible difference at
+render size — checked by cropping a gradient-heavy band from all three
+candidates, stacking them 1:1, and actually looking, rather than
+trusting the byte count. Worth doing for any lossy step on a visual
+asset; the file size tells you nothing about whether it still looks
+right.
+
+Process note: the change appeared in the working tree *after* the
+user's "commit all" was given against a listed set of files, so it
+wasn't covered by that approval. Committing it silently would have been
+the easy path and would have shipped the 7.5 MB. A change list the user
+approved is a snapshot, not a standing licence — re-check `git status`
+between approval and commit, and anything new is a separate ask.
