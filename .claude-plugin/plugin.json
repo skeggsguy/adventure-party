@@ -2,7 +2,7 @@
   "name": "party",
   "displayName": "Adventure Party",
   "description": "An adventuring party for your codebase — fighter builds, cleric reviews and fixes, wizard advises — plus an experience system that levels up your project's memory.",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "author": {
     "name": "Tom Skeggs"
   },
