@@ -46,6 +46,8 @@ experience system in:
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
+Finish by re-running /party:setup in each project.
+
 Then restart the session — plugin skills are read at launch.
 
 ## The premise
