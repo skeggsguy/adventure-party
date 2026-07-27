@@ -20,3 +20,6 @@ tennis/
 *.swp
 .idea/
 .vscode/
+
+# Windows "downloaded from the internet" metadata sidecars
+*:Zone.Identifier

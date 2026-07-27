@@ -1,3 +1,8 @@
+# Everything text is LF in the repo and in the working copy. Contributors
+# work on Windows, macOS, Linux and WSL against the same files; a CRLF
+# checkout would show every file as modified next to a POSIX one.
+* text=auto eol=lf
+
 # Shell scripts must stay LF — xp.sh is executed as a statusline/hook
 # command; CRLF from a Windows checkout breaks it on every prompt render.
 *.sh text eol=lf
