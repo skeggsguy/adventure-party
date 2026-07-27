@@ -47,38 +47,32 @@ experience system in:
 /party:setup
 ```
 
-Approve the write into `.claude/` (that's the install; it also offers
-the opt-in experience display, and migrates projects wired by an older
-plugin version, showing you the diff first), restart the session so
-settings take effect, then fill in the `<placeholders>` it leaves in
-`CLAUDE.md` and seed the experience files — the party is only as good
-as what the project tells it.
 
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
-driven but weren't full-stack developers before 2024 — and on the
+driven but weren't full-stack developers before the genesis of AI — and on the
 conviction that successful AI development hinges on three things:
 
 1. **The dialogue** — the human conversation with the agent, where you
    learn, brainstorm, and land decisions you actually understand.
-2. **The orchestration of plan mode** — where the technical design gets
-   shaped, challenged (adversarial planning agents are encouraged), and
-   written down.
-3. **The decisions made there** — recorded with their *why*, so they
-   compound instead of evaporating.
+2. **Agentic orphestration** — where multiple agents build, test,
+   review and ship the plan. Agent instructions are loosely coupled as not to
+   constrain better and better models, and compliance enforced through
+   unit testing and agentic review.
+4. **Leveling up** — You learn, the AI learns. Learnings should be recorded
+   and curated into experience, so they compound instead of evaporating.
 
 Other frameworks install process and assume engineering literacy, or
-remove decisions and assume expertise. Adventure Party installs process
-**and teaches the literacy as you go**: trade-offs explained in plain
-language where they're used, delegation made legible through party
-roles, and every landed decision written down with its reasons. You are
-the main success lever. The system's job is to make you better at
-wielding it.
+remove decisions and assume expertise. 
 
-Your quest stays yours: the plugin brings the party and the experience
-system; your project's CLAUDE.md stays part guide to this system, part
-blank page to tailor per project.
+Adventure Party installs process **and teaches the literacy as you go**: 
+trade-offs explained in plain language where they're used, 
+delegation made legible through party roles, and every landed decision 
+written down with its reasons. 
+
+You are the main success lever. The system's job is to make you better at
+wielding it.
 
 ## The workflow
 
@@ -104,7 +98,9 @@ that wrote the code reviews the code, believes its own report, and moves
 on. Splitting the work across specialized agents buys real separation —
 the reviewer reads the actual diff instead of trusting the builder's
 summary (on this framework's first-ever smoke test, the reviewer caught a
-genuine parsing bug the builder had shipped green). The main session is
+genuine parsing bug the builder had shipped green). 
+
+The main session is
 **the Guide**: it runs the dialogue, assigns the quests, and is the only
 one that talks to you.
 
@@ -115,41 +111,31 @@ one that talks to you.
 | `party:wizard`  | Advisor (deep judgment) | Fable | xhigh  | read-only (no writes)  | nobody — deliberately                             |
 
 **Fighter** ships a substantial implementation end-to-end —
-implementation and tests, running the project's suite as it goes. Tests
-are written red-first: a test it has never seen fail isn't evidence. In
+implementation and tests, running the project's suite as it goes. In
 a repo with no suite at all it writes the first test file and records
 the command in your CLAUDE.md, so the project ends up more testable
 than it started. Deliberately loose otherwise — it's a powerhorse, not
-a checklist-follower — and it ends with a labeled build report,
-including what it did *not* verify.
+a checklist-follower.
 
-**Cleric** always runs after fighter, never conditional on the build
-looking clean. It reviews the actual diff (never just the report), then
-directly fixes what it finds — bugs, pinned-invariant violations, test
-gaps, convention drift, needless complexity — and leaves the tree
-green, driving any user-facing surface the way a user would. Every real
-bug it fixes gets a test that fails without the fix, and it checks
-fighter's tests by inverting the logic they cover rather than by
-reading them — a test that passes both ways is a green light wired to
-nothing. It stays inside the change and its blast radius: a build that
-needs rebuilding rather than repairing comes back as `NEEDS_REBUILD:`
-for you to call, not a silent redesign.
+**Cleric** always runs after fighter, it reviews the actual diff
+and the report from fighter, then directly heals what it finds — 
+bugs, pinned-invariant violations, test gaps, convention drift, 
+needless complexity — and leaves the tree green, driving any user-facing 
+surface the way a user would. 
+
+It stays inside the change and its blast radius: a build that
+needs rebuilding from scratch rather than repairing comes back as 
+`NEEDS_REBUILD:` for you to call, not a silent redesign.
 
 **Wizard** is the party's high-effort judgment: deep review, hard
-debugging (2+ failed attempts), and which-approach calls. Read-only for
-real — it holds no write tools and no shell, so callers paste the
-actual diff and error output, and where the answer turns on something
-it can't see, it names the command that would settle the question
-instead of guessing. It is the one party member that delegates nothing:
-one deep context reading the real code is the whole point of calling
-it. Anything durable it learns leaves in its `LEARNED:` line, into your
-experience files rather than a private store.
+debugging (2+ failed attempts), and which-approach calls. Wizard
+is expensive and slow but valuable exactly when the repo needs it
+most. Solves for try and fail re-attempts.
 
-### The protocol
+### The muster protocol
 
 **The party musters on command, not by default.** The Guide does
-ordinary work itself — including substantial work. The party rides out
-only on one of three triggers:
+ordinary work itself. The party rides out only on one of three triggers:
 
 - You explicitly summon it.
 - A plan-mode plan is approved — **plans muster by default**: every plan
@@ -162,29 +148,13 @@ only on one of three triggers:
 - You accept the Guide's suggestion — it may offer, once and in one
   line, when work looks party-sized, and takes no for an answer.
 
-Once mustered: fighter builds and calls for aid as it goes (`Explore`
-recon, wizard for approach calls or twice-failed problems, an
-independent verifier once the build is done), writing every line of the
-change itself — the parallelism is on the read-only side, so the build
-report stays a first-hand account. When fighter finishes, the Guide
-**always** spawns cleric with fighter's build report; cleric fans out a
-verifier per finding when useful and makes every fix itself.
-
-Nesting is capped at depth 2: the Guide spawns party members, party
-members spawn helpers, and those helpers are leaves. Where nesting
-isn't available the party degrades to the relay — a stuck agent ends
-its turn with a `NEEDS_WIZARD:` block (problem, attempts, hypotheses,
-file paths), the Guide puts the question to wizard and resumes the
-agent with the answer via SendMessage, its context preserved.
-
 Planning is deliberately **not** a party member: planning is a dialogue
 with the human, and subagents can't talk to the human. The quest gets
 written at the Guide's table; the party executes it.
 
-Default models are set per agent; to change them, put overrides in
-`.claude/party.json` (stable tiers like `opus`/`fable`, not model IDs)
-and run `/party:config` to validate and apply them — the Guide passes
-your choice at spawn time, which outranks the agent file's default.
+Default models are set per agent; to change them, run `/party:config` 
+— the Guide passes your choice at spawn time, which outranks the agent 
+file's default.
 
 ## Session Zero
 
@@ -284,51 +254,16 @@ whole framework exists to build.
   frontmatter values are Anthropic model tiers (`opus`, `fable`) —
   change them via `.claude/party.json` + `/party:config` to match what
   your plan offers.
-- Calling for aid mid-encounter needs **nested subagents**, gated by the
-  `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` environment variable. `/party:setup`
-  writes `"2"` into your project's `.claude/settings.json`; it's read at
-  session start, so restart after the install. Whether nesting is on by
-  default varies by Claude Code version — hence setting it explicitly.
-  Without it the party still works: fighter and cleric fall back to the
-  `NEEDS_WIZARD:` relay through the main session.
-- A project-level `.claude/agents/fighter.md` (or `cleric`/`wizard`)
-  does **not** override the plugin's copy — verified: the two coexist,
-  and `party:fighter` always resolves to the plugin agent. If you
-  previously installed the party by hand, delete those files; they
-  linger as separate bare-name agents that can confuse delegation
-  (`/party:config` will flag them).
-- The experience display is per-user (written to
-  `.claude/settings.local.json`) and needs a POSIX shell — on
-  Windows-native Claude Code, setup declines it honestly; WSL is fine.
-  `party.json` IS a committed project file — model choices are a
-  team-level call.
-- On a team repo, most of what `/party:setup` writes is committed —
-  the experience files, `party.json`, the spawn-depth setting in
-  `.claude/settings.json`, the CLAUDE.md wiring — so run it on a branch
-  and let the team review the diff like any other change.
-- The agents discover project specifics (test command, pinned invariants,
-  verification method) from your CLAUDE.md. A well-documented repo gets
-  their best behavior; a bare repo gets honest judgment and honest
-  reports about what wasn't verified.
-- The protocol is convention, not enforcement — the muster-gated agent
-  descriptions, the Guide's CLAUDE.md section, and the
-  plans-muster-by-default rule are what keep it followed. It's a
-  strong nudge, deliberately not a hard block. Nothing stops an agent
-  with tool access from delegating in ways its definition doesn't
-  describe, either.
 
 ## Roadmap
 
 - Submit `party` to a community plugin marketplace so it installs without
   adding this repo as a marketplace first.
-- **The Thief** — red team: attempts to steal your app's data and
-  reports how it got in (wrapping Claude Code's security-review
-  capability in a party posture).
-- **The Artificer** — refactors, optimizes, and generally prepares you
-  for production (a natural home for simplification passes).
-- Possible **Rogue**: a dedicated UI-verification specialist (headless
-  browser driving) — a natural helper for cleric to spawn when a change
-  has a user-facing surface.
+- **The Thief** — red team: sets up local experiment, plants secrets and
+  attempts to steal your app's data and reports how it got in. Test your
+  security for real.
+- **The Artificer** — refactors, optimizes, and prepares you
+  for production.
 
 ## License
 
