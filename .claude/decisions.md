@@ -5,6 +5,23 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-27 — `<!-- party@X.Y.Z -->` markers version the block's *text*,
+never the release, and the legibility problem is fixed with a one-line
+legend rather than a second number — setup's step 5a already reads them
+that way ("a block preceded by a 0.5.0 marker is already current"),
+while `skills/setup/SKILL.md` separately told setup to stamp the current
+plugin version; that contradiction is deleted. Rejected restamping at
+release (a manual per-release step, and 5a loses its cheap signal) and
+the two-field `party@0.6.2 (block last changed 0.5.0)` middle ground —
+the current-version field goes stale the same way the moment a user
+upgrades without that block changing, unless setup rewrites markers in
+blocks it has no reason to touch, which is diff noise in the user's repo
+and against setup's own "never touches your content" promise. The
+freak-out ("0.5.0 in a 0.6.2 repo — has this rotted?") was the author's
+own reaction and is real, but it is a labelling problem: the legend
+answers it where it is asked, at zero fingerprint cost. Same rule
+governs xp.sh's header, which is therefore correct at 0.6.1.
+
 2026-07-27 — Dogfooding runs the source via `claude --plugin-dir .`; the
 installed `party` plugin on this machine exists only to test the
 *released* install path, and the release routine is push → marketplace

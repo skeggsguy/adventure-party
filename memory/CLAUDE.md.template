@@ -17,6 +17,8 @@ it's in, where the canonical plan lives if there is one>
 ## Conventions
 
 - <the project's own rules: style, patterns, hard constraints>
+<!-- Party-authored blocks below. A marker's version is when that block's
+     text last changed — not your installed plugin version. Leave them. -->
 <!-- party@0.5.0 -->
 - **The party musters on command, not by default.** The main session
   (the Guide) does the ordinary work itself — including substantial

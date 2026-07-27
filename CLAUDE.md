@@ -42,7 +42,10 @@ is no build. The repo doubles as its own marketplace
 - Shipped-text changes ripple: the muster-rule bullets exist in
   `memory/CLAUDE.md.template`, this file, and README — keep them in
   sync, and remember old shipped variants become migration fingerprints
-  in `skills/setup/SKILL.md` step 5a.
+  in `skills/setup/SKILL.md` step 5a. A `<!-- party@X.Y.Z -->` marker
+  versions the *block's text*, not the release — bump one only when you
+  change the block beneath it, never at release time (same for xp.sh's
+  header).
 - Naming: no trademarked tabletop terms in anything shipped. Check:
   `git grep -riE 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills memory .claude-plugin LICENSE`
   must return zero hits (pattern is self-escaping; the repo's own
@@ -50,6 +53,8 @@ is no build. The repo doubles as its own marketplace
   them). The main session is "the Guide".
 - `*.sh` stays LF (`.gitattributes` enforces); xp.sh must degrade
   gracefully on every failure path — it runs on every prompt render.
+<!-- Party-authored blocks below. A marker's version is when that block's
+     text last changed — not your installed plugin version. Leave them. -->
 <!-- party@0.5.0 -->
 - **The party musters on command, not by default.** The main session
   (the Guide) does the ordinary work itself — including substantial

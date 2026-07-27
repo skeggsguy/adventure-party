@@ -37,9 +37,13 @@ Everything is copied out of the installed plugin:
 - `${CLAUDE_PLUGIN_ROOT}/skills/config/SKILL.md` (step 6 references it)
 
 If any of those paths cannot be read, stop and say so — do not
-reconstruct the file contents from memory. Read the plugin version from
-`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`; the version markers
-below use it.
+reconstruct the file contents from memory.
+
+A `<!-- party@X.Y.Z -->` marker records when that block's **text** last
+changed, not the installed plugin version — so it is copied verbatim
+from the template and never restamped. A marker that trails the plugin
+version is a block that hasn't changed since, which is exactly what step
+5a needs to know.
 
 ## Steps
 

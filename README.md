@@ -66,6 +66,14 @@ chain by hand:
 
 Then restart the session — plugin skills are read at launch.
 
+To check where you stand: `claude plugin list` prints the version you
+have installed (one entry per scope), and
+[the tags page](https://github.com/skeggsguy/adventure-party/tags) is
+the latest released. The `/plugin` **Discover** tab reads your local
+marketplace clone rather than GitHub, so it only tells the truth after a
+refresh — which auto-update does for you shortly after each session
+starts.
+
 **Either way, finish by re-running `/party:setup` once in each project
 that uses it.** Updating the plugin does not touch anything already
 written into your projects. Setup is safe to re-run: it never overwrites
