@@ -4,7 +4,7 @@
   "description": "An adventuring party for your codebase — fighter builds, cleric reviews and fixes, wizard advises — plus an experience system that levels up your project's memory.",
   "version": "0.6.0",
   "author": {
-    "name": "Tomo"
+    "name": "Tom Skeggs"
   },
   "license": "MIT",
   "homepage": "https://github.com/skeggsguy/adventure-party",

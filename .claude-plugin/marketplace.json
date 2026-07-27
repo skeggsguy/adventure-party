@@ -1,7 +1,7 @@
 {
   "name": "adventure-party",
   "owner": {
-    "name": "Tomo"
+    "name": "Tom Skeggs"
   },
   "description": "Single-plugin marketplace for Adventure Party: an adventuring party and experience system for Claude Code.",
   "plugins": [
