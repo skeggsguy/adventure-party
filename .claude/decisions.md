@@ -4,6 +4,16 @@ Why A over B, for choices below plan level. Loaded into every session —
 keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
+Budget: 3–5 lines. The argument lives in learnings.md; point at it by
+date. This file is paid for every session, the argument is read once.
+
+2026-07-27 — Decisions entries get a 3–5 line budget: choice, rejected
+alternative, one-clause why, plus a pointer to the learnings entry
+holding the full argument — over pruning old decisions at the Long Rest
+(smaller edit, but leaves the write-time habit intact) or leaving it.
+Decisions was the one curated file with an inflow and no outflow: the
+Long Rest's prune gate tests *truth*, and a decision never stops being
+true, only stops being load-bearing. See learnings 2026-07-27.
 
 2026-07-27 — Session Zero becomes a **phase work passes through by
 default**, not a mode the Guide has to recognise — and the bullet is

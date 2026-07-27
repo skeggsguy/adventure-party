@@ -57,11 +57,14 @@ the same window — every earlier step is idempotent by design.
    chronicle yet → the whole log is in scope.
 2. **Distill.** For each in-scope learnings entry, decide where its
    durable core belongs — `architecture.md`, `gotchas.md`,
-   `decisions.md` — and add it there in that file's format, **skipping
-   anything already present** (idempotent). Many entries distill to
-   nothing durable; that's normal. Never edit or delete the learnings
-   entries themselves — the log is append-only, and it is the XP
-   record.
+   `decisions.md` — and add it there in that file's format **and within
+   its length budget** (gotchas 1–2 lines, decisions 3–5), **skipping
+   anything already present** (idempotent). Distilling means compressing
+   to the durable core and pointing back — "see learnings YYYY-MM-DD" —
+   not restating the argument in a file that loads every session. Many
+   entries distill to nothing durable; that's normal. Never edit or
+   delete the learnings entries themselves — the log is append-only, and
+   it is the XP record.
 3. **Prune.** Remove gotchas whose underlying cause is verifiably fixed
    (check the code/tree, not memory), and curated entries that stopped
    being true. This is the hygiene the curated files' own contract

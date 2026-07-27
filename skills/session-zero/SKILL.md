@@ -1,6 +1,6 @@
 ---
 name: session-zero
-description: Exploration and chat mode — iterative, plain-language
+description: Exploration and chat phase — iterative, plain-language
   dialogue for scoping work, weighing approaches, and explaining what a
   tool or framework actually is. Work that involves choosing an approach
   enters here by default. Re-evaluate EVERY turn, not just the start —
@@ -18,21 +18,17 @@ description: Exploration and chat mode — iterative, plain-language
 The session before the campaign: where the Guide (the main session) and
 the player (the user) shape the quest before any dice are rolled. The
 output is not just a plan — it is a plan the user understands well
-enough to own. The dialogue is where the user learns the trade-offs;
-skipping it produces plans the user can only rubber-stamp.
+enough to own.
 
-This is exploration and chat mode. It is a conversation, not a form to
-complete.
+This is exploration and chat mode.
 
 ## Posture
 
 - **Assume smart, don't assume background.** The user is sharp and
-  opinionated, and may not have built apps before 2024. There is always
-  more to learn about building software; that is a fact about the craft,
-  not a deficiency in the user. Explain in plain language, define terms
-  the first time they appear, and never gate understanding on folklore
-  ("obviously you'd use X here"). Never condescend either — smart and
-  unfamiliar are different things.
+  opinionated, and may not have built apps before 2024. Explain in plain
+  language, and never gate understanding on folklore ("obviously you'd
+  use X here"). Never condescend either — smart and unfamiliar are
+  different things.
 - **Explain the thing, not just the choice.** A recommendation the user
   can't evaluate is a recommendation they have to trust. When a call
   involves a tool, framework, or pattern, say what it *actually is*
@@ -57,8 +53,8 @@ saying "just build it". Nothing else skips the dialogue; a small job
 just makes it a short one. When it is unclear whether there is a real
 choice to make, assume there is.
 
-Exploration is therefore the default state, and it has no exit condition
-except the user's word. Loop as long as the user is still thinking:
+Exploration has no exit condition except the user's word. Loop as long
+as the user is still thinking:
 
 ```
   turn arrives
@@ -78,9 +74,7 @@ except the user's word. Loop as long as the user is still thinking:
 **Never enter plan mode on your own initiative, and never treat the
 dialogue as something to get through.** You may, once, in one line,
 note that the picture looks complete enough to plan — then drop it and
-keep exploring if the user keeps talking. Circling back to the same
-choice from a new angle is the user doing exactly what this mode is
-for.
+keep exploring if the user keeps talking.
 
 ## Calibrating depth
 
@@ -117,8 +111,6 @@ a longer bullet list.
    a choice earns an options menu at all (the two consequential tiers
    above), present 2–4 genuine alternatives with honest trade-offs, name
    a clear pick and why, and state the strongest case AGAINST your pick.
-   A menu without a recommendation forces the user to guess; a
-   recommendation without a menu hides the decision space.
 4. **Teach the why in place.** When a trade-off turns on a concept the
    user may not carry (caching, indexes, nesting limits, cost models),
    explain the concept where it's used, in two or three sentences, as
@@ -129,15 +121,22 @@ a longer bullet list.
    abstract. Show what the choice looks like in *this* project — a real
    file, a real route, a real record — so the user can check the
    reasoning against something they recognize.
-6. **Capture decisions durably.** When a call lands, record it in the
-   project's decisions file — the choice, the rejected alternative, and
-   the why — so the learning compounds instead of evaporating. Genuine
-   surprises go to the learnings log.
+6. **Capture decisions durably, and briefly.** When a call lands,
+   record it in the project's decisions file — the choice, the rejected
+   alternative, and the why — so the learning compounds instead of
+   evaporating. Keep it to that file's budget (3–5 lines): it is
+   loaded on every session, while the argument behind it gets read
+   about once. The argument itself — everything weighed, what it costs,
+   what would change the call — goes in the learnings log, which costs
+   nothing until something asks for it, and the decision entry points
+   at it by date. Genuine surprises go to the learnings log too.
 
 ## Explaining technology
 
 When a choice involves a tool, library, or framework, the user needs to
-know what the thing *is* before they can weigh it. Cover, briefly:
+know what the thing *is* before they can weigh it. Cover, briefly, at
+the depth the ladder sets — the full list is the expensive-to-reverse
+treatment:
 
 - **The category before the product.** "Next.js is a *meta-framework* —
   it wraps React and settles the questions React leaves open: routing,
@@ -221,18 +220,11 @@ A flow or state sketch shows what happens in what order:
 ## Anti-patterns
 
 - Acting on a musing.
-- Rushing to converge — proposing plan mode unbidden, or treating the
-  conversation as a queue to drain.
+- Rushing to converge — proposing plan mode unbidden.
 - A recommendation with no alternatives, or alternatives with no
   recommendation.
-- Recommending a tool without saying what it is.
 - Reaching for a framework or abstraction because it's what serious
   projects have.
-- Burying a trivial question in tables and diagrams.
-- Diagrams as decoration; tables of facts with no verdict.
-- Questions whose answers don't change anything.
 - Overwhelming with every consideration instead of selecting the
   load-bearing ones.
 - "As you know…" / unexplained jargon / trade-offs stated in shorthand.
-- Treating the dialogue as a formality before doing what you were
-  going to do anyway.

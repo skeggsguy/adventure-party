@@ -420,3 +420,46 @@ carve-out that got misapplied was written about the triviality of the
 that the *answer* was obvious and the *work* was small. An exemption is
 read against whatever nearby thing feels small; if two different things
 can be small, name which one you meant.
+
+## 2026-07-27 — The curated file with an inflow and no outflow
+
+Audited the experience system's intent against its actual state at 19
+XP. Three of the four files were behaving: gotchas held its 1–2 line
+discipline (76 lines), architecture stayed at four entries, learnings
+grew freely as designed because nothing imports it. `decisions.md` was
+252 lines across 16 entries — ~16 lines each, several past 30 — sitting
+in the tier that is paid for on *every* session, including sessions
+that only fix a typo.
+
+The cause is structural, not sloppiness. Every other curated file has a
+death condition that can be *checked*: a gotcha dies when the code
+proves its cause fixed, an architecture note dies when it stops being
+true. The Long Rest's prune step tests exactly that — "curated entries
+that stopped being true" — and a decision is a historical record, so it
+passes the test forever. Meanwhile two separate rules pushed entries
+in: Session Zero's "capture decisions durably" fires at decision time,
+and the Long Rest's distill step routes learnings cores into the same
+file. Inflow from both ends, outflow gated on a condition that can
+never fire.
+
+The general shape: **a retention rule that tests truth cannot bound a
+file whose entries are permanently true.** What was actually wanted was
+"stopped being load-bearing," which is not checkable — so the fix has
+to be a budget at write time rather than a test at prune time.
+
+Also worth keeping: the reason a length budget is the right instrument
+here at all is that a decision's *conclusion* and its *argument* have
+completely different read frequencies — the conclusion is consulted
+every session by construction (it's imported), the argument roughly
+once, when someone tries to reopen the call. Two read frequencies in
+one file means one of them is being overpaid for. Splitting on that
+seam is why the pointer ("see learnings YYYY-MM-DD") does real work
+rather than being a citation formality.
+
+Corollary noticed while checking who actually reads these: subagents
+inherit the project CLAUDE.md, so fighter never *loads* gotchas — the
+imports arrive pre-loaded before it reads its task. Only wizard has an
+explicit instruction to open the learnings log, which is coherent, since
+it's the member you call when the cheap always-loaded context already
+failed. So "is this file worth its size" is really a question about
+every agent in the party at once, not just the Guide.

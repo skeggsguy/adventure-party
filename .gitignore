@@ -8,6 +8,7 @@
 # local dogfood launchers
 party.bat
 party.sh
+ts_note.txt
 
 # local test-app sandbox for dogfooding the plugin
 tennis/
@@ -23,3 +24,4 @@ tennis/
 
 # Windows "downloaded from the internet" metadata sidecars
 *:Zone.Identifier
+*Zone.Identifier
