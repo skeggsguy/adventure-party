@@ -10,7 +10,13 @@ plugin**. You bring the quest; the party ships it.
 
 ## Install
 
-Once, to add the marketplace and install the plugin:
+There is a two phase installation process. Installing the plugin
+gets you the party and session zero. Running setup gets you the
+experience system to improve your party over time.
+
+You can install both onto a new or existing repo.
+
+**Step One** - Once, to add the marketplace and install the plugin:
 
 ```
 /plugin marketplace add skeggsguy/adventure-party
@@ -23,30 +29,17 @@ Pick a scope when `/plugin install` asks:
   Right for solo work and for trying it out; it stays inert in any
   repo until you run setup there.
 - **Project** — the party ships with the repo, for team use. Choosing
-  "Project" writes it into the repo's `.claude/settings.json`; you can
-  also check that in by hand:
-
-  ```json
-  {
-    "extraKnownMarketplaces": {
-      "adventure-party": {
-        "source": { "source": "github", "repo": "skeggsguy/adventure-party" }
-      }
-    },
-    "enabledPlugins": { "party@adventure-party": true }
-  }
-  ```
+  "Project" writes it into the repo's `.claude/settings.json`.
 
   Teammates opening the repo are prompted once to add the marketplace;
   after that the plugin loads automatically for them.
 
-Then — whichever scope you chose — once per project you want the
+**Step 2** Then — whichever scope you chose — once per project you want the
 experience system in:
 
 ```
 /party:setup
 ```
-
 
 ## The premise
 
