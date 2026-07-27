@@ -52,6 +52,17 @@ and delete entries once the underlying cause is fixed.
   in a terminal opened from Git Bash. Wire subprocess commands
   (statusline, hooks) with absolute interpreter paths — a PATH-dependent
   one dies silently when the user launches differently.
+- `/plugin install` and `/reload-plugins` never fetch origin — they
+  snapshot the local *marketplace clone* into a version-keyed cache, and
+  auto-update is off by default for third-party marketplaces. So the
+  installed plugin can silently trail a just-pushed release: dogfood this
+  repo with `claude --plugin-dir .`, never the installed copy.
+- The marketplace clone's `origin/main` ref is not evidence of what it
+  has fetched — a marketplace update leaves the ref stale while moving
+  the checkout (fetch-to-`FETCH_HEAD` shape). Only its HEAD is truthful.
+- `${CLAUDE_PLUGIN_ROOT}` resolves to the *cache snapshot*, not the cwd,
+  so `/party:setup` run inside this repo copies the installed version's
+  shipped text over the newer text sitting in the working tree.
 - A shell resolving is not its coreutils resolving: `Git\bin\sh.exe`
   wraps and sets PATH, `Git\usr\bin\sh.exe` is the bare binary and loses
   `grep`/`tail`/`sed`. Probing a script that guards its utility calls

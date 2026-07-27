@@ -35,6 +35,14 @@ Pick a scope when `/plugin install` asks:
   Teammates opening the repo are prompted once to add the marketplace;
   after that the plugin loads automatically for them.
 
+Then turn on auto-update, which is **off by default** for every
+third-party marketplace including this one — without it you stay on the
+version you installed, with no notification that a newer one exists. Run
+`/plugin`, go to the **Marketplaces** tab, select `adventure-party`, and
+choose **Enable auto-update**. Claude Code will then refresh the
+marketplace and update the plugin in the background shortly after each
+session starts, and prompt you to `/reload-plugins` when it does.
+
 **Step 2** Then — whichever scope you chose — once per project you want the
 experience system in:
 
@@ -42,11 +50,29 @@ experience system in:
 /party:setup
 ```
 
-**Upgrading** — after you update the plugin to a newer version, re-run `/party:setup` once in each project that uses it. It is safe to
-re-run: it never overwrites your experience files or your edits, it
-brings any older CLAUDE.md wiring up to the current version, and it
-refreshes the local copy of the experience-display script. Skipping it
-leaves the project running the previous version's copy.
+**Upgrading** — nothing pulls for you unless auto-update is on, and
+there are two halves to it: your local copy of the *marketplace* (a git
+clone) and the installed *plugin* (a snapshot of that clone). Refreshing
+one does not refresh the other.
+
+With auto-update enabled, both happen in the background; you just
+`/reload-plugins` when prompted, or restart. Without it, do the whole
+chain by hand:
+
+```
+/plugin marketplace update adventure-party
+/plugin update party@adventure-party
+```
+
+Then restart the session — plugin skills are read at launch.
+
+**Either way, finish by re-running `/party:setup` once in each project
+that uses it.** Updating the plugin does not touch anything already
+written into your projects. Setup is safe to re-run: it never overwrites
+your experience files or your edits, it brings any older CLAUDE.md
+wiring up to the current version, and it refreshes the local copy of the
+experience-display script. Skipping it leaves the project running the
+previous version's copy.
 
 ## The premise
 

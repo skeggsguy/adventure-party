@@ -354,3 +354,35 @@ Also worth noting how it was found — not by review, but by running
 entry above fixed this same area by dogfooding too, and left a subtler
 bug behind. One pass of dogfooding finds the failure that fires
 immediately; the deferred one needs the second pass.
+
+## 2026-07-27 — Editing a plugin's source is not running it, and the default is stale
+
+`/plugin install` in this very repo served 0.6.0 while HEAD was 0.6.1 —
+two commits, including the fix for a statusline bug that fires on every
+prompt render. Nothing malfunctioned. Install snapshots the local
+*marketplace clone* into a cache keyed by version string, and neither
+install nor `/reload-plugins` ever fetches origin. The clone had last
+been updated hours before the release. So four copies of the same bytes
+sit on this machine with four different refresh rules, and
+`${CLAUDE_PLUGIN_ROOT}` — which every skill's file paths resolve
+through — points at the oldest one. That is how `/party:setup` run
+*inside* the source repo copied a `party@0.4.0` script into a repo whose
+working tree held 0.6.1.
+
+Two things generalize past plugins. First: the wizard's reconstruction
+was right in outline but I nearly accepted a false detail with it — the
+clone's `origin/main` ref was *behind its own checkout*, which a plain
+fetch cannot produce. A ref you'd naturally trust as "what it has seen"
+was lying, and only running the discriminating test surfaced it. An
+analysis worth commissioning is worth the two commands that falsify it.
+
+Second, and the one that cost a user-facing bug: I reasoned about the
+mechanism from strong evidence for three exchanges without once checking
+whether the platform already solved it. It does — auto-update refreshes
+marketplace *and* plugin in the background. But it is enabled by default
+only for Anthropic's own marketplaces and **off for third-party ones**,
+so every Adventure Party user was pinned at their install version with
+no notification, and the README's Upgrading section documented step 4 of
+a 4-step process. The defaults that bite are the ones that differ by
+who owns the thing; "how does this work" is not the same question as
+"what does this do by default for someone who isn't me."

@@ -5,6 +5,21 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-27 — Dogfooding runs the source via `claude --plugin-dir .`; the
+installed `party` plugin on this machine exists only to test the
+*released* install path, and the release routine is push → marketplace
+update → plugin update → restart. Sitting in the source repo does not
+mean running it: install snapshots the marketplace clone into a
+version-keyed cache, so three copies of the same bytes drift
+independently, and `${CLAUDE_PLUGIN_ROOT}` points at the oldest of them.
+Diagnosed after `/plugin install` here served 0.6.0 while HEAD was
+0.6.1 — which would have re-wired the statusline with the weak probe
+0.6.1 exists to fix. The user-facing half is a README fix, not a code
+change: auto-update is off by default for third-party marketplaces, so
+Install now says to enable it and Upgrading names both halves of the
+chain (marketplace, then plugin) instead of only the `/party:setup`
+re-run.
+
 2026-07-27 — The interpreter probe's success predicate gains **empty
 stderr** alongside exit 0 and non-empty stdout, and each Git for Windows
 location is tried `bin\sh.exe` before `usr\bin\sh.exe` — amending, not
