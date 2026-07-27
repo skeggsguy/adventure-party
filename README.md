@@ -10,8 +10,8 @@ plugin**. You bring the quest; the party ships it.
 
 ## Install
 
-There is a two phase installation process. Installing the plugin
-gets you the party and session zero. Running setup gets you the
+There is a two phase installation process. (1) Installing the plugin
+gets you the party and session zero. (2) Running setup gets you the
 experience system to improve your party over time.
 
 You can install both onto a new or existing repo.
@@ -35,14 +35,6 @@ Pick a scope when `/plugin install` asks:
   Teammates opening the repo are prompted once to add the marketplace;
   after that the plugin loads automatically for them.
 
-Then turn on auto-update, which is **off by default** for every
-third-party marketplace including this one — without it you stay on the
-version you installed, with no notification that a newer one exists. Run
-`/plugin`, go to the **Marketplaces** tab, select `adventure-party`, and
-choose **Enable auto-update**. Claude Code will then refresh the
-marketplace and update the plugin in the background shortly after each
-session starts, and prompt you to `/reload-plugins` when it does.
-
 **Step 2** Then — whichever scope you chose — once per project you want the
 experience system in:
 
@@ -50,37 +42,11 @@ experience system in:
 /party:setup
 ```
 
-**Upgrading** — nothing pulls for you unless auto-update is on, and
-there are two halves to it: your local copy of the *marketplace* (a git
-clone) and the installed *plugin* (a snapshot of that clone). Refreshing
-one does not refresh the other.
-
-With auto-update enabled, both happen in the background; you just
-`/reload-plugins` when prompted, or restart. Without it, do the whole
-chain by hand:
-
-```
-/plugin marketplace update adventure-party
-/plugin update party@adventure-party
-```
+**Upgrading** — Two options either (1) put auto update on within the settings
+in Claude marketplace for this plugin. OR (2) periodically refresh the
+marketplace directly and then refresh the plugin as a second step.
 
 Then restart the session — plugin skills are read at launch.
-
-To check where you stand: `claude plugin list` prints the version you
-have installed (one entry per scope), and
-[the tags page](https://github.com/skeggsguy/adventure-party/tags) is
-the latest released. The `/plugin` **Discover** tab reads your local
-marketplace clone rather than GitHub, so it only tells the truth after a
-refresh — which auto-update does for you shortly after each session
-starts.
-
-**Either way, finish by re-running `/party:setup` once in each project
-that uses it.** Updating the plugin does not touch anything already
-written into your projects. Setup is safe to re-run: it never overwrites
-your experience files or your edits, it brings any older CLAUDE.md
-wiring up to the current version, and it refreshes the local copy of the
-experience-display script. Skipping it leaves the project running the
-previous version's copy.
 
 ## The premise
 
@@ -191,15 +157,6 @@ the **`/party:session-zero`** skill. It is exploration and chat mode — an
 iterative dialogue the Guide runs *before* plan mode or code, built for
 users who are smart and opinionated but didn't grow up in app
 development.
-
-**Work passes through it by default — if writing code means choosing
-*how*, the Guide talks first** and builds once you say go. It is not a
-gate on all code: a typo, or a mechanical edit with one obvious form,
-contains no choice, so it was never in scope. Three things release work
-that otherwise would be — an approach already settled earlier in the
-conversation (executing it isn't re-litigated), an approved plan-mode
-plan (approval *is* the go), and you saying "just build it", which ends
-the dialogue immediately.
 
 Its core moves: options **with** a recommendation (and the strongest case
 against it); what a tool or framework *actually is* before any verdict on
