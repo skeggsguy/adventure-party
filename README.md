@@ -16,7 +16,8 @@ experience system to improve your party over time.
 
 You can install both onto a new or existing repo.
 
-**Step One** - Once, to add the marketplace and install the plugin:
+**Step One** - Within the Claude session, add the marketplace and install 
+the plugin:
 
 ```
 /plugin marketplace add skeggsguy/adventure-party
