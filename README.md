@@ -42,6 +42,12 @@ experience system in:
 /party:setup
 ```
 
+**Upgrading** — after you update the plugin to a newer version, re-run `/party:setup` once in each project that uses it. It is safe to
+re-run: it never overwrites your experience files or your edits, it
+brings any older CLAUDE.md wiring up to the current version, and it
+refreshes the local copy of the experience-display script. Skipping it
+leaves the project running the previous version's copy.
+
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
