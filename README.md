@@ -56,11 +56,11 @@ conviction that successful AI development hinges on three things:
 
 1. **The dialogue** — the human conversation with the agent, where you
    learn, brainstorm, and land decisions you actually understand.
-2. **Agentic orphestration** — where multiple agents build, test,
+2. **Agentic orchestration** — where multiple agents build, test,
    review and ship the plan. Agent instructions are loosely coupled as not to
    constrain better and better models, and compliance enforced through
    unit testing and agentic review.
-4. **Leveling up** — You learn, the AI learns. Learnings should be recorded
+3. **Leveling up** — You learn, the AI learns. Learnings should be recorded
    and curated into experience, so they compound instead of evaporating.
 
 Other frameworks install process and assume engineering literacy, or
