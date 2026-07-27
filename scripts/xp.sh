@@ -17,8 +17,9 @@
 
 DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
 
-# Drain stdin (statusline/hook JSON) so the writer never sees EPIPE.
-cat >/dev/null 2>&1 || :
+# Drain stdin (statusline/hook JSON) so the writer never sees EPIPE. Skip it
+# when stdin is a terminal: a TTY never reaches EOF, so cat would hang here.
+[ -t 0 ] || cat >/dev/null 2>&1 || :
 
 XP=$(grep -c '^## [0-9][0-9][0-9][0-9]-' "$DIR/.claude/learnings.md" 2>/dev/null)
 case "$XP" in ''|*[!0-9]*) XP=0 ;; esac
