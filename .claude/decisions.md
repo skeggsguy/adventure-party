@@ -5,6 +5,37 @@ keep entries short, newest first.
 
 Format: `YYYY-MM-DD — decision — why`
 
+2026-07-27 — Session Zero becomes a **phase work passes through by
+default**, not a mode the Guide has to recognise — and the bullet is
+rewritten to decide the case rather than describe the mode. Forced by a
+live 0.6.0 misfire (see learnings 2026-07-27): the always-loaded
+CLAUDE.md bullet was in context the whole time and did not help, because
+the Guide never disputed "scoping turns get Session Zero" — it decided
+"this isn't a scoping turn." The failure is classification, upstream of
+anything the skill contains, which is precisely why every more-text fix
+was rejected: `@`-importing SKILL.md (~2.3k tokens every session,
+forever, including typo-fix sessions), growing the bullet, or adding
+trigger examples all describe a mode already excluded. Removing the
+recognition step is the only fix that touches the failing step, and
+ambiguity now resolves toward talking ("when it is unclear whether there
+is a real choice to make, assume there is") where 0.6.x resolved it
+toward building. The gate is Option A — approach decisions, "if writing
+code means choosing how, talk first" — over Option B, no edit without a
+preceding exchange: B removes the judgement entirely but trains the user
+to bypass it, and a rule routinely bypassed is worse than a narrower one
+that holds. A typo fix contains no architecture, so it is outside the
+gate's scope rather than an exemption from it. Three explicit releases
+(approach settled earlier in the thread, approved plan, "just build it")
+stop it re-litigating agreed work; the depth clause is what stops it
+becoming the ceremony tax. Honest cost accepted — some one-turn tasks
+become two, which is the trade being bought, since the complaint was the
+Guide picking an architecture silently and presenting it finished.
+Muster rules untouched; this governs only what happens before pen
+touches paper. The `PreToolUse` hook that would make the failure
+mechanically impossible stays deferred — it needs an unblock mechanism
+and would fight legitimate work; revisit only with evidence the prose
+rule doesn't hold.
+
 2026-07-27 — `<!-- party@X.Y.Z -->` markers version the block's *text*,
 never the release, and the legibility problem is fixed with a one-line
 legend rather than a second number — setup's step 5a already reads them

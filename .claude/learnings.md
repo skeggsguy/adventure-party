@@ -386,3 +386,37 @@ no notification, and the README's Upgrading section documented step 4 of
 a 4-step process. The defaults that bite are the ones that differ by
 who owns the thing; "how does this work" is not the same question as
 "what does this do by default for someone who isn't me."
+
+## 2026-07-27 — A rule that describes a mode can't fix a misclassified turn
+
+A downstream project on party@0.6.0 opened with "i want to play snake,
+lets build the app. whats the lowest effort way to achieve this on this
+pc. i want to play in browser." The Guide wrote the whole game and
+opened it in a browser. Session Zero never fired, despite an explicit
+approach question sitting in the turn, and the user's next message was
+"why didnt you call session 0."
+
+The instinct was to put more Session Zero in front of the model. That
+instinct was wrong, and the evidence was already on the screen: the
+CLAUDE.md Session Zero bullet is always-loaded, it was in context for
+the entire session, and it changed nothing. Because compliance was never
+the broken part. The Guide agreed that scoping turns get Session Zero;
+it decided this wasn't a scoping turn. Classification failed, compliance
+held, and every fix in the more-text family — importing the ~2.3k-token
+SKILL.md, growing the bullet, adding trigger examples — feeds the step
+that was already working. Generalizes past this bullet: when an
+always-loaded rule doesn't fire, first establish whether the model
+disputed the rule or the case. Only the second is fixed by rewriting the
+rule, and it is fixed by making the rule *decide the case* rather than
+describe the behavior.
+
+Two contributing details worth carrying separately. The trigger examples
+were all pure questions ("what's your view", "should I…"), so a turn
+that mixed an imperative with a question read as an instruction with a
+detail attached — examples teach the *shape* of a trigger, not just its
+subject, and a list of one shape silently excludes the others. And the
+carve-out that got misapplied was written about the triviality of the
+*question* ("a one-shot fact"), while the Guide's actual reasoning was
+that the *answer* was obvious and the *work* was small. An exemption is
+read against whatever nearby thing feels small; if two different things
+can be small, name which one you meant.

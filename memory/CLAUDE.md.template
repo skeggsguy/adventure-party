@@ -55,15 +55,19 @@ it's in, where the canonical plan lives if there is one>
   `/party:setup` writes the setting that enables nesting
   (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH: "2"` in
   `.claude/settings.json`); it takes effect on the next session start.
-<!-- party@0.6.0 -->
-- Session Zero (`/party:session-zero`): exploration and chat mode —
-  invoke when scoping work, weighing approaches, or explaining what a
-  tool or framework actually is, BEFORE plan mode. Iterative dialogue:
-  options + recommendation, plain-language trade-offs, terms defined on
-  first use, tables/diagrams where they carry structure, YAGNI over
-  speculative abstraction, the user makes the calls. Depth tracks stakes
-  × reversibility. Never move to plan mode on your own initiative — the
-  dialogue ends when the user says so.
+<!-- party@0.6.4 -->
+- **Session Zero comes before pen touches paper.** Work that involves
+  choosing an approach starts as dialogue, not edits — options +
+  recommendation, plain-language trade-offs, terms defined on first use,
+  YAGNI over speculative abstraction — and the Guide builds only once
+  the user says go. When it is unclear whether there is a real choice to
+  make, assume there is. Depth tracks stakes × reversibility — a small
+  choice gets a line, not a dialogue. Not gated — pure facts, mechanical
+  edits with one obvious form, executing an approach already agreed in
+  this thread, and approved plan-mode plans. "Just build it" ends the
+  dialogue immediately. Never move to plan mode on your own initiative.
+  `/party:session-zero` loads the full method when the exploration is
+  more than a line.
 
 <!-- party@0.5.0 -->
 ## Project memory — the party's experience

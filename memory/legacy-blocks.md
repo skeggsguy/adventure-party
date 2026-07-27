@@ -125,3 +125,25 @@ in 0.6.0. Match on the body.
   dialogue (options + recommendation, plain-language trade-offs, the user
   makes the calls).
 ```
+
+## 0.6.x — the Session Zero bullet (Conventions)
+
+In installed files this bullet is preceded by a `<!-- party@0.6.0 -->`
+marker line. Unlike the 0.5.0 entry above, that marker **is** a
+sufficient fingerprint on its own: `party@0.6.0` marked exactly one
+block in the 0.6.x template — this one. Body match is the fallback, for
+files whose markers were stripped or hand-edited. If you are matching on
+the body, note it opens "exploration and chat mode — invoke when scoping
+work", which is what separates it from the 0.5.0 variant above ("invoke
+when scoping new work or weighing approaches").
+
+```markdown
+- Session Zero (`/party:session-zero`): exploration and chat mode —
+  invoke when scoping work, weighing approaches, or explaining what a
+  tool or framework actually is, BEFORE plan mode. Iterative dialogue:
+  options + recommendation, plain-language trade-offs, terms defined on
+  first use, tables/diagrams where they carry structure, YAGNI over
+  speculative abstraction, the user makes the calls. Depth tracks stakes
+  × reversibility. Never move to plan mode on your own initiative — the
+  dialogue ends when the user says so.
+```

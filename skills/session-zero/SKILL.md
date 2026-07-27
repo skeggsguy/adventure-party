@@ -2,15 +2,15 @@
 name: session-zero
 description: Exploration and chat mode — iterative, plain-language
   dialogue for scoping work, weighing approaches, and explaining what a
-  tool or framework actually is before deciding whether to adopt it.
-  Re-evaluate EVERY turn, not just at the start — invoke as soon as a
-  turn is exploring, scoping, or choosing an approach, including when a
-  conversation drifts into design. Triggers — "what's your view",
-  "should I…", "what is X and do I need it", comparing tools, proposing
-  changes to the project's own design, or any turn where you are about
-  to recommend what the user should do. NOT a trigger — a one-shot fact
-  with no decision behind it; but if the answer's purpose is a decision,
-  it IS a trigger.
+  tool or framework actually is. Work that involves choosing an approach
+  enters here by default. Re-evaluate EVERY turn, not just the start —
+  including when the conversation drifts into design. A build
+  instruction in the SAME turn does NOT cancel it — "let's build X,
+  what's the simplest way?" is a trigger; settle the approach first,
+  build after. An obvious answer or a small job are NOT exemptions —
+  they shorten the dialogue, never skip it. NOT a trigger — a one-shot
+  fact with no decision behind it; but if the answer's purpose is a
+  decision, it IS a trigger.
 ---
 
 # Session Zero
@@ -47,8 +47,18 @@ complete.
 
 ## The shape of the dialogue
 
-Exploration is the default state, and it has no exit condition except
-the user's word. Loop as long as the user is still thinking:
+Work enters here by default. The question is never "was that turn
+exploratory enough to count" — it is whether the work contains a choice
+at all, and if so, whether anything *releases* it. A pure fact, or a
+mechanical edit with one obvious form, contains no choice and was never
+in scope. Three things release work that is in scope: an approach
+already agreed in this thread, an approved plan-mode plan, and the user
+saying "just build it". Nothing else skips the dialogue; a small job
+just makes it a short one. When it is unclear whether there is a real
+choice to make, assume there is.
+
+Exploration is therefore the default state, and it has no exit condition
+except the user's word. Loop as long as the user is still thinking:
 
 ```
   turn arrives

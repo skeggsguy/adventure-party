@@ -111,9 +111,10 @@ wielding it.
 ## The workflow
 
 1. **Session Zero** — a real multi-turn conversation shapes every
-   change before any code: what the options actually are, plain-language
-   trade-offs, options with a recommendation, you make the calls
-   (`/party:session-zero`). It runs as long as you're still thinking.
+   change that involves choosing an approach, before any code: what the
+   options actually are, plain-language trade-offs, options with a
+   recommendation, you make the calls (`/party:session-zero`). It runs
+   as long as you're still thinking.
 2. **Plan mode** — "let's plan mode this." The technical design, where
    you can and should orchestrate adversarial agents to challenge it
    (a UI challenge, a database-design challenge…).
@@ -190,6 +191,15 @@ the **`/party:session-zero`** skill. It is exploration and chat mode — an
 iterative dialogue the Guide runs *before* plan mode or code, built for
 users who are smart and opinionated but didn't grow up in app
 development.
+
+**Work passes through it by default — if writing code means choosing
+*how*, the Guide talks first** and builds once you say go. It is not a
+gate on all code: a typo, or a mechanical edit with one obvious form,
+contains no choice, so it was never in scope. Three things release work
+that otherwise would be — an approach already settled earlier in the
+conversation (executing it isn't re-litigated), an approved plan-mode
+plan (approval *is* the go), and you saying "just build it", which ends
+the dialogue immediately.
 
 Its core moves: options **with** a recommendation (and the strongest case
 against it); what a tool or framework *actually is* before any verdict on

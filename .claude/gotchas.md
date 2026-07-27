@@ -67,3 +67,10 @@ and delete entries once the underlying cause is fixed.
   wraps and sets PATH, `Git\usr\bin\sh.exe` is the bare binary and loses
   `grep`/`tail`/`sed`. Probing a script that guards its utility calls
   (like xp.sh) can't tell them apart by exit code — check stderr too.
+- `git show HEAD:path` applies working-tree eol conversion, so it cannot
+  prove byte-identity with HEAD — it compares converted text to converted
+  text. Use `git cat-file blob HEAD:path` wherever the bytes are the
+  point (legacy-block fingerprints in `memory/legacy-blocks.md`).
+- `grep -c $'\r'` through the Bash tool silently matches every line — the
+  `$'...'` quoting doesn't survive to grep. Count line endings in Python
+  (`b.count(b'\r\n')`), never by shell pattern.

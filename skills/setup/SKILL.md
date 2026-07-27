@@ -178,14 +178,25 @@ file; do not reconstruct old text from memory. Look for:
   a block preceded by a `<!-- party@0.5.0 -->` marker, or whose body
   matches the current template, is already current — skip it silently
   rather than reporting it as hand-modified.
-- The 0.5.0 Session Zero bullet — the variant whose body opens "invoke
-  when scoping new work or weighing approaches" and calls the dialogue
-  "collaborative quest-shaping". The 0.6.0
-  replacement describes exploration/chat mode and the no-self-initiated-
-  plan-mode rule, which the old three-line body doesn't cover. Its
-  `<!-- party@0.5.0 -->` marker is **not** a fingerprint on its own —
-  0.5.0 also marked the muster and experience blocks, which are current
-  — so match on the body against legacy-blocks.md.
+- The 0.6.x Session Zero bullet — the variant whose body opens
+  "exploration and chat mode — invoke when scoping work" and ends "the
+  dialogue ends when the user says so". Unlike every other candidate in
+  this list, its `<!-- party@0.6.0 -->` marker **is** a sufficient
+  fingerprint on its own: 0.6.0 marked exactly one block, this one. Body
+  match against legacy-blocks.md is the fallback, for files whose
+  markers were stripped. The 0.6.4 replacement makes Session Zero a
+  phase work passes through by default rather than a mode the Guide has
+  to recognise, and names what is not gated — neither of which the old
+  body covers.
+- The 0.5.0 Session Zero bullet — the older variant whose body opens
+  "invoke when scoping new work or weighing approaches" and calls the
+  dialogue "collaborative quest-shaping"; that opening is what separates
+  it from the 0.6.x variant above. The 0.6.4 replacement makes Session
+  Zero a phase work passes through by default, which the old three-line
+  body doesn't cover. Its `<!-- party@0.5.0 -->` marker is **not** a
+  fingerprint on its own — 0.5.0 also marked the muster and experience
+  blocks, which are current — so match on the body against
+  legacy-blocks.md.
 - The 0.3.x Conventions bullets (opening `**Summon the party — don't
   build alone.**`, plus the `**Plans name their executor.**` and
   `- Party mechanics:` companions)
