@@ -86,6 +86,10 @@ and delete entries once the underlying cause is fixed.
 - `grep -c $'\r'` through the Bash tool silently matches every line — the
   `$'...'` quoting doesn't survive to grep. Count line endings in Python
   (`b.count(b'\r\n')`), never by shell pattern.
+- `main` is the live distribution channel, not a dev branch: with
+  `"source": "./"` the marketplace clones the repo, so merging to `main`
+  ships to every end user immediately. Work on a branch; merging is the
+  release.
 - Deleting a key from `party.json` silently promotes it to an *unknown*
   key, which `/party:config` treats as a typo and hard-stops on — so a
   removal breaks every config the previous version shipped until the
