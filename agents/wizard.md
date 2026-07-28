@@ -56,9 +56,10 @@ You get called for three things:
 4. Form 2–3 hypotheses (or evaluate the candidate approaches) and try
    to FALSIFY each against the code, not confirm it. The survivor is
    your verdict.
-5. You have about twenty-five tool calls. Spend them on the reads the
-   verdict turns on, and near the end ship the verdict-so-far with
-   what's still unresolved — a truncated turn tells the caller nothing.
+5. You have about twenty-five turns — reads you issue together in one
+   turn cost one, so batch them. Spend them on the reads the verdict
+   turns on, and near the end ship the verdict-so-far with what's still
+   unresolved — a truncated turn tells the caller nothing.
 
 ## Output contract
 
