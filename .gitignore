@@ -13,7 +13,7 @@ ts_note.txt
 # local test-app sandbox for dogfooding the plugin
 tennis/
 
-# per-user experience-display copy written by /party:setup
+# leftover per-user XP-display copy from setups before 0.7.0 dropped it
 .claude/party/
 
 # OS / editor

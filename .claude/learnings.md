@@ -499,3 +499,197 @@ wasn't covered by that approval. Committing it silently would have been
 the easy path and would have shipped the 7.5 MB. A change list the user
 approved is a snapshot, not a standing licence — re-check `git status`
 between approval and commit, and anything new is a separate ask.
+
+## 2026-07-28 — An absolute interpreter path is machine-state, and nothing re-probes it
+
+The XP statusline and SessionStart banner went silent in this repo. Every
+part of the experience system was intact — `party.json` had
+`experience.enabled: true`, `.claude/party/xp.sh` was byte-identical to
+`scripts/xp.sh`, and running it by hand printed `📜 Party Lv.2 · 20/25 XP`.
+What was wrong was the interpreter: `settings.local.json` invoked
+`"C:\Program Files\Git\bin\sh.exe"`, written by a `/party:setup` run under
+Windows-native Claude Code. The same project directory reached from WSL
+has no such path, so the statusline command failed on every render and
+Claude Code showed nothing rather than an error.
+
+This is the bill for the 2026-07-26 probe decision, and the decision is
+still right — a PATH-dependent interpreter dies silently when the user
+launches differently, which is worse. But an absolute path records where
+the interpreter was *at setup time*, and setup runs once. The probe has no
+re-run trigger, so any move of the environment under a project — WSL to
+Windows-native, a Git for Windows uninstall, a repo copied between
+machines — leaves a stale absolute path with no self-heal and no
+diagnostic. `settings.local.json` being gitignored hides it further: the
+breakage lives in the one file nobody reviews.
+
+Diagnostic order that worked, and should be the default for "feature X
+shows nothing": run the script by hand *first*. It printed correct output
+immediately, which eliminated XP counting, the opt-in gate, the file copy,
+and the level thresholds in a single command, and left only the wiring.
+Debugging from the payload outward beats reading the config first, because
+a working payload converts a vague "it's broken" into "the caller is
+wrong."
+
+Second trap, in the same session: the banner was *also* silent, and that
+one is correct behavior. Banner exits 0 unless a level-up is pending, and
+Lv.2 chronicled equals Lv.2 computed at 20 XP. Two silent things with one
+real cause — say which is which when reporting, or the user re-fixes the
+half that was never broken.
+
+Open, not fixed: setup could re-validate the stored interpreter on a later
+run, or the statusline could fall back rather than vanish. Both are real
+designs and neither is chosen yet; the cost of the current behavior is
+that the failure is invisible exactly where the theme promises visibility.
+
+## 2026-07-28 — The display was machinery disproportionate to its payload
+
+Started as "why is my statusline blank" and ended as a decision to delete
+the statusline. Worth recording the path, because the first four turns
+solved the wrong problem well.
+
+The presenting bug: `settings.local.json` invoked xp.sh through
+`"C:\Program Files\Git\bin\sh.exe"`, written by a `/party:setup` run under
+Windows-native, while the session was WSL. Claude Code renders nothing
+when a statusline command fails, so it failed invisibly, in a gitignored
+file nobody reviews.
+
+The design work that followed was real and mostly wasted. A runtime
+`cmd1 || cmd2` chain looked right on a good argument — it is not
+"guessing with a safety net", it is the setup-time probe moved to
+run-time, which is where it belongs when the bug is that setup-time facts
+go stale. Wizard killed it on a point the dialogue had missed entirely:
+xp.sh's banner mode uses **exit 2 as its success signal**, so in a `||`
+chain a *successful* banner fires the fallback and the deliberate exit 2
+gets mangled. A chain covers the statusline and not the banner — half a
+fix at full complexity, resting on an unverified per-platform assumption
+about whether the harness shell-parses the command string at all.
+
+Wizard also found a live bug nobody was looking for: `/party:config`
+declines to touch an existing `statusLine`, and on a re-run the plugin's
+*own previous wiring* is an existing statusLine — so the repair path
+promised in its Report section is forbidden by its own pre-check.
+
+What actually settled it was a ratio, not any of that. To display one
+line of text the plugin ships a 9-rung probe ladder, an exit-0 +
+non-empty-stdout + empty-stderr predicate, a settings mutation, a
+per-repo script copy, and a repair path — ~70 lines of the densest
+model-executed instruction in the repo. Three fix rounds have now landed
+in that same block. **When repeated fixes cluster in one place, suspect
+the mechanism is disproportionate to the payload rather than that you are
+one fix away.** The script itself was never implicated; it ran correctly
+every time it was invoked by hand.
+
+The structural error underneath: the design **polls** a rarely-changing
+state through the most fragile channel available (an external interpreter
+resolved from a settings file in an environment we cannot see) on the
+highest-frequency trigger available (every prompt render). XP changes a
+handful of times per session, and at the exact moment it changes the
+Guide is already there, already in context, already writing the file.
+The trigger was free and sitting unused. Poll-to-event is the fix, and
+the fragile channel disappears with it.
+
+Corollary that made the delete easy: while the statusline is *also* the
+mechanism, its silent failure is intolerable — a plugin themed on making
+memory visible cannot have an invisible failure. Demote it to ornament
+and the same failure becomes acceptable. That is the tell that it should
+not have been load-bearing.
+
+Two mechanism notes for the build. Count with the **Grep tool**, not
+Bash — whether Claude Code's Bash tool has a POSIX shell on
+Windows-native is precisely the class of thing this repo has now been
+wrong about twice, and Grep is harness-provided and platform-independent.
+And keep the count *derived*: XP is `^## YYYY-` headings in learnings.md
+and must never be cached, because a counter drifts on hand edits, merges,
+and Long Rest rewrites, and the drift would land in the one number that
+gates the level-up. The celebrated level is the opposite case — not
+derivable, a record of an event — and CHRONICLE.md already stores it as
+`## Level N`. Derived values get recomputed; events get stored.
+
+Process note: the reframe came from the user, not from the analysis. Four
+turns of increasingly clever fixes inside the probe never questioned
+whether the probe should exist, and the question "why are we keeping
+xp.sh if we're removing the display" caught a real inconsistency I was
+carrying. Wizard, asked to review, attacked the options as framed and
+found genuine flaws in them — but also did not challenge the frame. Both
+the subagent and the Guide optimised within the given box.
+
+## 2026-07-28 — Removing a shipped feature leaves residue the orphan grep cannot see
+
+Executing the 0.7.0 display removal turned up a class of breakage neither
+the plan nor the token grep (`xp.sh|statusLine|statusline|SessionStart`)
+would ever catch, because the residue contains none of those words.
+
+**Deleting a config key silently converts it into a *fatal* one.**
+`experience` was dropped from `party.json`, which made it an *unknown*
+top-level key — and `/party:config` stops the run on unknown keys, by
+design, because that strictness is what catches `experiance`. The same
+rule then rejects the file the previous version's own setup wrote,
+including this repo's. A removal is only complete when the validator is
+told the removed key is **inert** rather than **wrong**; the two look
+identical to a schema and opposite to a user.
+
+**Bumping a `party@` marker ripples past the block it marks.** Prose
+elsewhere that *enumerates what a version marked* goes false silently.
+Setup step 5a said 0.5.0 also marked the muster and experience blocks
+"which are current" — true until the bump, after which a 0.5.0-marked
+experience block is exactly the outgoing legacy variant, and calling it
+current tells setup to skip the migration it should offer. The shipped-
+text ripple convention in CLAUDE.md should be read as covering
+fingerprint *cross-references*, not just bullet bodies.
+
+**A deleted section is still referenced in words.** `skills/setup/SKILL.md`
+pointed at the deleted config section as "that skill owns the wiring" —
+no grepped token in it. Deleting a numbered step also invalidates every
+internal step cross-reference; one was already wrong before the edit.
+After removing a section, read the referring files end to end. The grep
+proves the *name* is gone, never that the *promise* is.
+
+Method note worth keeping: fighter's build report flagged four open
+items it had deliberately not acted on, and three were real — the
+orphaned `Bash(sh scripts/xp.sh …)` permissions in the committed
+`.claude/settings.json` were out of its brief's scope but in cleric's.
+An agent naming what it did not do is what makes the next reviewer
+useful; a report claiming completeness would have buried all three.
+
+## 2026-07-28 — A detection string is a contract, and the archive hides the breach
+
+`/party:setup` step 5b and `/party:config` both decided "is the muster
+bullet already wired?" by testing the project's CLAUDE.md for the string
+`party:fighter`. `memory/CLAUDE.md.template` had not written that string
+since 0.4.0, when the rewrite replaced the "Summon the party" bullet
+(which did name it) with the muster bullet (which namespaces cleric and
+wizard, but writes the fighter as prose — "fighter builds"). The
+heuristic wasn't updated to match. So for three minor versions every
+correctly wired project read as unwired: re-running setup appended a
+*second* copy of the muster block, and `/party:config` warned that model
+overrides wouldn't be picked up on projects where they already were. The
+only flow that showed the bug is the one users are told is safe to
+repeat.
+
+What kept it invisible is worth more than the fix. `git grep
+party:fighter` returns hits — because `memory/legacy-blocks.md` archives
+the 0.2.x and 0.3.x blocks verbatim, and those name it three times. The
+repo greps clean while the shipped file is broken. An archive of old
+shipped text is, to grep, indistinguishable from current shipped text,
+so any question of the form "do we still ship this string" has to name
+the shipped file and never the repo.
+
+The fix class is the durable part. Keying on a different string
+(`party:cleric`, which sits inside the bullet) would have been one word
+and would have drifted again at the next rewording. Naming
+`party:fighter` in the template costs a real migration — marker bump,
+outgoing block archived, new 5a fingerprint — but is independently more
+correct, since the Guide must spawn the namespaced id and the other two
+members were already namespaced in that same sentence. Neither prevents
+recurrence: what does is the sentinel loop now in CLAUDE.md Commands,
+asserting that every string 5b tests for exists in the template. The
+detection string was a contract between a skill and a shipped file, and
+nothing was checking it.
+
+One more, found while fixing: repairing the sentinel would have left the
+bug's worst path open. 5a legitimately refuses to migrate in two cases —
+the user declines the diff, or the block was hand-edited — and in both,
+a single-string test then sends 5b on to append the duplicate anyway.
+5b's presence test therefore accepts the bullet's opening phrase as well
+as the sentinel. When a fix depends on a migration having run, check what
+happens on every path where it deliberately doesn't.

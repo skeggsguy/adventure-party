@@ -116,8 +116,8 @@ needs no migration.
 
 In installed files this bullet is preceded by a `<!-- party@0.5.0 -->`
 marker line. Note that marker alone does not identify it: 0.5.0 also
-marked the muster and experience blocks, both of which are **unchanged**
-in 0.6.0. Match on the body.
+marked the muster and experience blocks, both of which were replaced at
+0.7.0 and have their own entries below. Match on the body.
 
 ```markdown
 - Session Zero (`/party:session-zero`): invoke when scoping new work or
@@ -146,4 +146,74 @@ when scoping new work or weighing approaches").
   speculative abstraction, the user makes the calls. Depth tracks stakes
   × reversibility. Never move to plan mode on your own initiative — the
   dialogue ends when the user says so.
+```
+
+## 0.5.0–0.6.x — the "Project memory" section (experience era)
+
+In installed files this section is preceded by a `<!-- party@0.5.0 -->`
+marker line. That marker alone does not identify it — 0.5.0 also marked
+the muster and Session Zero blocks — so match on the body. What separates
+it from the 0.2.x–0.3.x variant above is the heading (`## Project memory —
+the party's experience`) and the closing `Experience points:` paragraph.
+The 0.7.0 replacement rewrites that paragraph (it still opens
+`Experience points:`, so match the full body, not the opening): the XP
+display is gone, and the level-up nudge is something the Guide does
+itself after appending a learning.
+
+```markdown
+## Project memory — the party's experience
+
+@.claude/architecture.md
+@.claude/gotchas.md
+@.claude/decisions.md
+
+Curated files above are auto-loaded every session — keep them small; remove
+stale entries. Append-only log: .claude/learnings.md (NOT imported — read it
+when context suggests a past learning is relevant; distilled into the
+curated files by the Long Rest, `/party:level-up`).
+
+When a session surfaces something non-obvious — a trap hit and diagnosed, a
+wrong assumption corrected, a design insight, user feedback on approach —
+append it to .claude/learnings.md (dated, append-only) without being asked.
+New gotchas discovered in the codebase also get a 1–2 line entry in
+gotchas.md. Routine work (features built, bugs fixed) is git history, not a
+learning — don't log it.
+
+Experience points: each dated entry in learnings.md is one XP, and the
+party levels up at thresholds (see `/party:level-up`). XP counts entries,
+but junk entries are dead weight the party carries — a padded log
+distills into bloated curated files that cost context every session.
+Log genuine learnings; let the level come.
+```
+
+## 0.5.0–0.6.x — the muster bullet (Conventions)
+
+In installed files this bullet is preceded by a `<!-- party@0.5.0 -->`
+marker line, which does **not** identify it on its own — 0.5.0 also
+marked the Session Zero and experience blocks. Its opening line is
+identical in the 0.4.x variant above, so that proves nothing either.
+Match on the body, where one clause settles it: this variant's "Once
+mustered:" sentence reads "fighter builds", while the 0.7.0 replacement
+names `party:fighter`. A muster bullet that does not contain the string
+`party:fighter` is pre-0.7.0, full stop — which matters because setup
+step 5b uses that same string to decide the bullet is already wired.
+Its `**Plan-mode plans muster the party by default.**` and
+`- Party mechanics:` companions are **unchanged** in 0.7.0 — leave them
+alone; they need no migration.
+
+```markdown
+- **The party musters on command, not by default.** The main session
+  (the Guide) does the ordinary work itself — including substantial
+  work. The party rides out only when: (a) the user explicitly summons
+  it, (b) a plan-mode plan is approved (plans muster by default — next
+  bullet), or (c) the user accepts the Guide's muster suggestion. The
+  Guide MAY suggest, once and in one line, when work looks party-sized
+  ("this looks party-sized — summon them?") — and takes no for an
+  answer. Once mustered: fighter builds, and when fighter finishes,
+  ALWAYS spawn `party:cleric` with its build report — not conditional
+  on the build looking clean. `party:wizard` (read-only) is on call
+  when explicitly asked, or after two failed attempts at the same
+  problem. When spawning a party member, check `.claude/party.json`
+  for a `models` override and pass it as the Agent tool's `model`
+  parameter (absent = the member's default).
 ```

@@ -3,8 +3,8 @@
 This is the source repo for **Adventure Party** (`party` plugin) — a
 fantasy-flavored agent-party and experience-system framework for Claude
 Code, aimed at smart, driven users who weren't full-stack devs before
-2024. Everything is markdown skills/agents plus one shell script; there
-is no build. The repo doubles as its own marketplace
+2024. Everything shipped is markdown skills and agents — no runtime
+code, no build. The repo doubles as its own marketplace
 (`.claude-plugin/marketplace.json`).
 
 ## Commands
@@ -16,12 +16,14 @@ is no build. The repo doubles as its own marketplace
   broken description silently unloads the file; needs PyYAML —
   `pip install pyyaml`, not bundled with python3 on Debian/Ubuntu):
   `python3 -c "import re,glob,yaml;[yaml.safe_load(re.match(r'^---\n(.*?)\n---\n',open(p,encoding='utf-8').read(),re.S).group(1)) for p in glob.glob('agents/*.md')+glob.glob('skills/*/SKILL.md')]"`
+- Check detection sentinels (silence means valid): every string
+  `/party:setup` step 5b and `/party:config` test for must actually
+  appear in the shipped template, or a wired project reads as unwired
+  and setup appends a duplicate —
+  `for s in 'party:fighter' '/party:session-zero' '@.claude/architecture.md'; do grep -q -- "$s" memory/CLAUDE.md.template || echo "MISSING SENTINEL: $s"; done`
 - Dogfood locally: `claude --plugin-dir .` (agents `party:fighter/cleric/wizard`,
   skills `/party:session-zero`, `/party:setup`, `/party:config`,
   `/party:level-up` should all list)
-- Test the XP script offline: `sh scripts/xp.sh statusline` /
-  `sh scripts/xp.sh banner` against fixture `.claude/learnings.md` and
-  `CHRONICLE.md` files
 
 ## Layout
 
@@ -31,7 +33,6 @@ is no build. The repo doubles as its own marketplace
 - `skills/` — session-zero, setup, config, level-up (the Long Rest)
 - `memory/` — the experience-system shells `/party:setup` copies into a
   user's project, incl. `CLAUDE.md.template`
-- `scripts/xp.sh` — statusline + level-up banner (POSIX sh, zero tokens)
 
 ## Conventions
 
@@ -44,18 +45,17 @@ is no build. The repo doubles as its own marketplace
   sync, and remember old shipped variants become migration fingerprints
   in `skills/setup/SKILL.md` step 5a. A `<!-- party@X.Y.Z -->` marker
   versions the *block's text*, not the release — bump one only when you
-  change the block beneath it, never at release time (same for xp.sh's
-  header).
+  change the block beneath it, never at release time.
 - Naming: no trademarked tabletop terms in anything shipped. Check:
   `git grep -riE 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills memory .claude-plugin LICENSE`
   must return zero hits (pattern is self-escaping; the repo's own
   `.claude/` memory may name the terms when recording why we avoid
   them). The main session is "the Guide".
-- `*.sh` stays LF (`.gitattributes` enforces); xp.sh must degrade
-  gracefully on every failure path — it runs on every prompt render.
+- `*.sh` stays LF (`.gitattributes` enforces) — `party.sh` is executed
+  by a POSIX shell, which chokes on CRLF from a Windows checkout.
 <!-- Party-authored blocks below. A marker's version is when that block's
      text last changed — not your installed plugin version. Leave them. -->
-<!-- party@0.5.0 -->
+<!-- party@0.7.0 -->
 - **The party musters on command, not by default.** The main session
   (the Guide) does the ordinary work itself — including substantial
   work. The party rides out only when: (a) the user explicitly summons
@@ -63,13 +63,13 @@ is no build. The repo doubles as its own marketplace
   bullet), or (c) the user accepts the Guide's muster suggestion. The
   Guide MAY suggest, once and in one line, when work looks party-sized
   ("this looks party-sized — summon them?") — and takes no for an
-  answer. Once mustered: fighter builds, and when fighter finishes,
-  ALWAYS spawn `party:cleric` with its build report — not conditional
-  on the build looking clean. `party:wizard` (read-only) is on call
-  when explicitly asked, or after two failed attempts at the same
-  problem. When spawning a party member, check `.claude/party.json`
-  for a `models` override and pass it as the Agent tool's `model`
-  parameter (absent = the member's default).
+  answer. Once mustered: spawn `party:fighter` to build, and when
+  fighter finishes, ALWAYS spawn `party:cleric` with its build
+  report — not conditional on the build looking clean. `party:wizard`
+  (read-only) is on call when explicitly asked, or after two failed
+  attempts at the same problem. When spawning a party member, check
+  `.claude/party.json` for a `models` override and pass it as the Agent
+  tool's `model` parameter (absent = the member's default).
 - **Plan-mode plans muster the party by default.** Entering plan mode
   is the signal that work is party-sized. Every plan ends with an
   Execution section naming who runs each phase — by default fighter
@@ -105,7 +105,7 @@ is no build. The repo doubles as its own marketplace
   `/party:session-zero` loads the full method when the exploration is
   more than a line.
 
-<!-- party@0.5.0 -->
+<!-- party@0.7.0 -->
 ## Project memory — the party's experience
 
 @.claude/architecture.md
@@ -124,8 +124,17 @@ New gotchas discovered in the codebase also get a 1–2 line entry in
 gotchas.md. Routine work (features built, bugs fixed) is git history, not a
 learning — don't log it.
 
-Experience points: each dated entry in learnings.md is one XP, and the
-party levels up at thresholds (see `/party:level-up`). XP counts entries,
-but junk entries are dead weight the party carries — a padded log
-distills into bloated curated files that cost context every session.
-Log genuine learnings; let the level come.
+Experience points: each dated entry in learnings.md is one XP. The party
+starts at level 1 and gains one at 10, 25, 50 and 100 XP, then one per
+100 beyond that. Straight after appending a learning — and at no other
+time — the Guide counts the entries with the Grep tool in count mode
+(`^## [0-9]{4}-` over .claude/learnings.md; never read the whole log to
+count it) and works out the level that count has earned. If it is above
+the level in the last `## Level N` heading of CHRONICLE.md (no chronicle
+means level 1), say so in one line and suggest `/party:level-up`. Then
+let it go: once per session, however many learnings follow, and take no
+for an answer. A session that appended nothing says nothing — the Guide
+never raises XP unprompted otherwise. XP counts entries, but junk
+entries are dead weight the party carries — a padded log distills into
+bloated curated files that cost context every session. Log genuine
+learnings; let the level come.

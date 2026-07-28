@@ -7,6 +7,15 @@ Format: `YYYY-MM-DD — decision — why`
 Budget: 3–5 lines. The argument lives in learnings.md; point at it by
 date. This file is paid for every session, the argument is read once.
 
+2026-07-28 — The XP statusline and SessionStart banner are dropped
+outright; the level-up nudge moves to the moment the Guide appends a
+learning, counting with the Grep tool (no shell, no stored counter).
+Rejected patching the probe (runtime `||` chain, slot-2 discovery,
+re-probe on `/party:config`) and shipping `xp.sh` unwired for manual
+setup — ~70 lines of the repo's most bug-prone shipped instruction
+existed to render one line, and every fix round has landed in it. See
+learnings 2026-07-28.
+
 2026-07-27 — Decisions entries get a 3–5 line budget: choice, rejected
 alternative, one-clause why, plus a pointer to the learnings entry
 holding the full argument — over pruning old decisions at the Long Rest

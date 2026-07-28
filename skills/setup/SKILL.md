@@ -2,11 +2,10 @@
 name: setup
 description: Install the Adventure Party experience system (project
   memory) into the current project — seeds the four experience files
-  into .claude/, creates party.json, enables nested delegation, wires
-  the party protocol, Session Zero, and experience sections into
+  into .claude/, creates party.json, enables nested delegation, and
+  wires the party protocol, Session Zero, and experience sections into
   CLAUDE.md (migrating party-authored blocks from older plugin
-  versions), and offers the opt-in experience display. Run once per
-  repo, by hand.
+  versions). Run once per repo, by hand.
 disable-model-invocation: true
 ---
 
@@ -34,7 +33,6 @@ Everything is copied out of the installed plugin:
 - `${CLAUDE_PLUGIN_ROOT}/memory/learnings.md`
 - `${CLAUDE_PLUGIN_ROOT}/memory/CLAUDE.md.template`
 - `${CLAUDE_PLUGIN_ROOT}/memory/legacy-blocks.md` (step 5a matches against it)
-- `${CLAUDE_PLUGIN_ROOT}/skills/config/SKILL.md` (step 6 references it)
 
 If any of those paths cannot be read, stop and say so — do not
 reconstruct the file contents from memory.
@@ -70,7 +68,7 @@ there.
 Writes under `.claude/` are treated as sensitive and will normally raise a
 permission prompt. That is expected for an installer — ask for the
 approval, don't route around it. If approval isn't available, stop and say
-so plainly; do not silently continue to the CLAUDE.md wiring in step 4,
+so plainly; do not silently continue to the CLAUDE.md wiring in step 5,
 because a `CLAUDE.md` with `@.claude/*.md` imports and no files behind
 them is worse than no install.
 
@@ -81,10 +79,7 @@ If it doesn't exist, create it as:
 ```json
 {
   "//": "To change a party member's model, add it under \"models\" — fighter, cleric, or wizard, set to opus, sonnet, haiku, or fable — then run /party:config. Empty or absent means the plugin's default.",
-  "models": {},
-  "experience": {
-    "enabled": false
-  }
+  "models": {}
 }
 ```
 
@@ -106,9 +101,9 @@ additive exception: if the file has neither a `"//"` key nor a `models`
 key, it predates this text and is missing the pointer — show the user
 the `"//"` line and add it on their confirmation, changing nothing
 else. Declining is fine; say `/party:config` reports the lineup either
-way. This is the user's one config file — model overrides and the
-experience display live here; `/party:config` applies it. Absent keys
-mean plugin defaults.
+way. This is the user's one config file — model overrides live here,
+and `/party:config` reads it back to you. Absent keys mean plugin
+defaults.
 
 ### 4. Enable nested delegation
 
@@ -173,11 +168,23 @@ file; do not reconstruct old text from memory. Look for:
   executor when they delegate.**` companion). Fingerprint them by the
   preceding `<!-- party@0.4.0 -->` marker line, or by exact body match
   against legacy-blocks.md. Their `- Party mechanics:` companion is
-  unchanged in 0.5.0 — leave it in place. Note this bullet's opening
-  line is identical in 0.5.0, so the opening line alone proves nothing:
-  a block preceded by a `<!-- party@0.5.0 -->` marker, or whose body
-  matches the current template, is already current — skip it silently
-  rather than reporting it as hand-modified.
+  unchanged in every version since — leave it in place. Note this
+  bullet's opening line is identical in 0.5.0 and 0.7.0, so the opening
+  line alone proves nothing about which variant you are holding; the
+  next entry says what does.
+- The 0.5.0–0.6.x muster bullet — same opening line, the *current*
+  trigger (b) ("a plan-mode plan is approved"), but its "Once mustered:"
+  sentence reads "fighter builds" where 0.7.0 names `party:fighter`.
+  That absence is the fingerprint: a muster bullet not containing the
+  string `party:fighter` is pre-0.7.0, and one containing it is already
+  current — skip that silently rather than reporting it as
+  hand-modified. Its `<!-- party@0.5.0 -->` marker is **not** a
+  fingerprint on its own (0.5.0 also marked the Session Zero and
+  experience blocks). Migrating this one matters more than it looks:
+  5b below tests for that same string, so an un-migrated bullet reads
+  as absent and gets a duplicate appended. Its `**Plan-mode plans
+  muster the party by default.**` and `- Party mechanics:` companions
+  are unchanged in 0.7.0 — leave them alone.
 - The 0.6.x Session Zero bullet — the variant whose body opens
   "exploration and chat mode — invoke when scoping work" and ends "the
   dialogue ends when the user says so". Unlike every other candidate in
@@ -194,9 +201,9 @@ file; do not reconstruct old text from memory. Look for:
   it from the 0.6.x variant above. The 0.6.4 replacement makes Session
   Zero a phase work passes through by default, which the old three-line
   body doesn't cover. Its `<!-- party@0.5.0 -->` marker is **not** a
-  fingerprint on its own — 0.5.0 also marked the muster and experience
-  blocks, which are current — so match on the body against
-  legacy-blocks.md.
+  fingerprint on its own — 0.5.0 also marked the muster bullet and the
+  experience-era memory section, both replaced at 0.7.0 — so match on
+  the body against legacy-blocks.md.
 - The 0.3.x Conventions bullets (opening `**Summon the party — don't
   build alone.**`, plus the `**Plans name their executor.**` and
   `- Party mechanics:` companions)
@@ -223,8 +230,12 @@ setups can fingerprint it by lookup instead of forensics:
 1. **The muster bullet** — the "The party musters on command" bullet
    from the template's Conventions section (plus its companions
    "Plan-mode plans muster the party by default" and "Party mechanics").
-   Consider them present if the file mentions `party:fighter` — but
-   only after 5a has had its chance to migrate old text.
+   Consider them present if the file mentions `party:fighter` **or**
+   the phrase "The party musters on command" — but only after 5a has
+   had its chance to migrate old text. The second test is what stops a
+   duplicate when 5a correctly declined to migrate: a user who refused
+   the diff, or a hand-modified block setup must not touch, still has
+   the bullet, and re-running setup is documented as safe.
 2. **The Session Zero bullet** — likewise from Conventions. Present if
    the file already mentions `/party:session-zero` — again, only after
    5a has had its chance to migrate the old variant.
@@ -245,24 +256,7 @@ delete a single line of the existing CLAUDE.md. If a section exists but
 looks stale or partial, leave it alone and flag it in the summary — the
 user decides.
 
-### 6. Offer the experience display (opt-in)
-
-Ask one question: *"Want the experience display? A statusline showing
-the party's level and XP, plus a one-line level-up banner at session
-start. Both are local shell scripts — zero tokens, per-user (not
-committed), and removable. [yes/no]"*
-
-- **No** → skip; note in the report that `/party:config` can wire it
-  later (set `experience.enabled` to `true` in party.json and run it).
-- **Yes** → set `"enabled": true` in `.claude/party.json`, then read
-  `${CLAUDE_PLUGIN_ROOT}/skills/config/SKILL.md` and perform its
-  "Applying `experience`" section exactly — that skill owns the wiring
-  (pre-checks, atomicity, the proved-interpreter choice and its
-  decline, the existing-statusline decline). Don't reimplement it from
-  memory here, and in particular don't decline on your own read of the
-  platform — the interpreter is chosen by probing, not by detection.
-
-### 7. Report
+### 6. Report
 
 Print a short summary:
 
@@ -272,13 +266,10 @@ Print a short summary:
 - **Skipped** — each file left alone because it already existed, and for
   CLAUDE.md, which blocks were already present.
 - **Nested delegation** — which of the four cases step 4 hit.
-- **Experience display** — opted in or not; what was wired, declined,
-  or left for `/party:config`.
 - **Your turn** — what the user still has to do by hand:
-  - **Restart the session** if step 4 or step 6 changed a settings
-    file. Settings are read at session start; until the restart,
-    fighter and cleric fall back to the `NEEDS_WIZARD:` relay and the
-    statusline stays as it was.
+  - **Restart the session** if step 4 changed `.claude/settings.json`.
+    Settings are read at session start; until the restart, fighter and
+    cleric fall back to the `NEEDS_WIZARD:` relay.
   - Fill the template's `<placeholders>` (project description, commands,
     layout, conventions), and seed the experience files with the
     project's real architecture notes, gotchas, and decisions. Empty

@@ -11,8 +11,7 @@ disable-model-invocation: true
 # The Long Rest
 
 Levels are earned by experience: every `## YYYY-MM-DD` entry in
-`.claude/learnings.md` is one XP, and the statusline shows when the
-party has enough to level up. The Long Rest is where the level-up
+`.claude/learnings.md` is one XP. The Long Rest is where the level-up
 actually happens — and it is not a fireworks display. It is the moment
 the party *trains*: the append-only log gets distilled into the curated
 files that load every session, so a leveled-up party is literally a
@@ -40,9 +39,8 @@ level.
 - Chronicled level: the last `## Level N` heading in `CHRONICLE.md`
   (1 if the file doesn't exist).
 
-This matches `scripts/xp.sh` in the plugin — if `.claude/party/xp.sh`
-is installed, just run `sh .claude/party/xp.sh statusline` and read the
-numbers instead of recomputing.
+Count with the Grep tool in count mode — the log is append-only and
+gets long, and there is never a reason to read it just to count it.
 
 ## The ceremony — order matters
 
@@ -90,8 +88,9 @@ the same window — every earlier step is idempotent by design.
    ```
 
    The `## Level N` heading and the watermark line are load-bearing —
-   `xp.sh` and the next rest parse them. The level recorded is the
-   computed level (unchanged, on a below-threshold rest). The watermark
+   the next rest parses them, and so does the Guide's level-up nudge.
+   The level recorded is the computed level (unchanged, on a
+   below-threshold rest). The watermark
    date is the date of the newest learnings entry distilled; if the rest
    found no in-scope entries, carry the previous watermark forward (or
    use today's date on a first-ever rest).
