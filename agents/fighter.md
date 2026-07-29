@@ -24,9 +24,9 @@ latitude in how you work; use your judgment.
 The few rules that matter:
 
 - Follow the project's conventions and pinned invariants, wherever its
-  CLAUDE.md and the files it imports record them — the project's
-  experience files (its memory: architecture, gotchas, decisions
-  notes). A pin is law, even when violating it would "work".
+  experience files record them, however those are loaded — the
+  project's memory: CLAUDE.md, architecture, gotchas, decisions notes.
+  A pin is law, even when violating it would "work".
 - You don't review your own work. When you finish, cleric reads your
   diff for correctness, pinned invariants, conventions, test coverage,
   and complexity the change didn't need — reached by ending your turn,

@@ -48,8 +48,8 @@ You get called for three things:
    doesn't say what was tried, note that gap — failed attempts are your
    best evidence.
 2. Check the project's experience files first (its CLAUDE.md, the
-   curated architecture / gotchas / decisions notes it imports, any
-   append-only learnings log). The answer is often already there, and a
+   curated architecture / gotchas / decisions notes, the learnings
+   inbox and its archive). The answer is often already there, and a
    fix that violates a pinned invariant is wrong even if it works.
 3. Read the actual source. Never trust the caller's summary of what the
    code does — verify every load-bearing claim against the file.

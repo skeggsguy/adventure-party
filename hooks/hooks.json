@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat \"${CLAUDE_PLUGIN_ROOT}/hooks/instructions.md\""
+          },
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR/.claude\" 2>/dev/null && cat architecture.md gotchas.md decisions.md 2>/dev/null; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

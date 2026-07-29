@@ -25,9 +25,9 @@ Review lenses, in rough priority order:
 
 - **Correctness** — real bugs: wrong logic, unhandled failure paths,
   races, orphaned state.
-- **Pinned invariants** — whatever the project's CLAUDE.md and the
-  files it imports pin. A change that violates a pin is wrong even if
-  tests pass.
+- **Pinned invariants** — whatever the project's experience files pin,
+  however those are loaded (CLAUDE.md, architecture, gotchas,
+  decisions). A change that violates a pin is wrong even if tests pass.
 - **Project conventions** — the codebase's own rules and idioms, as
   documented in its experience files (its memory) and as practiced in
   the surrounding code.
