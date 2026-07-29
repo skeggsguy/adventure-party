@@ -7,6 +7,23 @@ Format: `YYYY-MM-DD — decision — why`
 Budget: 3–5 lines. The argument lives in learnings.md; point at it by
 date. This file is paid for every session, the argument is read once.
 
+2026-07-29 — The plugin serves its instructions from a SessionStart hook
+and copies nothing into a user's repo; `/party:setup`, `/party:config`
+and `/party:level-up` are deleted, `learnings.md` becomes an inbox that
+`/party:consolidate` empties, and levels are one per rest. Rejected
+keeping the template plus better migration tooling — the drift it
+manages is created by the copying, and every piece of the machinery that
+manages it can fail silently. Cost accepted: the hook is now a hard
+dependency, and its Windows-native path is unverified. See learnings
+2026-07-29.
+
+2026-07-29 — The hook ships as one SessionStart block, two one-line `cat`
+commands, plain stdout, matcher omitted — not JSON `additionalContext`,
+not one entry per file, not an enumerated matcher. The spike proved
+stdout injects verbatim and a 21.9k payload survives whole, so both
+elaborations bought nothing, and plain `cat` keeps python3 out of the
+plugin's runtime requirements. See learnings 2026-07-29.
+
 2026-07-28 — The XP statusline and SessionStart banner are dropped
 outright; the level-up nudge moves to the moment the Guide appends a
 learning, counting with the Grep tool (no shell, no stored counter).

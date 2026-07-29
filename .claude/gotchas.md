@@ -58,11 +58,6 @@ and delete entries once the underlying cause is fixed.
   binary blob ship to every user. Size binaries at commit time (README
   hero renders at width 480, so 960px is the ceiling); there is no
   package step to catch it later.
-- Grepping the repo cannot tell you what the plugin *ships*:
-  `memory/legacy-blocks.md` archives old blocks verbatim, so
-  `party:fighter` looked current for three versions after the template
-  dropped it (setup 5b keys on it). Ask the shipped file by name — the
-  sentinel loop in CLAUDE.md Commands does exactly that.
 - Git Bash on Windows PATH is a property of the *launch chain*, not the
   machine: `Git\usr\bin` is absent from the persistent PATH but present
   in a terminal opened from Git Bash. Wire subprocess commands
@@ -76,13 +71,13 @@ and delete entries once the underlying cause is fixed.
 - The marketplace clone's `origin/main` ref is not evidence of what it
   has fetched — a marketplace update leaves the ref stale while moving
   the checkout (fetch-to-`FETCH_HEAD` shape). Only its HEAD is truthful.
-- `${CLAUDE_PLUGIN_ROOT}` resolves to the *cache snapshot*, not the cwd,
-  so `/party:setup` run inside this repo copies the installed version's
-  shipped text over the newer text sitting in the working tree.
+- `${CLAUDE_PLUGIN_ROOT}` resolves to the *cache snapshot*, not the cwd —
+  so the installed plugin serves the snapshot's `hooks/instructions.md`,
+  which can trail the working tree even while you sit in this repo.
 - `git show HEAD:path` applies working-tree eol conversion, so it cannot
   prove byte-identity with HEAD — it compares converted text to converted
   text. Use `git cat-file blob HEAD:path` wherever the bytes are the
-  point (legacy-block fingerprints in `memory/legacy-blocks.md`).
+  point.
 - `grep -c $'\r'` through the Bash tool silently matches every line — the
   `$'...'` quoting doesn't survive to grep. Count line endings in Python
   (`b.count(b'\r\n')`), never by shell pattern.
@@ -90,12 +85,8 @@ and delete entries once the underlying cause is fixed.
   `"source": "./"` the marketplace clones the repo, so merging to `main`
   ships to every end user immediately. Work on a branch; merging is the
   release.
-- Deleting a key from `party.json` silently promotes it to an *unknown*
-  key, which `/party:config` treats as a typo and hard-stops on — so a
-  removal breaks every config the previous version shipped until the
-  validator is told the key is inert rather than wrong (0.7.0,
-  `experience`).
-- Bumping a `<!-- party@X.Y.Z -->` marker ripples past its own block:
-  prose that enumerates *what a version marked* (setup step 5a's
-  fingerprint notes, `legacy-blocks.md` framing) goes false silently.
-  Grep the old version string after any bump.
+- A plugin's `hooks/hooks.json` auto-registers — no `hooks` key in
+  `plugin.json`, and `--plugin-dir` honors it. SessionStart hook stdout
+  is injected verbatim (no JSON wrapper needed) and is not truncated at
+  ~22k chars; the `matcher` field is honored and accepts alternation, so
+  a wrong matcher fails silently by simply never firing.

@@ -5,27 +5,28 @@ current — this file is loaded into every session. Remove entries that stop
 being true.
 
 - **What loads when is the real architecture of this repo.** Four tiers,
-  and every design trade-off here is paid in one of them: CLAUDE.md plus
-  the three curated experience files load on *every* session;
+  and every design trade-off here is paid in one of them:
+  `hooks/instructions.md` plus the project's three curated experience
+  files load on *every* session, in every project the plugin is installed
+  for — that tier is the expensive one, hence the ~4k budget;
   `learnings.md` is read on demand only; a skill's body costs nothing
   until it is invoked, but its frontmatter `description` is always in the
   model's list — which is why triggers live there and detail lives in the
-  body; `xp.sh` costs zero tokens because it is shell. Bloat in the
-  always-loaded tier is the expensive kind.
+  body; `hooks.json` itself costs nothing, it is plumbing.
 - **An instruction only fires if it is in context at the moment it must
-  fire.** CLAUDE.md is loaded once at session start, then competes with
-  everything else by the time execution begins — which is why the muster
-  rule rides *inside* plan text (the mandatory Execution section) instead
-  of relying on CLAUDE.md alone. Corollary for every default we set:
-  silence must mean the behavior we want, because silence is the most
-  common case.
-- **The plugin ships nothing project-specific; `/party:setup` writes all
-  project state.** That asymmetry is what makes install scope the
-  installer's free choice — a user-level install is inert in any repo
-  that hasn't run setup. It also means shipped text and already-installed
-  text drift apart across versions, which is why setup carries the
-  fingerprinted migration in step 5a and `memory/legacy-blocks.md` holds
-  the exact old bodies to match against.
+  fire.** Session-start text — hook payload or CLAUDE.md alike — competes
+  with everything else by the time execution begins, which is why the
+  muster rule also rides *inside* plan text (the mandatory Execution
+  section). Corollary for every default we set: silence must mean the
+  behavior we want, because silence is the most common case.
+- **The plugin writes nothing into a user's repo; it serves its
+  instructions live at session start.** That is the whole 0.8.0 bet:
+  copied text drifts from shipped text, so we stopped copying —
+  install scope is the only gate (user-level = every repo, project-level
+  = that repo), upgrading the plugin upgrades every project at once, and
+  the only project state left is what the *user's own* sessions write
+  (`.claude/` experience files, `party.json`). The cost is that the hook
+  is now a hard dependency: no POSIX shell, no instructions.
 - **The party is one builder, an unconditional reviewer, and a third
   member held in reserve.** Deliberate, not arbitrary: the consensus
   failure mode of workflow plugins is the ceremony tax, and a reviewer

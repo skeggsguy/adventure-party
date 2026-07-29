@@ -693,3 +693,61 @@ a single-string test then sends 5b on to append the duplicate anyway.
 5b's presence test therefore accepts the bullet's opening phrase as well
 as the sentinel. When a fix depends on a migration having run, check what
 happens on every path where it deliberately doesn't.
+
+## 2026-07-29 — The drift machinery was the product's largest surface, so we stopped copying text
+
+Six of the repo's gotchas, three skills, an entire `memory/` directory and
+every `<!-- party@X.Y.Z -->` marker existed for one reason: text copied into
+a user's repo at setup time drifts from the text the plugin later ships.
+Nothing in that machinery *fixed* the drift — it managed it, with migration
+fingerprints, archived legacy blocks, detection sentinels, and a sentinel
+loop to check the detection sentinels. The cost was not the tokens, it was
+that each of those pieces could fail silently and several already had.
+
+0.8.0 removes the cause instead: a SessionStart hook `cat`s
+`hooks/instructions.md` out of the plugin and the project's own curated
+experience files out of `.claude/`, into every session. Nothing is copied,
+so nothing can drift; updating the plugin updates every project at once;
+install scope becomes the only gate. `/party:setup`, `/party:config` and
+`/party:level-up` all die with it — setup because there is nothing to write,
+config because a JSON file the user edits by hand never needed a skill to
+validate it, level-up because levels no longer have to be derived from a
+counter that has to survive distillation.
+
+The thing that made it possible was the inbox reframing. XP-as-entry-count
+forced `learnings.md` to be append-only forever, which forced a watermark to
+bound each rest, which is where the whole level arithmetic came from. Make
+the log an inbox that `/party:consolidate` empties and all of it collapses:
+"time to consolidate" is `inbox >= 10`, and the level is just the last
+chronicle level plus one. Two numbers that had to agree became one file that
+is either full or empty.
+
+What replaces the drift risk is a hard dependency: no POSIX shell, no
+instructions at all. That is a worse failure mode than drift (silent and
+total, versus stale) and it is unverified on Windows-native — which is why
+the README now names it as the thing to report.
+
+## 2026-07-29 — Spiking the hook rails first answered five questions the docs disagreed on
+
+Every design fork in the re-architecture rested on plugin-hook behavior the
+documentation is contradictory about, so nothing shipped until a scratch
+plugin under `/tmp` had been driven headless with `claude --plugin-dir`.
+Five runs, five answers, all cheap: `--plugin-dir` does load a plugin's
+hooks; `hooks/hooks.json` auto-registers with no `hooks` key in
+`plugin.json`; plain stdout is injected verbatim, so the planned fallback to
+a `python3 -c json.dumps` one-liner was never needed — and python3 therefore
+never became a runtime requirement of the plugin; a 21.9k-char payload
+arrived intact head *and* tail, so one entry per file was unnecessary; and
+the `matcher` field is honored, with alternation working (`startup|compact`
+fired, `clear|compact|resume` did not).
+
+The last one is the trap worth keeping: a matcher that doesn't match fails
+by silently never firing, and the omitted-matcher case can only be *proved*
+for the source you can reach headless. `startup` is provable; `compact` and
+`clear` are interactive-only, so "fires on all sources" remains an
+assumption the shipped file rests on, not a tested fact.
+
+The generalisable half: the spike cost five tiny headless prompts and
+retired two variants of the design before a line of shipped text existed.
+The alternative — build on the docs, discover at dogfood time — is how the
+xp.sh probe consumed three releases.
