@@ -39,7 +39,8 @@ into every session as it starts.
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
-Then restart the session — plugin skills are read at launch.
+Then restart the session — plugin skills and the session-start hook are
+read at launch.
 
 ## The premise
 
