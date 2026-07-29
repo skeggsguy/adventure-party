@@ -10,6 +10,9 @@ party.bat
 party.sh
 ts_note.txt
 
+# local working notes for the session-zero rework (not shipped)
+todo-session0.md
+
 # local test-app sandbox for dogfooding the plugin
 tennis/
 
