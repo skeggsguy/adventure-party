@@ -11,8 +11,7 @@ plugin**. You bring the quest; the party ships it.
 ## Install
 
 One step. Installing the plugin gets you the party, session zero, and the
-experience system — there is nothing to run per project, and nothing is
-copied into your repo. Works on a new or existing repo.
+experience system.
 
 Within the Claude session, add the marketplace and install the plugin:
 
@@ -39,14 +38,10 @@ into every session as it starts.
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
-Then restart the session — plugin skills and the session-start hook are
-read at launch.
-
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
-driven but weren't full-stack developers before the genesis of AI — and on the
-conviction that successful AI development hinges on three things:
+driven, and on the conviction that successful AI development hinges on three things:
 
 1. **The dialogue** — the human conversation with the agent, where you
    learn, brainstorm, and land decisions you actually understand.
@@ -85,7 +80,7 @@ wielding it.
    off the commit.
 5. **New adventure, new session** — and the experience system carries
    what was learned.
-6. **Level up** — learnings are captured in every session. When enough
+6. **Long rest** — learnings are captured in every session. When enough
    have piled up you take a Long Rest, and they are sorted into
    architecture, decisions and gotchas which are readable by Claude. You
    level up, AI levels up.
@@ -127,25 +122,8 @@ most. Solves for try and fail re-attempts.
 ### The muster protocol
 
 **The party musters on command, not by default.** The Guide does
-ordinary work itself. The party rides out only on one of three triggers:
-
-- You explicitly summon it.
-- A plan-mode plan is approved — **plans muster by default**: every plan
-  ends with an Execution section naming who runs each phase, fighter
-  building and cleric reviewing unless you said otherwise while
-  planning.
-- You accept the Guide's suggestion — it may offer, once and in one
-  line, when work looks party-sized, and takes no for an answer.
-
-Planning is deliberately **not** a party member: planning is a dialogue
-with the human, and subagents can't talk to the human. The quest gets
-written at the Guide's table; the party executes it.
-
-Default models are set per agent; to change them, edit
-`.claude/party.json` in your project — put `fighter`, `cleric` or
-`wizard` under `models`, set to a tier (`opus`, `sonnet`, `haiku`,
-`fable`). The Guide passes your choice at spawn time, which outranks the
-agent file's default.
+ordinary work itself. The party rides out only if you summon it,
+you accept a suggestion from the guide, or on execution of plan mode.
 
 ## Session Zero
 
@@ -155,23 +133,15 @@ iterative dialogue the Guide runs *before* plan mode or code, built for
 users who are smart and opinionated but didn't grow up in app
 development.
 
-Its core moves: options **with** a recommendation (and the strongest case
-against it); what a tool or framework *actually is* before any verdict on
-using it — the category, the problem it was built for, and which
-decisions it takes off your plate in exchange for its opinions; YAGNI
-held as the default, because a wrong abstraction is a rewrite where
-duplicated code is only a refactor; tables and ASCII sketches where they
-carry structure prose carries badly; every term defined the first time
-it appears; clarifying questions batched early and only when the answer
-changes something; musings answered with assessment rather than action.
-
-Depth tracks **stakes × reversibility** — a naming question gets a
-sentence, a dependency you'll build on gets the full treatment. The
-dialogue has no exit condition except your word: the Guide never moves
-to plan mode on its own initiative, and circling back to the same call
-from a new angle is the mode working as intended. Every landed decision
-is recorded with its why in the project's decisions file, so the
-learning compounds. The user makes the calls, informed.
+Its core moves: options **with** a recommendation; what a tool or 
+framework *actually is* before any verdict on using it — the category, 
+the problem it was built for, and which decisions it takes off your plate 
+in exchange for its opinions; YAGNI held as the default, because a wrong 
+abstraction is a rewrite where duplicated code is only a refactor; 
+tables and ASCII sketches where they carry structure prose carries badly; 
+every term defined the first time it appears; clarifying questions batched 
+early and only when the answer changes something; musings answered with 
+assessment rather than action.
 
 ## The experience system
 
@@ -213,9 +183,8 @@ entries the Guide mentions it, once — resting is always your call.
    plain language — what was built, what was conquered, what *you*
    learned. Every rest is a level; the chronicle is the record of them.
 3. It awards the party a title — seeded from your repo's name and the
-   level, so it is deterministic: *your* project's Level 3 party is
-   always, say, the Wardens of the Unbroken Build. Their name, not a
-   slot machine's.
+   level: *your* project's Level 3 party is always, say, the Wardens of
+   the Unbroken Build.
 
 The player levels up too: the chronicle plus the decisions file is a
 growing, readable record of your own understanding — the thing this
@@ -226,10 +195,7 @@ whole framework exists to build.
 - Claude Code with plugin support and subagents; `model:`/`effort:`
   frontmatter values are Anthropic model tiers (`opus`, `fable`) —
   change them in `.claude/party.json` to match what your plan offers.
-- The session-start hook runs one `cat` through a POSIX shell. Verified
-  on Linux and WSL; on Windows-native it is expected to work through Git
-  Bash but is not yet verified — if the party's instructions never show
-  up there, that is the thing to report.
+- The session-start hook runs one `cat` through a POSIX shell.
 
 ## Roadmap
 
