@@ -17,6 +17,8 @@ build looking clean. `party:wizard` (read-only) is on call when explicitly
 asked, or after two failed attempts at the same problem. When spawning a
 party member, check `.claude/party.json` for a `models` override and pass it
 as the Agent tool's `model` parameter (absent = the member's default).
+Subagents never see this hook-injected context — carry the experience
+entries relevant to the quest into each party member's spawn prompt.
 
 **Plan-mode plans muster the party by default.** Entering plan mode is the
 signal that work is party-sized. Every plan ends with an Execution section

@@ -88,7 +88,8 @@ and delete entries once the underlying cause is fixed.
 - SessionStart hook output reaches the MAIN session only — subagents do
   not inherit it (tested 2026-07-29). CLAUDE.md and its `@`-imports do
   propagate, so anything a party member must have either lives in
-  CLAUDE.md or must be read by the agent itself.
+  CLAUDE.md, is read by the agent itself, or rides the spawn prompt —
+  `hooks/instructions.md` mandates that briefing at muster.
 - A plugin's `hooks/hooks.json` auto-registers — no `hooks` key in
   `plugin.json`, and `--plugin-dir` honors it. SessionStart hook stdout
   is injected verbatim (no JSON wrapper needed) and is not truncated at
