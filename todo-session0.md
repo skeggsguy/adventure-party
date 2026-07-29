@@ -25,9 +25,9 @@ Review it and delete it before the next release.**
   scales with the size of the request like everything else does.
 
 - [ ] **Superseded-not-deleted decision entries accumulate forever** in a
-  file that is injected into every session. Give `/party:consolidate`
+  file that is injected into every session. Give `/party:long-rest`
   explicit license to prune long-superseded tombstones (it currently prunes
-  them, but the rule lives only in the consolidate skill — the two rules
+  them, but the rule lives only in the Long Rest skill — the two rules
   should agree out loud).
 
 - [ ] **Two scaffolds worth re-adding from the old skill, compressed** — the

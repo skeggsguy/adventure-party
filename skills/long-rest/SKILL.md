@@ -1,6 +1,6 @@
 ---
-name: consolidate
-description: The Long Rest — the party's consolidation ceremony. Distills the
+name: long-rest
+description: The Long Rest — the party's level-up ceremony. Distills the
   learnings inbox into the curated experience files (your project's memory),
   prunes what has stopped being true, archives the processed entries, and
   records the new level in CHRONICLE.md with a seeded title. User-invoked
@@ -12,7 +12,7 @@ disable-model-invocation: true
 # The Long Rest
 
 `.claude/learnings.md` is an inbox, not an archive: entries land there
-un-curated as sessions surface them. Consolidation is where the party
+un-curated as sessions surface them. The Long Rest is where the party
 *trains* — the inbox is distilled into the curated files that load every
 session, then emptied, so a leveled-up party is literally a better-informed
 party.
@@ -68,7 +68,7 @@ design.
 5. **Archive and empty the inbox.** Append every processed entry, verbatim
    and in order, to `.claude/learnings-archive.md` (create it with a
    `# Learnings archive` heading and a one-line note that it is written by
-   `/party:consolidate` and read on demand). Then leave
+   `/party:long-rest` and read on demand). Then leave
    `.claude/learnings.md` as its bare header and nothing else — the next
    entry starts a fresh inbox. Write no watermark line: the empty inbox is
    the watermark.

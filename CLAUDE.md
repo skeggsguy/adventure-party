@@ -26,7 +26,7 @@ experience files arrive that way rather than from this file.
   `claude --plugin-dir . -p 'Quote the sentence containing "lantern" from your instructions, or say NONE.'`
 - Dogfood locally: `claude --plugin-dir .` (agents
   `party:fighter/cleric/wizard`, skills `/party:session-zero` and
-  `/party:consolidate` should list)
+  `/party:long-rest` should list)
 
 ## Layout
 
@@ -35,7 +35,7 @@ experience files arrive that way rather than from this file.
   wizard (read-only advisor)
 - `hooks/` — `hooks.json` (SessionStart) and `instructions.md`, the
   party protocol + experience rules injected into every session
-- `skills/` — session-zero, consolidate (the Long Rest)
+- `skills/` — session-zero, long-rest (distills the learnings inbox)
 
 ## Conventions
 

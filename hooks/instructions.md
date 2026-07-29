@@ -66,12 +66,12 @@ the old entry superseded with a one-line reason instead of deleting it.
 Straight after appending a learning — and at no other time — count the inbox
 with the Grep tool in count mode (`^## [0-9]{4}-` over
 `.claude/learnings.md`; never read the log to count it). At 10 entries or
-more, say so in one line and suggest `/party:consolidate`. Then let it go:
+more, say so in one line and suggest `/party:long-rest`. Then let it go:
 once per session, however many learnings follow, and take no for an answer.
 
 Create any of these that is missing with its heading and a one-line contract,
 nothing else: `# Learnings (inbox)` (append-only dated entries, distilled and
-archived by `/party:consolidate`), `# Architecture notes` (how the system
+archived by `/party:long-rest`), `# Architecture notes` (how the system
 actually fits together), `# Gotchas` (traps, 1–2 lines each, deleted once
 fixed), `# Decisions` (why A over B, newest first).
 

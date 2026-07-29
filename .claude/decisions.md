@@ -10,7 +10,7 @@ date. This file is paid for every session, the argument is read once.
 2026-07-29 — The plugin serves its instructions from a SessionStart hook
 and copies nothing into a user's repo; `/party:setup`, `/party:config`
 and `/party:level-up` are deleted, `learnings.md` becomes an inbox that
-`/party:consolidate` empties, and levels are one per rest. Rejected
+`/party:long-rest` empties, and levels are one per rest. Rejected
 keeping the template plus better migration tooling — the drift it
 manages is created by the copying, and every piece of the machinery that
 manages it can fail silently. Cost accepted: the hook is now a hard

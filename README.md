@@ -201,7 +201,7 @@ there.
 
 ## Leveling up — the Long Rest
 
-`/party:consolidate` is the ceremony, and it is not fireworks: a Long
+`/party:long-rest` is the ceremony, and it is not fireworks: a Long
 Rest is the moment the party *trains*. When the inbox reaches ten
 entries the Guide mentions it, once — resting is always your call.
 
