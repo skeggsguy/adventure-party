@@ -153,8 +153,8 @@ memory is its **experience**, and it levels up. Four files under
   loaded every session)
 - `gotchas.md` — non-obvious traps, 1–2 lines each, deleted when fixed
   (curated, loaded every session)
-- `decisions.md` — why A over B, newest first (curated, loaded every
-  session)
+- `decisions.md` — why A over B, ~2 lines each, newest first (curated,
+  loaded every session; the full argument lives in the archive)
 - `learnings.md` — the **inbox**: an append-only log of surprises,
   never loaded, read on demand and emptied by the Long Rest (below)
 
@@ -176,9 +176,12 @@ Rest is the moment the party *trains*. When the inbox reaches ten
 entries the Guide mentions it, once — resting is always your call.
 
 1. It distills the inbox into the curated files that load every session,
-   prunes what has stopped being true, then archives the processed
-   entries to `learnings-archive.md` and leaves the inbox empty. A
-   leveled-up party is literally a better-informed party.
+   prunes what has stopped being true, compacts what has outgrown its
+   budget — the full argument moves to `learnings-archive.md`, the live
+   entry keeps the claim — then archives the processed entries and leaves
+   the inbox empty. It also tells you what those always-loaded files now
+   cost, every rest: distilling grows them, so the same ceremony is what
+   bounds them. A leveled-up party is literally a better-informed party.
 2. It appends the level to **`CHRONICLE.md`**: your project's saga in
    plain language — what was built, what was conquered, what *you*
    learned. Every rest is a level; the chronicle is the record of them.
@@ -195,7 +198,7 @@ whole framework exists to build.
 - Claude Code with plugin support and subagents; `model:`/`effort:`
   frontmatter values are Anthropic model tiers (`opus`, `fable`) —
   change them in `.claude/party.json` to match what your plan offers.
-- The session-start hook runs one `cat` through a POSIX shell.
+- The session-start hook runs two one-line `cat`s through a POSIX shell.
 
 ## Roadmap
 

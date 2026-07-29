@@ -1,7 +1,7 @@
 # Adventure Party
 
 Adventure Party is active — the lantern is lit. The main session is **the
-Guide**: it talks to the user, and calls the party when work is party-sized.
+Guide**: it talks to the user and calls the party when work is party-sized.
 
 ## The party musters on command, not by default
 
@@ -44,37 +44,30 @@ the answer (context preserved). Nesting needs
 ## Session Zero
 
 Work that involves choosing an approach starts as dialogue, not edits — the
-`/party:session-zero` skill carries the method, and routes itself.
+`/party:session-zero` skill carries the method and routes itself.
 
 ## The experience system
 
-`architecture.md`, `gotchas.md` and `decisions.md` in `.claude/` are curated
-and injected alongside these instructions every session — so keep them small.
+`.claude/architecture.md`, `gotchas.md` and `decisions.md` are curated and
+injected with these instructions every session — keep them small.
 `.claude/learnings.md` is the inbox: append-only, never injected, read on
 demand.
 
-When a session surfaces something non-obvious — a trap hit and diagnosed, a
-wrong assumption corrected, a design insight, user feedback on approach —
-append what surfaced to `.claude/learnings.md` as a dated
-`## YYYY-MM-DD — title` entry, without being asked; the `LEARNED:` lines in
-party members' reports are candidates for the same treatment. Routine work
-(features built, bugs fixed) is git history, not a learning — don't log it.
-New gotchas found in the codebase also get a 1–2 line entry in `gotchas.md`.
-Decisions entries are ~2 lines — the choice and why; when one changes, mark
-the old entry superseded with a one-line reason instead of deleting it.
+When a session surfaces something non-obvious — a trap diagnosed, an
+assumption corrected, a design insight, user feedback on approach — append it
+to the inbox as a dated `## YYYY-MM-DD — title` entry, unprompted; party
+members' `LEARNED:` lines are candidates too. Routine work (features built,
+bugs fixed) is git history, not a learning. New gotchas get a 1–2 line entry
+in `gotchas.md`. Decisions entries are ~2 lines — the choice, the alternative
+rejected, and why; when one changes, mark the old one superseded with a
+one-line reason rather than deleting it.
 
-Straight after appending a learning — and at no other time — count the inbox
-with the Grep tool in count mode (`^## [0-9]{4}-` over
-`.claude/learnings.md`; never read the log to count it). At 10 entries or
-more, say so in one line and suggest `/party:long-rest`. Then let it go:
-once per session, however many learnings follow, and take no for an answer.
+Right after appending a learning — and at no other time — count the inbox
+unread: `^## [0-9]{4}-` matches in it. At 10 or more, suggest
+`/party:long-rest` in one line — once per session, and take no for an answer.
 
-Create any of these that is missing with its heading and a one-line contract,
-nothing else: `# Learnings (inbox)` (append-only dated entries, distilled and
-archived by `/party:long-rest`), `# Architecture notes` (how the system
-actually fits together), `# Gotchas` (traps, 1–2 lines each, deleted once
-fixed), `# Decisions` (why A over B, newest first).
-
-If the project's `CLAUDE.md` still carries `<!-- party@ -->` blocks or
-`@.claude/*.md` experience imports from an older Adventure Party setup, offer
-once to strip them — these instructions supersede them.
+Create any of these only when you first have something to write to it — its
+heading and a one-line contract, nothing else: `# Learnings (inbox)`
+(append-only, emptied by `/party:long-rest`), `# Architecture notes` (how it
+all fits together), `# Gotchas` (traps, deleted once fixed), `# Decisions`
+(why A over B, newest first).

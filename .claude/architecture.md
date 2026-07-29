@@ -33,3 +33,22 @@ being true.
   earns its cost only where it isn't ceremonial. Hence fighter → cleric
   always, and wizard only on request or after two failed attempts — an
   advisor pushed by default stops being an advisor.
+- **When an always-loaded rule doesn't fire, establish whether the model
+  disputed the rule or the case.** Only the second is fixed by rewriting
+  the rule, and it is fixed by making the rule *decide the case* rather
+  than describe the behavior — every more-text fix feeds the step that was
+  already working. See learnings 2026-07-27.
+- **Derived values get recomputed; events get stored.** The inbox count is
+  `^## YYYY-` headings counted live and must never be cached — a stored
+  counter drifts on hand edits, merges and Long Rest rewrites. A level is
+  an event, so `CHRONICLE.md` stores it as `## Level N`, which the next
+  rest parses. See learnings 2026-07-28.
+- **A text budget only holds where the argument is no longer in context.**
+  `decisions.md` has inflow from two rules and an outflow gated on "stopped
+  being true", which a decision never does — and a write-time budget is no
+  fix either: that shipped 2026-07-27 and was violated the same day, in the
+  file defining it, because a writer still holding the argument finds every
+  clause load-bearing. So the bound is the Long Rest's compact step, which
+  moves the entry to `learnings-archive.md` verbatim before cutting it to
+  its claim; its size gauge is what bounds the tier one level up. See
+  learnings 2026-07-27, 2026-07-29.

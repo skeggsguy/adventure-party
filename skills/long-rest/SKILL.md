@@ -15,15 +15,19 @@ disable-model-invocation: true
 un-curated as sessions surface them. The Long Rest is where the party
 *trains* — the inbox is distilled into the curated files that load every
 session, then emptied, so a leveled-up party is literally a better-informed
-party.
+party. It is also the only thing that bounds those files: distilling grows
+them, so the same ceremony compacts what has outgrown its budget and reports
+what the tier now costs.
 
 ## Before anything: state the plain reading and the price
 
 Open with (in your own words, both halves mandatory):
 
 > A Long Rest distills your project's learnings inbox into the curated
-> experience files (its memory), archives the processed entries, and records
-> the level in the chronicle. It uses real tokens and edits
+> experience files (its memory), shortens entries that have outgrown their
+> budget (their full text is kept in the archive), archives the processed
+> entries, records the level in the chronicle, and tells you what the
+> always-loaded files now cost. It uses real tokens and edits
 > `.claude/architecture.md` / `gotchas.md` / `decisions.md`,
 > `.claude/learnings.md`, `.claude/learnings-archive.md` and `CHRONICLE.md`.
 > Proceed?
@@ -31,22 +35,23 @@ Open with (in your own words, both halves mandatory):
 Wait for a yes. If the inbox is empty or nearly so, say that honestly and
 ask whether to rest anyway — a small rest is allowed, it just distills less.
 
-Count the inbox with the Grep tool in count mode (`^## [0-9]{4}-` over
-`.claude/learnings.md`). Never read the whole log just to count it.
+Count the inbox without reading it: `^## [0-9]{4}-` matches in
+`.claude/learnings.md`, via whatever search tool the session has (Grep in
+count mode, or `grep -c`). Never read the whole log just to count it.
 
 ## The ceremony — order matters
 
-The chronicle entry is written **last** and the archive move happens with
-it: the chronicle is the atomic commit-record of the whole rest. If the
-ceremony is aborted at any earlier step the inbox is still intact, so the
-next rest simply redoes the same work — every earlier step is idempotent by
-design.
+The chronicle entry is written **last** and the *inbox's* archive move
+happens with it: the chronicle is the atomic commit-record of the whole
+rest. If the ceremony is aborted at any earlier step the inbox is still
+intact, so the next rest simply redoes the same work — every earlier step is
+idempotent by design, the compact step's own archive appends included.
 
 1. **Scope.** Every entry in `.claude/learnings.md`. One exception, for
    projects carried over from the watermark era: if `CHRONICLE.md` contains
    a `*Distilled through YYYY-MM-DD.*` line, entries dated on or before the
    last such date were already distilled by an earlier rest — archive them
-   in step 5 without reading or re-distilling them, and distill only what is
+   in step 6 without reading or re-distilling them, and distill only what is
    dated after it.
 2. **Distill.** For each in-scope entry, decide where its durable core
    belongs — `architecture.md`, `gotchas.md`, `decisions.md` — and add it
@@ -56,23 +61,50 @@ design.
    learnings YYYY-MM-DD" — not restating the argument in a file that loads
    every session. Many entries distill to nothing durable; that's normal.
    Never edit the text of an entry itself — it moves to the archive verbatim.
+   Anything you write here that lands over budget is fair game for step 4.
 3. **Prune.** Remove gotchas whose underlying cause is verifiably fixed
    (check the code/tree, not memory), curated entries that stopped being
    true, and decision entries whose superseded tombstone has long since
    stopped earning its line. This is the hygiene the curated files' own
    contract demands.
-4. **Flag junk, don't drop it.** In-scope entries that shouldn't have been
+4. **Compact.** The prune step drops what stopped being true; this one
+   drops what is merely long. Read the three curated files and find every
+   entry past its budget — decisions ~2 lines, gotchas 1–2, architecture
+   notes one claim plus the evidence for it. For each:
+   1. If it carries no `see learnings YYYY-MM-DD` pointer, append its
+      **verbatim** text to `.claude/learnings-archive.md` *first*, under a
+      `## YYYY-MM-DD — title` heading carrying the entry's own date (create
+      the file as step 6 describes if it is missing, and skip the append if
+      that text is already there, so a re-run changes nothing). Move, then
+      shorten — never shorten in place, or the argument is destroyed rather
+      than relocated.
+   2. Then cut the live entry to its claim plus a `see learnings
+      YYYY-MM-DD` pointer at that heading's date. Keep the date, the
+      choice, the rejected alternative in one clause, one why-clause, and
+      any `*Superseded:*` / `*Amended:*` tombstone. The rejected
+      alternative is the entry's whole job — it is what stops the next
+      session re-litigating a settled call.
+   3. Never compact an entry whose existing pointer resolves to nothing —
+      no entry under that date in the archive, and none in the inbox this
+      rest is about to archive. Skip it and name it in the report.
+
+   This step lives here, and not in the rule that writes the entry, for a
+   reason worth knowing: whoever writes an entry is still holding the whole
+   argument, so every clause feels load-bearing and the budget never bites.
+   You are not holding it, which is exactly what makes you able to apply
+   the budget.
+5. **Flag junk, don't drop it.** In-scope entries that shouldn't have been
    logged (routine work, session narration) get a one-line mention in the
    chronicle entry's notes — they still go to the archive, and the flag
    teaches the habit. Routine work is git history, not a learning.
-5. **Archive and empty the inbox.** Append every processed entry, verbatim
+6. **Archive and empty the inbox.** Append every processed entry, verbatim
    and in order, to `.claude/learnings-archive.md` (create it with a
    `# Learnings archive` heading and a one-line note that it is written by
    `/party:long-rest` and read on demand). Then leave
    `.claude/learnings.md` as its bare header and nothing else — the next
    entry starts a fresh inbox. Write no watermark line: the empty inbox is
    the watermark.
-6. **Chronicle.** Append to `CHRONICLE.md` (create it with a `# Chronicle`
+7. **Chronicle.** Append to `CHRONICLE.md` (create it with a `# Chronicle`
    heading if missing):
 
    ```markdown
@@ -118,6 +150,20 @@ machine — same repo, same level, same title, and no randomness needed:
 ## Report
 
 Level reached and title; what was distilled where (counts, files); what was
-pruned; junk flagged; how many entries were archived. Plain language first,
+pruned; what was compacted, and any entry skipped because its pointer didn't
+resolve; junk flagged; how many entries were archived. Plain language first,
 flavor second — the user should know exactly which files changed and why
 before they see the trumpets.
+
+Then the gauge, **every rest, over budget or not**. Measure the byte size of
+`.claude/architecture.md`, `gotchas.md` and `decisions.md` (however this
+session can — `wc -c`, or read-and-count) and state each one and the total
+in plain characters, against this line:
+
+> **under 50k fine · 50–100k worth a review · over 100k act on it**
+
+These three files are injected into every session of this project, so their
+total is a bill the user pays forever. Say the number even when it is
+comfortably fine: a gauge that only speaks up in an emergency is a gauge
+nobody trusts, and drift is invisible without a previous reading to compare
+against.

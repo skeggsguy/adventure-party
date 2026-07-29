@@ -60,9 +60,9 @@ and delete entries once the underlying cause is fixed.
   package step to catch it later.
 - Git Bash on Windows PATH is a property of the *launch chain*, not the
   machine: `Git\usr\bin` is absent from the persistent PATH but present
-  in a terminal opened from Git Bash. Wire subprocess commands
-  (statusline, hooks) with absolute interpreter paths — a PATH-dependent
-  one dies silently when the user launches differently.
+  in a terminal opened from Git Bash — so a PATH-dependent interpreter in
+  a shipped subprocess (the SessionStart hook) dies silently when the user
+  launches differently.
 - `/plugin install` and `/reload-plugins` never fetch origin — they
   snapshot the local *marketplace clone* into a version-keyed cache, and
   auto-update is off by default for third-party marketplaces. So the
@@ -94,4 +94,18 @@ and delete entries once the underlying cause is fixed.
   `plugin.json`, and `--plugin-dir` honors it. SessionStart hook stdout
   is injected verbatim (no JSON wrapper needed) and is not truncated at
   ~22k chars; the `matcher` field is honored and accepts alternation, so
-  a wrong matcher fails silently by simply never firing.
+  a wrong matcher fails silently by simply never firing — and "omitted
+  matcher fires on every source" is proven only for `startup`, since
+  `compact`/`clear` are interactive-only.
+- A grep proves the *name* is gone, never that the *promise* is: prose
+  that describes a removed feature contains none of its tokens. After
+  deleting a section, read the referring files end to end.
+- An archive of superseded text is indistinguishable from live text to
+  `git grep` — `.claude/learnings-archive.md` holds strings this repo no
+  longer ships, so "do we still ship this?" must name the shipped file,
+  never the repo.
+- `/party:long-rest` both grows and drains the always-loaded tier:
+  distilling writes *into* `architecture.md` / `gotchas.md` /
+  `decisions.md` and the prune step drops only what stopped being true, so
+  its compact step is the sole drain and its size gauge the only thing
+  measuring the tier the ~4k budget applies to.

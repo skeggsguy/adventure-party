@@ -41,6 +41,6 @@ Always include following in handoff: goal validated, user concerns, options expl
 
 Maintain decisions in project .claude/decisions.md
 
-Decisions only, ~2 lines each, never transcript. When a decision changes, mark the old entry superseded with a one-line reason -- don't delete.
+Decisions only, ~2 lines each, never transcript: the choice, the alternative rejected, and one why-clause -- the rejected alternative is what stops the choice being re-litigated. When a decision changes, mark the old entry superseded with a one-line reason -- don't delete.
 
 Never start coding unless explicitly asked by user (don't infer).
