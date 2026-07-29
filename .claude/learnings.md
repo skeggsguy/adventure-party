@@ -751,3 +751,16 @@ The generalisable half: the spike cost five tiny headless prompts and
 retired two variants of the design before a line of shipped text existed.
 The alternative — build on the docs, discover at dogfood time — is how the
 xp.sh probe consumed three releases.
+
+One finding landed after the shipped text was written, and it is the
+sharpest of them: hook-injected context does **not** reach subagents. A
+spawned Explore agent, asked whether its own context contained the sentinel
+word or the repo's gotchas, answered "NO, NO." CLAUDE.md and its
+`@`-imports do propagate — that is how party members have been receiving the
+curated experience files all along — so 0.8.0 quietly moves the experience
+files from "auto-loaded for everyone" to "auto-loaded for the Guide, and the
+agents must read them." The agents' own instructions already tell them to
+consult the project's experience files, so this degrades rather than breaks,
+but it is a real cost of the re-architecture and it was invisible until
+tested. The general shape: when you move where an instruction is *served
+from*, re-ask who was receiving it before.

@@ -85,6 +85,10 @@ and delete entries once the underlying cause is fixed.
   `"source": "./"` the marketplace clones the repo, so merging to `main`
   ships to every end user immediately. Work on a branch; merging is the
   release.
+- SessionStart hook output reaches the MAIN session only — subagents do
+  not inherit it (tested 2026-07-29). CLAUDE.md and its `@`-imports do
+  propagate, so anything a party member must have either lives in
+  CLAUDE.md or must be read by the agent itself.
 - A plugin's `hooks/hooks.json` auto-registers — no `hooks` key in
   `plugin.json`, and `--plugin-dir` honors it. SessionStart hook stdout
   is injected verbatim (no JSON wrapper needed) and is not truncated at
