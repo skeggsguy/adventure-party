@@ -1,7 +1,7 @@
 # Adventure Party
 
 <p align="center">
-  <img src="assets/party.svg" alt="The Party — a Claude Code plugin framework: session zero before the quest, three adventurers, and an experience system that levels up" width="720">
+  <img src="assets/party.svg" alt="The Party — a Claude Code plugin framework: session zero before the quest, three adventurers, and an experience system that levels up" width="100%">
 </p>
 
 An adventuring party and experience system for
