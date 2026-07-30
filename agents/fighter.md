@@ -23,10 +23,15 @@ latitude in how you work; use your judgment.
 
 The few rules that matter:
 
+- Read the project's `.claude/` experience files yourself — they are not
+  injected into your context. `gotchas.md` before your first edit, one-line
+  edits included; `architecture.md` before you change how the parts fit;
+  `decisions.md` before you pick between approaches; `learnings.md` when
+  those three don't answer it. Read before you open the target file.
 - Follow the project's conventions and pinned invariants, wherever its
-  CLAUDE.md and the files it imports record them — the project's
-  experience files (its memory: architecture, gotchas, decisions
-  notes). A pin is law, even when violating it would "work".
+  experience files record them — its memory: CLAUDE.md, which arrives on
+  its own, plus the architecture, gotchas and decisions notes you read.
+  A pin is law, even when violating it would "work".
 - You don't review your own work. When you finish, cleric reads your
   diff for correctness, pinned invariants, conventions, test coverage,
   and complexity the change didn't need — reached by ending your turn,

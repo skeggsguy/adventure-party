@@ -1,7 +1,7 @@
 # Adventure Party
 
 <p align="center">
-  <img src="assets/party.png" alt="A fighter, cleric, and wizard gathered around a glowing arcane interface" width="480">
+  <img src="assets/party.svg" alt="The Party — a Claude Code plugin framework: session zero before the quest, three adventurers, and an experience system that levels up" width="100%">
 </p>
 
 An adventuring party and experience system for
@@ -10,14 +10,10 @@ plugin**. You bring the quest; the party ships it.
 
 ## Install
 
-There is a two phase installation process. (1) Installing the plugin
-gets you the party and session zero. (2) Running setup gets you the
-experience system to improve your party over time.
+One step. Installing the plugin gets you the party, session zero, and the
+experience system.
 
-You can install both onto a new or existing repo.
-
-**Step One** - Within the Claude session, add the marketplace and install 
-the plugin:
+Within the Claude session, add the marketplace and install the plugin:
 
 ```
 /plugin marketplace add skeggsguy/adventure-party
@@ -26,35 +22,29 @@ the plugin:
 
 Pick a scope when `/plugin install` asks:
 
-- **User** (the default) — the party is on call in every project.
-  Right for solo work and for trying it out; it stays inert in any
-  repo until you run setup there.
-- **Project** — the party ships with the repo, for team use. Choosing
+- **User** (the default) — the party is on call in **every** project on
+  this machine. Right for solo work and for trying it out.
+- **Project** — the party ships with **this** repo, for team use. Choosing
   "Project" writes it into the repo's `.claude/settings.json`.
 
   Teammates opening the repo are prompted once to add the marketplace;
   after that the plugin loads automatically for them.
 
-**Step 2** Then — whichever scope you chose — once per project you want the
-experience system in:
-
-```
-/party:setup
-```
+Wherever it is installed, the party is on: the plugin feeds its
+instructions into every session as it starts, and those instructions send
+the party to read your project's own experience files, if it has any, at the
+moments each one matters.
 
 **Upgrading** — Two options either (1) put auto update on within the settings
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
-Finish by re-running /party:setup in each project.
 
-Then restart the session — plugin skills are read at launch.
 
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
-driven but weren't full-stack developers before the genesis of AI — and on the
-conviction that successful AI development hinges on three things:
+driven, and on the conviction that successful AI development hinges on three things:
 
 1. **The dialogue** — the human conversation with the agent, where you
    learn, brainstorm, and land decisions you actually understand.
@@ -93,9 +83,10 @@ wielding it.
    off the commit.
 5. **New adventure, new session** — and the experience system carries
    what was learned.
-6. **Level up** — learnings are captured in every session. On level up
-   you long rest and learnings are sorted into architecture, decisions
-   and gotchas which are readable by Claude. You level up, AI levels up.
+6. **Long rest** — learnings are captured in every session. When enough
+   have piled up you take a Long Rest, and they are sorted into
+   architecture, decisions and gotchas which are readable by Claude. You
+   level up, AI levels up.
 
 ## The party
 
@@ -134,23 +125,8 @@ most. Solves for try and fail re-attempts.
 ### The muster protocol
 
 **The party musters on command, not by default.** The Guide does
-ordinary work itself. The party rides out only on one of three triggers:
-
-- You explicitly summon it.
-- A plan-mode plan is approved — **plans muster by default**: every plan
-  ends with an Execution section naming who runs each phase, fighter
-  building and cleric reviewing unless you said otherwise while
-  planning.
-- You accept the Guide's suggestion — it may offer, once and in one
-  line, when work looks party-sized, and takes no for an answer.
-
-Planning is deliberately **not** a party member: planning is a dialogue
-with the human, and subagents can't talk to the human. The quest gets
-written at the Guide's table; the party executes it.
-
-Default models are set per agent; to change them, run `/party:config` 
-— the Guide passes your choice at spawn time, which outranks the agent 
-file's default.
+ordinary work itself. The party rides out only if you summon it,
+you accept a suggestion from the guide, or on execution of plan mode.
 
 ## Session Zero
 
@@ -160,61 +136,62 @@ iterative dialogue the Guide runs *before* plan mode or code, built for
 users who are smart and opinionated but didn't grow up in app
 development.
 
-Its core moves: options **with** a recommendation (and the strongest case
-against it); what a tool or framework *actually is* before any verdict on
-using it — the category, the problem it was built for, and which
-decisions it takes off your plate in exchange for its opinions; YAGNI
-held as the default, because a wrong abstraction is a rewrite where
-duplicated code is only a refactor; tables and ASCII sketches where they
-carry structure prose carries badly; every term defined the first time
-it appears; clarifying questions batched early and only when the answer
-changes something; musings answered with assessment rather than action.
-
-Depth tracks **stakes × reversibility** — a naming question gets a
-sentence, a dependency you'll build on gets the full treatment. The
-dialogue has no exit condition except your word: the Guide never moves
-to plan mode on its own initiative, and circling back to the same call
-from a new angle is the mode working as intended. Every landed decision
-is recorded with its why in the project's decisions file, so the
-learning compounds. The user makes the calls, informed.
+Its core moves: options **with** a recommendation; what a tool or 
+framework *actually is* before any verdict on using it — the category, 
+the problem it was built for, and which decisions it takes off your plate 
+in exchange for its opinions; YAGNI held as the default, because a wrong 
+abstraction is a rewrite where duplicated code is only a refactor; 
+tables and ASCII sketches where they carry structure prose carries badly; 
+every term defined the first time it appears; clarifying questions batched 
+early and only when the answer changes something; musings answered with 
+assessment rather than action.
 
 ## The experience system
 
 Agents are only as good as what the project tells them — so the party's
-memory is its **experience**, and it levels up. The plugin ships a shell
-of a four-file system that keeps a repo's hard-won knowledge loaded and
-current:
+memory is its **experience**, and it levels up. Four files under
+`.claude/` in your own repo hold it:
 
-- `architecture.md` — how the system actually fits together (curated,
-  auto-loaded every session)
+- `architecture.md` — how the system actually fits together (curated; read
+  before planning, or before changing how parts fit)
 - `gotchas.md` — non-obvious traps, 1–2 lines each, deleted when fixed
-  (curated, auto-loaded)
-- `decisions.md` — why A over B, dated, newest first (curated, auto-loaded)
-- `learnings.md` — append-only log of surprises; never imported,
-  distilled by the Long Rest (below)
-- `CLAUDE.md.template` — a project-instructions skeleton wiring it all
-  together, including the party protocol
+  (curated; read before the first edit, a one-line one included)
+- `decisions.md` — why A over B, ~2 lines each, newest first (curated; read
+  before choosing between approaches; the full argument lives in the archive)
+- `learnings.md` — the **inbox**: an append-only log of surprises, read only
+  when the curated three don't answer it, emptied by the Long Rest (below)
 
-The split matters: curated files stay small because they cost context on
-every prompt; the append-only log can grow forever because it's read on
-demand.
+Nothing is force-fed into the session — each file is read at the moment it
+can change what happens next. The split still matters: the curated three stay
+small because they are read often and every read costs context, while the
+inbox can grow because nothing opens it until something asks for it.
+
+Nothing here is scaffolded into your repo up front and nothing is copied
+out of the plugin: the party's own instructions come from the plugin at
+the start of every session — so upgrading the plugin upgrades every
+project — and those instructions are what point the party at your curated
+files once they exist. The Guide creates each file the first time it has
+something to write there.
 
 ## Leveling up — the Long Rest
 
-`/party:level-up` is the ceremony, and it is not fireworks: a Long Rest
-is the moment the party *trains*.
+`/party:long-rest` is the ceremony, and it is not fireworks: a Long
+Rest is the moment the party *trains*. When the inbox reaches ten
+entries the Guide mentions it, once — resting is always your call.
 
-1. It distills the learnings log — only entries since the last rest —
-   into the curated files that load every session, and prunes gotchas
-   that have been fixed. A leveled-up party is literally a
-   better-informed party.
+1. It distills the inbox into the curated files the party reads at their
+   triggers, prunes what has stopped being true, compacts what has outgrown
+   its budget — the full argument moves to `learnings-archive.md`, the live
+   entry keeps the claim — then archives the processed entries and leaves
+   the inbox empty. It also tells you what those curated files now cost to
+   read, every rest: distilling grows them, so the same ceremony is what
+   bounds them. A leveled-up party is literally a better-informed party.
 2. It appends the level to **`CHRONICLE.md`**: your project's saga in
    plain language — what was built, what was conquered, what *you*
-   learned.
+   learned. Every rest is a level; the chronicle is the record of them.
 3. It awards the party a title — seeded from your repo's name and the
-   level, so it is deterministic: *your* project's Level 3 party is
-   always, say, the Wardens of the Unbroken Build. Their name, not a
-   slot machine's.
+   level: *your* project's Level 3 party is always, say, the Wardens of
+   the Unbroken Build.
 
 The player levels up too: the chronicle plus the decisions file is a
 growing, readable record of your own understanding — the thing this
@@ -224,8 +201,8 @@ whole framework exists to build.
 
 - Claude Code with plugin support and subagents; `model:`/`effort:`
   frontmatter values are Anthropic model tiers (`opus`, `fable`) —
-  change them via `.claude/party.json` + `/party:config` to match what
-  your plan offers.
+  change them in `.claude/party.json` to match what your plan offers.
+- The session-start hook runs a single one-line `cat` through a POSIX shell.
 
 ## Roadmap
 

@@ -1,7 +1,8 @@
 # Gotchas
 
-Non-obvious traps. Loaded into every session — keep each entry to 1–2 lines
-and delete entries once the underlying cause is fixed.
+Non-obvious traps. Read before the first edit of a session, a one-line one
+included — keep each entry to 1–2 lines and delete entries once the
+underlying cause is fixed.
 
 <!-- Each entry: the trap, why it bites, and where it's pinned (a test that
      locks the invariant in place, if one exists). Example shape:
@@ -60,9 +61,9 @@ and delete entries once the underlying cause is fixed.
   package step to catch it later.
 - Git Bash on Windows PATH is a property of the *launch chain*, not the
   machine: `Git\usr\bin` is absent from the persistent PATH but present
-  in a terminal opened from Git Bash. Wire subprocess commands
-  (statusline, hooks) with absolute interpreter paths — a PATH-dependent
-  one dies silently when the user launches differently.
+  in a terminal opened from Git Bash — so a PATH-dependent interpreter in
+  a shipped subprocess (the SessionStart hook) dies silently when the user
+  launches differently.
 - `/plugin install` and `/reload-plugins` never fetch origin — they
   snapshot the local *marketplace clone* into a version-keyed cache, and
   auto-update is off by default for third-party marketplaces. So the
@@ -71,17 +72,57 @@ and delete entries once the underlying cause is fixed.
 - The marketplace clone's `origin/main` ref is not evidence of what it
   has fetched — a marketplace update leaves the ref stale while moving
   the checkout (fetch-to-`FETCH_HEAD` shape). Only its HEAD is truthful.
-- `${CLAUDE_PLUGIN_ROOT}` resolves to the *cache snapshot*, not the cwd,
-  so `/party:setup` run inside this repo copies the installed version's
-  shipped text over the newer text sitting in the working tree.
-- A shell resolving is not its coreutils resolving: `Git\bin\sh.exe`
-  wraps and sets PATH, `Git\usr\bin\sh.exe` is the bare binary and loses
-  `grep`/`tail`/`sed`. Probing a script that guards its utility calls
-  (like xp.sh) can't tell them apart by exit code — check stderr too.
+- `${CLAUDE_PLUGIN_ROOT}` resolves to the *cache snapshot*, not the cwd —
+  so the installed plugin serves the snapshot's `hooks/instructions.md`,
+  which can trail the working tree even while you sit in this repo.
 - `git show HEAD:path` applies working-tree eol conversion, so it cannot
   prove byte-identity with HEAD — it compares converted text to converted
   text. Use `git cat-file blob HEAD:path` wherever the bytes are the
-  point (legacy-block fingerprints in `memory/legacy-blocks.md`).
+  point.
 - `grep -c $'\r'` through the Bash tool silently matches every line — the
   `$'...'` quoting doesn't survive to grep. Count line endings in Python
   (`b.count(b'\r\n')`), never by shell pattern.
+- `main` is the live distribution channel, not a dev branch: with
+  `"source": "./"` the marketplace clones the repo, so merging to `main`
+  ships to every end user immediately. Work on a branch; merging is the
+  release.
+- SessionStart hook output reaches the MAIN session only — subagents do
+  not inherit it (tested 2026-07-29). CLAUDE.md and its `@`-imports do
+  propagate, so anything a party member must have either lives in
+  CLAUDE.md, is read by the agent itself, or rides the spawn prompt. As of
+  2026-07-30 the experience files take the middle route: each agent's own
+  read step, not a briefing carried into the spawn prompt.
+- A plugin's `hooks/hooks.json` auto-registers — no `hooks` key in
+  `plugin.json`, and `--plugin-dir` honors it. Stdout is injected verbatim,
+  no JSON wrapper needed; the `matcher` field is honored and accepts
+  alternation, so a wrong matcher fails silently by simply never firing —
+  and "omitted matcher fires on every source" is proven only for `startup`,
+  since `compact`/`clear` are interactive-only.
+- SessionStart stdout is injected verbatim only up to **10,000 characters,
+  inclusive, PER HOOK ENTRY**; at 10,001 the entry is replaced by
+  `Output too large … saved to …/tool-results/hook-*.txt` and a ~2k preview,
+  while the hook still exits 0 — so it fails silently and every cheap check
+  passes. Characters, not bytes or tokens: size checks here use `wc -m`,
+  never `wc -c`. Bisected 2026-07-30; this replaces an earlier "not
+  truncated at ~22k chars" entry, which aimed at a clipping ceiling an order
+  of magnitude above the real relocation threshold.
+- `@`-imports do not resolve in hook stdout — relative and absolute alike
+  arrive as literal text while the surrounding payload loads fine. A hook
+  has no include primitive, so referencing another file must be prose that
+  instructs the reader to go read it.
+- The experience read triggers fire on the default party models but not on
+  haiku, which names `gotchas.md` correctly when asked yet edits without
+  reading it — the *case* is disputed, not the rule, and neither stronger
+  wording nor hoisting the section moved it (0/4 vs 3/3, 2026-07-30).
+- A grep proves the *name* is gone, never that the *promise* is: prose
+  that describes a removed feature contains none of its tokens. After
+  deleting a section, read the referring files end to end.
+- An archive of superseded text is indistinguishable from live text to
+  `git grep` — `.claude/learnings-archive.md` holds strings this repo no
+  longer ships, so "do we still ship this?" must name the shipped file,
+  never the repo.
+- `/party:long-rest` both grows and drains the curated experience files:
+  distilling writes *into* `architecture.md` / `gotchas.md` /
+  `decisions.md` and the prune step drops only what stopped being true, so
+  its compact step is the sole drain and its gauge the only thing measuring
+  what those files cost to read.

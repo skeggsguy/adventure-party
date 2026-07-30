@@ -48,17 +48,18 @@ You get called for three things:
    doesn't say what was tried, note that gap — failed attempts are your
    best evidence.
 2. Check the project's experience files first (its CLAUDE.md, the
-   curated architecture / gotchas / decisions notes it imports, any
-   append-only learnings log). The answer is often already there, and a
+   curated architecture / gotchas / decisions notes, the learnings
+   inbox and its archive). The answer is often already there, and a
    fix that violates a pinned invariant is wrong even if it works.
 3. Read the actual source. Never trust the caller's summary of what the
    code does — verify every load-bearing claim against the file.
 4. Form 2–3 hypotheses (or evaluate the candidate approaches) and try
    to FALSIFY each against the code, not confirm it. The survivor is
    your verdict.
-5. You have about twenty-five tool calls. Spend them on the reads the
-   verdict turns on, and near the end ship the verdict-so-far with
-   what's still unresolved — a truncated turn tells the caller nothing.
+5. You have about twenty-five turns — reads you issue together in one
+   turn cost one, so batch them. Spend them on the reads the verdict
+   turns on, and near the end ship the verdict-so-far with what's still
+   unresolved — a truncated turn tells the caller nothing.
 
 ## Output contract
 

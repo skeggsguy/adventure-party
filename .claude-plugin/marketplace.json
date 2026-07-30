@@ -8,7 +8,7 @@
     {
       "name": "party",
       "source": "./",
-      "description": "Fighter builds, cleric reviews and fixes, wizard advises — plus Session Zero and an experience system that levels up your project's memory.",
+      "description": "Fighter builds, cleric reviews and fixes, wizard advises — plus Session Zero and an experience system that levels up your project's memory. Install once; it is on in every project it is installed for.",
       "category": "workflow"
     }
   ]

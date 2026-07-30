@@ -1,0 +1,134 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Party — a Claude Code plugin framework">
+  <!-- ============ palette ============
+       parchment #FBF9F4 | ink #2F2B26 | muted #6E6759
+       rule #C9C1AF | gold #B8912F | card #FFFFFF
+  ==================================== -->
+  <rect width="1200" height="630" fill="#FBF9F4"/>
+
+  <!-- character-sheet double border -->
+  <rect x="16" y="16" width="1168" height="598" fill="none" stroke="#2F2B26" stroke-width="1.5"/>
+  <rect x="24" y="24" width="1152" height="582" fill="none" stroke="#C9C1AF" stroke-width="1"/>
+
+  <!-- corner diamonds -->
+  <g fill="#B8912F">
+    <rect x="10" y="10" width="12" height="12" transform="rotate(45 16 16)"/>
+    <rect x="1178" y="10" width="12" height="12" transform="rotate(45 1184 16)"/>
+    <rect x="10" y="598" width="12" height="12" transform="rotate(45 16 604)"/>
+    <rect x="1178" y="598" width="12" height="12" transform="rotate(45 1184 604)"/>
+  </g>
+
+  <!-- ============ d20 ============ -->
+  <g stroke="#2F2B26" stroke-width="2" fill="none" stroke-linejoin="round">
+    <!-- outer hexagon -->
+    <polygon points="600,50 565.4,70 565.4,110 600,130 634.6,110 634.6,70"/>
+    <!-- front face (point-down triangle) -->
+    <polygon points="568,67 632,67 600,114"/>
+    <!-- edges -->
+    <line x1="600" y1="50" x2="568" y2="67"/>
+    <line x1="600" y1="50" x2="632" y2="67"/>
+    <line x1="565.4" y1="70" x2="568" y2="67"/>
+    <line x1="634.6" y1="70" x2="632" y2="67"/>
+    <line x1="565.4" y1="110" x2="600" y2="114"/>
+    <line x1="634.6" y1="110" x2="600" y2="114"/>
+    <line x1="600" y1="130" x2="600" y2="114"/>
+  </g>
+  <text x="600" y="94" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="bold" fill="#B8912F">20</text>
+
+  <!-- ============ heading ============ -->
+  <text x="600" y="188" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="54" fill="#2F2B26" letter-spacing="10">THE PARTY</text>
+  <text x="600" y="218" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="15" fill="#B8912F" letter-spacing="5">A CLAUDE CODE PLUGIN FRAMEWORK</text>
+
+  <!-- ornament divider -->
+  <g stroke="#C9C1AF" stroke-width="1">
+    <line x1="470" y1="242" x2="580" y2="242"/>
+    <line x1="620" y1="242" x2="730" y2="242"/>
+  </g>
+  <rect x="595" y="237" width="10" height="10" transform="rotate(45 600 242)" fill="#B8912F"/>
+
+  <!-- ============ cards ============ -->
+  <!-- card frames -->
+  <g fill="#FFFFFF" stroke="#CFC8B8" stroke-width="1.5">
+    <rect x="56"  y="266" width="346" height="208"/>
+    <rect x="426" y="266" width="346" height="208"/>
+    <rect x="796" y="266" width="346" height="208"/>
+  </g>
+
+  <!-- · card 1 · session zero · -->
+  <!-- map icon: chart a route before the quest -->
+  <g transform="translate(229,298)">
+    <rect x="-14" y="-10" width="28" height="20" fill="none" stroke="#2F2B26" stroke-width="1.6"/>
+    <path d="M -9 6 C -4 -6, 3 10, 9 -3" fill="none" stroke="#B8912F" stroke-width="1.6" stroke-dasharray="3 2.5"/>
+    <path d="M 7 -5 L 11 -1 M 11 -5 L 7 -1" stroke="#2F2B26" stroke-width="1.6"/>
+  </g>
+  <text x="229" y="336" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="14" fill="#B8912F" letter-spacing="4">BEFORE THE QUEST</text>
+  <text x="229" y="368" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#2F2B26">Session Zero</text>
+  <text text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#6E6759">
+    <tspan x="229" y="398">Interactive planning &amp; teaching.</tspan>
+    <tspan x="229" y="422">Options, trade-offs and clear picks —</tspan>
+    <tspan x="229" y="446">before a single line is written.</tspan>
+  </text>
+
+  <!-- · card 2 · the party · -->
+  <text x="599" y="304" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="14" fill="#B8912F" letter-spacing="4">THREE ADVENTURERS</text>
+  <text x="599" y="336" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#2F2B26">The Agents</text>
+
+  <!-- fighter · sword -->
+  <g transform="translate(478,364)" stroke="#2F2B26" stroke-width="1.6" fill="none" stroke-linecap="round">
+    <line x1="0" y1="-9" x2="0" y2="6"/>
+    <path d="M -3 -6 L 0 -11 L 3 -6"/>
+    <line x1="-5" y1="4" x2="5" y2="4"/>
+    <circle cx="0" cy="9" r="1.8" fill="#B8912F" stroke="none"/>
+  </g>
+  <text x="500" y="370" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#2F2B26">Fighter<tspan fill="#6E6759"> — builds it</tspan></text>
+
+  <!-- cleric · shield -->
+  <g transform="translate(478,400)">
+    <path d="M 0 -9 C 5 -9, 8 -7, 8 -4 C 8 2, 4 7, 0 10 C -4 7, -8 2, -8 -4 C -8 -7, -5 -9, 0 -9 Z" fill="none" stroke="#2F2B26" stroke-width="1.6"/>
+    <path d="M 0 -4 L 0 4 M -4 0 L 4 0" stroke="#B8912F" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+  <text x="500" y="406" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#2F2B26">Cleric<tspan fill="#6E6759"> — reviews &amp; heals</tspan></text>
+
+  <!-- wizard · staff -->
+  <g transform="translate(478,436)" stroke="#2F2B26" stroke-width="1.6" stroke-linecap="round">
+    <line x1="-3" y1="10" x2="3" y2="-5"/>
+    <g stroke="#B8912F">
+      <line x1="4" y1="-11" x2="4" y2="-5"/>
+      <line x1="1" y1="-8" x2="7" y2="-8"/>
+      <line x1="2" y1="-10" x2="6" y2="-6"/>
+      <line x1="6" y1="-10" x2="2" y2="-6"/>
+    </g>
+  </g>
+  <text x="500" y="442" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#2F2B26">Wizard<tspan fill="#6E6759"> — advises when stuck</tspan></text>
+
+  <!-- · card 3 · experience · -->
+  <!-- level-up chevrons -->
+  <g transform="translate(969,298)" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M -8 6 L 0 -2 L 8 6" stroke="#C9C1AF"/>
+    <path d="M -8 -2 L 0 -10 L 8 -2" stroke="#B8912F"/>
+  </g>
+  <text x="969" y="336" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="14" fill="#B8912F" letter-spacing="4">PROGRESSION</text>
+  <text x="969" y="368" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#2F2B26">Experience</text>
+  <text text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#6E6759">
+    <tspan x="969" y="398">Decisions, learnings &amp; gotchas</tspan>
+    <tspan x="969" y="422">persist between sessions.</tspan>
+  </text>
+
+  <!-- XP bar -->
+  <text x="824" y="454" font-family="'Courier New', Courier, monospace" font-size="13" fill="#6E6759">LVL&#160;1</text>
+  <text x="1114" y="454" text-anchor="end" font-family="'Courier New', Courier, monospace" font-size="13" fill="#6E6759">LVL&#160;2</text>
+  <rect x="876" y="443" width="190" height="12" fill="none" stroke="#2F2B26" stroke-width="1.2"/>
+  <rect x="878" y="445" width="122" height="8" fill="#B8912F"/>
+  <g stroke="#C9C1AF" stroke-width="1">
+    <line x1="923.5" y1="443" x2="923.5" y2="455"/>
+    <line x1="971" y1="443" x2="971" y2="455"/>
+    <line x1="1018.5" y1="443" x2="1018.5" y2="455"/>
+  </g>
+
+  <!-- ============ tagline ============ -->
+  <text x="600" y="524" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="21" font-style="italic" fill="#2F2B26">You are the main success lever — the system makes you better at wielding it.</text>
+  <g fill="#B8912F">
+    <rect x="491" y="547" width="7" height="7" transform="rotate(45 494.5 550.5)"/>
+    <rect x="702" y="547" width="7" height="7" transform="rotate(45 705.5 550.5)"/>
+  </g>
+  <text x="600" y="558" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="15" fill="#B8912F" letter-spacing="5">JOIN THE PARTY</text>
+</svg>

@@ -9,11 +9,7 @@
       "Bash(jq . .claude-plugin/plugin.json)",
       "Bash(jq . .claude-plugin/marketplace.json)",
       "Bash(python3 -m json.tool .claude-plugin/plugin.json)",
-      "Bash(python3 -m json.tool .claude-plugin/marketplace.json)",
-      "Bash(sh scripts/xp.sh statusline)",
-      "Bash(sh scripts/xp.sh banner)",
-      "Bash(sh scripts/xp.sh statusline </dev/null)",
-      "Bash(sh scripts/xp.sh banner </dev/null)"
+      "Bash(python3 -m json.tool .claude-plugin/marketplace.json)"
     ]
   }
 }
