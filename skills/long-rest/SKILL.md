@@ -13,11 +13,11 @@ disable-model-invocation: true
 
 `.claude/learnings.md` is an inbox, not an archive: entries land there
 un-curated as sessions surface them. The Long Rest is where the party
-*trains* — the inbox is distilled into the curated files that load every
-session, then emptied, so a leveled-up party is literally a better-informed
-party. It is also the only thing that bounds those files: distilling grows
-them, so the same ceremony compacts what has outgrown its budget and reports
-what the tier now costs.
+*trains* — the inbox is distilled into the curated files the party reads at
+their triggers, then emptied, so a leveled-up party is literally a
+better-informed party. It is also the only thing that bounds those files:
+distilling grows them, so the same ceremony compacts what has outgrown its
+budget and reports what they now cost to read.
 
 ## Before anything: state the plain reading and the price
 
@@ -26,8 +26,8 @@ Open with (in your own words, both halves mandatory):
 > A Long Rest distills your project's learnings inbox into the curated
 > experience files (its memory), shortens entries that have outgrown their
 > budget (their full text is kept in the archive), archives the processed
-> entries, records the level in the chronicle, and tells you what the
-> always-loaded files now cost. It uses real tokens and edits
+> entries, records the level in the chronicle, and tells you what the curated
+> files now cost to read. It uses real tokens and edits
 > `.claude/architecture.md` / `gotchas.md` / `decisions.md`,
 > `.claude/learnings.md`, `.claude/learnings-archive.md` and `CHRONICLE.md`.
 > Proceed?
@@ -58,8 +58,8 @@ idempotent by design, the compact step's own archive appends included.
    there in that file's format and **within its length budget** (gotchas 1–2
    lines, decisions ~2), **skipping anything already present** (idempotent).
    Distilling means compressing to the durable core and pointing back — "see
-   learnings YYYY-MM-DD" — not restating the argument in a file that loads
-   every session. Many entries distill to nothing durable; that's normal.
+   learnings YYYY-MM-DD" — not restating the argument in a file the party
+   re-reads constantly. Many entries distill to nothing durable; normal.
    Never edit the text of an entry itself — it moves to the archive verbatim.
    Anything you write here that lands over budget is fair game for step 4.
 3. **Prune.** Remove gotchas whose underlying cause is verifiably fixed
@@ -155,15 +155,16 @@ resolve; junk flagged; how many entries were archived. Plain language first,
 flavor second — the user should know exactly which files changed and why
 before they see the trumpets.
 
-Then the gauge, **every rest, over budget or not**. Measure the byte size of
-`.claude/architecture.md`, `gotchas.md` and `decisions.md` (however this
-session can — `wc -c`, or read-and-count) and state each one and the total
-in plain characters, against this line:
+Then the gauge, **every rest, over budget or not**. Measure
+`.claude/architecture.md`, `gotchas.md` and `decisions.md` in *characters* —
+`wc -m`, never `wc -c`, or read-and-count; this repo measures text in
+characters everywhere. State all three numbers and the total, and read the
+line below **per file**, not against the total:
 
-> **under 50k fine · 50–100k worth a review · over 100k act on it**
+> **under 8k fine · 8–15k worth a review · over 15k act on it**
 
-These three files are injected into every session of this project, so their
-total is a bill the user pays forever. Say the number even when it is
-comfortably fine: a gauge that only speaks up in an emergency is a gauge
-nobody trusts, and drift is invisible without a previous reading to compare
-against.
+This is a read-cost gauge, not a truncation guard: nothing clips these files,
+but agents re-read them at their triggers, so each one's size is a bill paid
+per read. Say the number even when it is comfortably fine: a gauge that only
+speaks up in an emergency is a gauge nobody trusts, and drift is invisible
+without a previous reading to compare against.

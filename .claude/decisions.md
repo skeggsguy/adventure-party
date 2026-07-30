@@ -1,21 +1,29 @@
 # Decisions
 
-Why A over B, for choices below plan level. Loaded into every session —
-newest first.
+Why A over B, for choices below plan level. Read before choosing between
+approaches — newest first.
 
 Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
+
+2026-07-30 — The `.claude/` experience files are read on demand against
+per-file triggers carried in `hooks/instructions.md`, not injected — over
+one hook entry per file policed under the 10,000-char cap, because that cap
+relocates the entry to disk while the hook still exits 0, so managing it
+means policing a silent failure forever. See learnings 2026-07-30.
 
 2026-07-29 — Instructions are served live from a SessionStart hook and
 nothing is copied into a repo — over the template plus better migration
 tooling, since the drift that tooling manages is created by the copying.
 See learnings 2026-07-29.
 
-2026-07-29 — The hook is one SessionStart block, two one-line `cat`s on
+2026-07-29 — The hook is one SessionStart block of one-line `cat`s on
 plain stdout, matcher omitted — over JSON `additionalContext` or one
-entry per file, elaborations the spike proved bought nothing. See
-learnings 2026-07-29.
+entry per file, elaborations the spike proved bought nothing. *Amended
+2026-07-30:* one `cat`, not two — the experience-file entry was silently
+over the 10,000-char cap and is now read on demand. See learnings
+2026-07-29.
 
 2026-07-28 — The XP statusline and banner are dropped, the level-up
 nudge moving to the moment the Guide appends a learning — over patching

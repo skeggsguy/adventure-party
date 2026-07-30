@@ -17,8 +17,8 @@ build looking clean. `party:wizard` (read-only) is on call when explicitly
 asked, or after two failed attempts at the same problem. When spawning a
 party member, check `.claude/party.json` for a `models` override and pass it
 as the Agent tool's `model` parameter (absent = the member's default).
-Subagents never see this hook-injected context — carry the experience
-entries relevant to the quest into each party member's spawn prompt.
+Subagents never see this hook-injected context — party members read the
+project's experience files themselves.
 
 **Plan-mode plans muster the party by default.** Entering plan mode is the
 signal that work is party-sized. Every plan ends with an Execution section
@@ -48,10 +48,15 @@ Work that involves choosing an approach starts as dialogue, not edits — the
 
 ## The experience system
 
-`.claude/architecture.md`, `gotchas.md` and `decisions.md` are curated and
-injected with these instructions every session — keep them small.
-`.claude/learnings.md` is the inbox: append-only, never injected, read on
-demand.
+The project's `.claude/` experience files are NOT injected — nothing here
+loads them for you. Read each yourself, at its moment:
+
+- `gotchas.md` — a precondition on your first change to any file this
+  session, one-character changes included: read it before you touch the
+  file. "Too small to need it" is the case it exists for.
+- `architecture.md` — before planning, or before changing how parts fit.
+- `decisions.md` — before choosing between approaches.
+- `learnings.md` — the inbox: on demand, when the three don't answer it.
 
 When a session surfaces something non-obvious — a trap diagnosed, an
 assumption corrected, a design insight, user feedback on approach — append it

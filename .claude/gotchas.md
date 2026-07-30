@@ -1,7 +1,8 @@
 # Gotchas
 
-Non-obvious traps. Loaded into every session — keep each entry to 1–2 lines
-and delete entries once the underlying cause is fixed.
+Non-obvious traps. Read before the first edit of a session, a one-line one
+included — keep each entry to 1–2 lines and delete entries once the
+underlying cause is fixed.
 
 <!-- Each entry: the trap, why it bites, and where it's pinned (a test that
      locks the invariant in place, if one exists). Example shape:
@@ -88,15 +89,31 @@ and delete entries once the underlying cause is fixed.
 - SessionStart hook output reaches the MAIN session only — subagents do
   not inherit it (tested 2026-07-29). CLAUDE.md and its `@`-imports do
   propagate, so anything a party member must have either lives in
-  CLAUDE.md, is read by the agent itself, or rides the spawn prompt —
-  `hooks/instructions.md` mandates that briefing at muster.
+  CLAUDE.md, is read by the agent itself, or rides the spawn prompt. As of
+  2026-07-30 the experience files take the middle route: each agent's own
+  read step, not a briefing carried into the spawn prompt.
 - A plugin's `hooks/hooks.json` auto-registers — no `hooks` key in
-  `plugin.json`, and `--plugin-dir` honors it. SessionStart hook stdout
-  is injected verbatim (no JSON wrapper needed) and is not truncated at
-  ~22k chars; the `matcher` field is honored and accepts alternation, so
-  a wrong matcher fails silently by simply never firing — and "omitted
-  matcher fires on every source" is proven only for `startup`, since
-  `compact`/`clear` are interactive-only.
+  `plugin.json`, and `--plugin-dir` honors it. Stdout is injected verbatim,
+  no JSON wrapper needed; the `matcher` field is honored and accepts
+  alternation, so a wrong matcher fails silently by simply never firing —
+  and "omitted matcher fires on every source" is proven only for `startup`,
+  since `compact`/`clear` are interactive-only.
+- SessionStart stdout is injected verbatim only up to **10,000 characters,
+  inclusive, PER HOOK ENTRY**; at 10,001 the entry is replaced by
+  `Output too large … saved to …/tool-results/hook-*.txt` and a ~2k preview,
+  while the hook still exits 0 — so it fails silently and every cheap check
+  passes. Characters, not bytes or tokens: size checks here use `wc -m`,
+  never `wc -c`. Bisected 2026-07-30; this replaces an earlier "not
+  truncated at ~22k chars" entry, which aimed at a clipping ceiling an order
+  of magnitude above the real relocation threshold.
+- `@`-imports do not resolve in hook stdout — relative and absolute alike
+  arrive as literal text while the surrounding payload loads fine. A hook
+  has no include primitive, so referencing another file must be prose that
+  instructs the reader to go read it.
+- The experience read triggers fire on the default party models but not on
+  haiku, which names `gotchas.md` correctly when asked yet edits without
+  reading it — the *case* is disputed, not the rule, and neither stronger
+  wording nor hoisting the section moved it (0/4 vs 3/3, 2026-07-30).
 - A grep proves the *name* is gone, never that the *promise* is: prose
   that describes a removed feature contains none of its tokens. After
   deleting a section, read the referring files end to end.
@@ -104,8 +121,8 @@ and delete entries once the underlying cause is fixed.
   `git grep` — `.claude/learnings-archive.md` holds strings this repo no
   longer ships, so "do we still ship this?" must name the shipped file,
   never the repo.
-- `/party:long-rest` both grows and drains the always-loaded tier:
+- `/party:long-rest` both grows and drains the curated experience files:
   distilling writes *into* `architecture.md` / `gotchas.md` /
   `decisions.md` and the prune step drops only what stopped being true, so
-  its compact step is the sole drain and its size gauge the only thing
-  measuring the tier the ~4k budget applies to.
+  its compact step is the sole drain and its gauge the only thing measuring
+  what those files cost to read.

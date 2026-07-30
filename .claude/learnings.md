@@ -98,3 +98,92 @@ After renumbering, re-read the whole file for the claims the list is embedded
 in, not just the references that name a number. Grep finds `step 4`; it does
 not find "happens last".
 
+## 2026-07-30 — Large hook output is relocated to disk, not injected
+
+Observed directly at this session's start: the SessionStart hook's second
+`cat` (`architecture.md gotchas.md decisions.md`, 16,912 B) did not reach
+context. It was replaced by `Output too large (16.3KB). Full output saved
+to: …/tool-results/hook-<uuid>-stdout.txt` plus the first ~2,048 B inline —
+so the session had four bullets of `architecture.md` and none of
+`gotchas.md` or `decisions.md`. The first `cat` (`instructions.md`,
+4,048 B) arrived verbatim, tail byte-identical to the file.
+
+The mechanism is not hook-specific: the spill path is the generic
+`tool-results/` directory, so hook stdout inherits the ordinary per-result
+inline cap. The cap is **per result, not per session** — which means the
+two-`cat` split chosen on 2026-07-29 for unrelated reasons is load-bearing.
+One combined `cat` would put the 21 KB total over the cap and take
+`instructions.md` — the party protocol itself — to disk with it, silently
+disabling the plugin. Any future consolidation of those `cat`s reintroduces
+that failure.
+
+`gotchas.md` recorded the opposite on 2026-07-29: "injected verbatim … not
+truncated at ~22k chars (tested)". Growth is not the explanation — the tier
+was *larger* that day (25,576 B) than now (16,913 B). The test was aimed at
+a hypothesised ~22k clipping ceiling, and the real behaviour is an
+order of magnitude lower and works by relocation, so it was outside the
+hypothesis space.
+
+Two generalisations, both about the shape of the miss rather than the
+number:
+
+Relocation defeats every cheap check, because nothing fails. The hook exits
+0, the text is retrievable on disk, and the content still exists — so
+"did the hook fire?", "is the file there?" and the `lantern is lit` sentinel
+all pass. Only absence *in the model's context* distinguishes the two
+states, and no gate in this repo tested for that. Worse, every existing
+gate probes `instructions.md`, the one file small enough to fit; the file
+that doesn't fit had no gate at all. When a limit degrades by moving data
+rather than erroring, the assertion has to name the consumer ("the model
+can quote line N"), never the producer.
+
+A budget expressed as one number hid two different limits. `~4k` was a
+voluntary cost budget on shipped text with no enforcement behind it, while
+the per-project tier — assumed unbounded — is the side with the real
+ceiling. `architecture.md` had already blurred the two by attaching the 4k
+to "that tier", and `/party:long-rest`'s 50k gauge calls a size "fine" that
+is several times past the point where the files stop being injected. A
+gauge inherits authority from being a number; it earns none of it unless
+its thresholds were measured against the mechanism they claim to bound.
+
+## 2026-07-30 — A read trigger is a capability floor, not a prose problem
+
+Replacing hook injection with per-file read triggers made delivery
+conditional on compliance for the first time — injection had no compliance
+step at all. Measured on the fixture built for the change: the `gotchas.md`
+trigger fired 3/3 on the default model and **0/4 on haiku**.
+
+The useful part is the diagnosis. Asked with tools disallowed which file it
+must read before its first change, haiku names `.claude/gotchas.md`
+correctly, then edits without reading it. So "the rule didn't fire" splits
+three ways — *didn't arrive*, *disputed the rule*, *disputed the case* — and
+only the middle one is a wording problem. This was the third. Both documented
+remedies were applied and both were null: strengthening the trigger to an
+explicit precondition ("one-character changes included … 'too small to need
+it' is the case it exists for"), and hoisting the whole section above the
+muster protocol. That is this repo's own "every more-text fix feeds the step
+that was already working", observed live rather than reasoned about.
+
+Establish which of the three failures you have before writing a single word
+of remedy, because two of the three cannot be written around. Shipped anyway:
+the alternative was silent non-delivery for *every* model, and the default
+party is opus/fable. But the trade is now explicit — the injected design had
+a truncation cliff, the referenced design has a compliance floor, and the
+floor is the one that varies per session without announcing itself.
+
+## 2026-07-30 — A behavioral fixture can leak its own answer
+
+The first attempt at the trigger test asked the model to edit a
+`config.txt` whose *other* lines already carried the `-ZORB` suffix the
+hidden rule in `gotchas.md` demanded. A pass proved nothing: the suffix was
+inferable from the file being edited, so pattern-matching and rule-following
+were indistinguishable. Discarded and rebuilt with a side-effect reachable
+only through the file under test.
+
+Same failure class as this repo's `lantern` sentinel, which passed for days
+while the experience tier silently wasn't loading — it only ever exercised
+the one file small enough to fit. A test of whether something was *consulted*
+must make its expected evidence unobtainable by any other route, and the way
+to check that is to ask what a model that never opened the file could still
+produce.
+

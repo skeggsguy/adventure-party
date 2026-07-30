@@ -4,12 +4,15 @@ This is the source repo for **Adventure Party** (`party` plugin) — a
 fantasy-flavored agent-party and experience-system framework for Claude
 Code, aimed at smart, driven users who weren't full-stack devs before
 2024. Everything shipped is markdown (agents, skills, one hook payload)
-plus a two-line `hooks/hooks.json` — no runtime code, no build. The repo
+plus a one-command `hooks/hooks.json` — no runtime code, no build. The repo
 doubles as its own marketplace (`.claude-plugin/marketplace.json`).
 
 Dogfooding this repo loads the shipped instructions through the plugin's
-own SessionStart hook, so the party protocol and this project's
-experience files arrive that way rather than from this file.
+own SessionStart hook, so the party protocol arrives that way rather than
+from this file. This project's `.claude/` experience files are NOT loaded
+by anything — read `gotchas.md` before your first edit, `architecture.md`
+before planning or changing how parts fit, `decisions.md` before choosing
+between approaches.
 
 ## Commands
 
@@ -21,6 +24,10 @@ experience files arrive that way rather than from this file.
   broken description silently unloads the file; needs PyYAML —
   `pip install pyyaml`, not bundled with python3 on Debian/Ubuntu):
   `python3 -c "import re,glob,yaml;[yaml.safe_load(re.match(r'^---\n(.*?)\n---\n',open(p,encoding='utf-8').read(),re.S).group(1)) for p in glob.glob('agents/*.md')+glob.glob('skills/*/SKILL.md')]"`
+- Check the hook payload against the 9,000 soft budget and the 10,000
+  *character* hard cap (past the cap the whole entry is silently relocated
+  to disk; counts code points, so `wc -c` is wrong here):
+  `python3 -c "import sys;n=len(open('hooks/instructions.md',encoding='utf-8').read());print('FAIL' if n>10000 else 'WARN' if n>9000 else 'OK',n,'chars');sys.exit(n>10000)"`
 - Hook smoke test (the sentinel phrase is `the lantern is lit`, in
   `hooks/instructions.md`; anything else means the hook didn't inject):
   `claude --plugin-dir . -p 'Quote the sentence containing "lantern" from your instructions, or say NONE.'`
@@ -34,7 +41,9 @@ experience files arrive that way rather than from this file.
 - `agents/` — the party: fighter (builder), cleric (reviewer/fixer),
   wizard (read-only advisor)
 - `hooks/` — `hooks.json` (SessionStart) and `instructions.md`, the
-  party protocol + experience rules injected into every session
+  party protocol injected into every session; it is also where the rules
+  for reading the `.claude/` experience files live (the files themselves
+  are not injected)
 - `skills/` — session-zero, long-rest (distills the learnings inbox)
 
 ## Conventions
@@ -44,10 +53,23 @@ experience files arrive that way rather than from this file.
   cost, and plain-language first — theme labels mechanics, never
   replaces them ("experience (your project's memory files)").
 - `hooks/instructions.md` is loaded into every session of every project
-  the plugin is installed in: budget ~4k characters, and every line
-  added there is paid forever. Shipped-text changes still ripple — the
-  muster rules live in `hooks/instructions.md` and README; keep them in
-  sync.
+  the plugin is installed in: soft budget 9,000 characters — a tripwire
+  leaving ~1k of margin under the hard cap, not a cost target, so crossing
+  it means "you are close to the wall", not "you overspent". Every line
+  added there is still paid forever, so weigh each one on its merits rather
+  than against the headroom. Shipped-text changes still ripple, and two
+  rule sets are duplicated across shipped files — keep both in sync: the
+  muster rules (`hooks/instructions.md`, README) and the per-file
+  experience-read triggers (`hooks/instructions.md`, README,
+  `agents/fighter.md`, `agents/cleric.md`, `skills/session-zero/SKILL.md`,
+  and this file's intro).
+- A SessionStart hook entry's stdout is injected verbatim only up to
+  **10,000 characters, inclusive, per entry**; at 10,001 the whole thing is
+  replaced by an `Output too large … saved to …/tool-results/` marker plus a
+  ~2k preview. That is the hard cap the 9,000 soft budget above guards. It
+  counts characters, not bytes, so **every size check here uses `wc -m`,
+  never `wc -c`** (bytes overstate this repo's prose by ~1%). Measured
+  2026-07-30; see `.claude/gotchas.md`.
 - Shipped hook commands stay one line each, with no logic beyond
   `cd`/`cat`/`exit` — no `.sh` file ships (the 0.7.0 xp.sh lesson: a
   shipped script that runs on every user's machine is the most

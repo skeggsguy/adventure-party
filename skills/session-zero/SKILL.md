@@ -21,7 +21,7 @@ Post understanding calibrate your response depth - your responses should match t
 
 Expect iterations in thinking and support this.
 
-Read .claude/decisions.md on start. Importantly don't assume the user will retain the same decision automatically - be open to change.
+Read .claude/decisions.md and .claude/architecture.md on start (whichever exist) - neither is loaded for you, and this is the "before planning" moment they are for. Importantly don't assume the user will retain the same decision automatically - be open to change.
 
 Always explain new concepts that are relevant (ELI5).
 

@@ -1,18 +1,29 @@
 # Architecture notes
 
 Deeper wiring than the one-line layout map in CLAUDE.md. Keep curated and
-current — this file is loaded into every session. Remove entries that stop
-being true.
+current — this file is read before planning and before any change to how the
+parts fit. Remove entries that stop being true.
 
 - **What loads when is the real architecture of this repo.** Four tiers,
   and every design trade-off here is paid in one of them:
-  `hooks/instructions.md` plus the project's three curated experience
-  files load on *every* session, in every project the plugin is installed
-  for — that tier is the expensive one, hence the ~4k budget;
-  `learnings.md` is read on demand only; a skill's body costs nothing
-  until it is invoked, but its frontmatter `description` is always in the
-  model's list — which is why triggers live there and detail lives in the
-  body; `hooks.json` itself costs nothing, it is plumbing.
+  `hooks/instructions.md` alone loads on *every* session, in every project
+  the plugin is installed for — the expensive tier, hence a 9,000-char soft
+  budget set as a tripwire below the hard 10,000-char-per-hook-entry cap it
+  must stay under (see gotchas); the project's `.claude/` experience files are
+  injected nowhere and cost nothing until an agent reads one against a
+  trigger in the instructions, so their bill is per read, not per session;
+  a skill's body costs nothing until it is invoked, but its frontmatter
+  `description` is always in the model's list — which is why triggers live
+  there and detail lives in the body; `hooks.json` itself costs nothing, it
+  is plumbing.
+- **Trading an injected file for a read trades a cost for a trigger.**
+  Reading the experience files on demand (2026-07-30) retires a silent cap
+  failure and makes the bill proportional to use, but it converts one
+  unmissable moment into per-file triggers — and a trigger that doesn't fire
+  is indistinguishable from a file with nothing to say. So each trigger
+  names an observable moment ("before your first edit"), never "when
+  relevant", and the triggers themselves live in `hooks/instructions.md`,
+  the one tier still guaranteed to be in context.
 - **An instruction only fires if it is in context at the moment it must
   fire.** Session-start text — hook payload or CLAUDE.md alike — competes
   with everything else by the time execution begins, which is why the
@@ -50,5 +61,5 @@ being true.
   file defining it, because a writer still holding the argument finds every
   clause load-bearing. So the bound is the Long Rest's compact step, which
   moves the entry to `learnings-archive.md` verbatim before cutting it to
-  its claim; its size gauge is what bounds the tier one level up. See
-  learnings 2026-07-27, 2026-07-29.
+  its claim; its gauge is the only thing that makes the read cost of the
+  curated three visible. See learnings 2026-07-27, 2026-07-29.

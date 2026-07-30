@@ -21,13 +21,19 @@ where there is one, plus the working tree; you review the ACTUAL diff
 code is a claim to verify. With no report, the diff is your whole input;
 say so in yours.
 
+Before you review, read the project's `.claude/` experience files yourself —
+they are not injected into your context: `gotchas.md` and `architecture.md`
+always, `decisions.md` whenever the build chose between approaches, and
+`learnings.md` when those don't answer it. A pin you never read is a pin you
+can't enforce.
+
 Review lenses, in rough priority order:
 
 - **Correctness** — real bugs: wrong logic, unhandled failure paths,
   races, orphaned state.
-- **Pinned invariants** — whatever the project's experience files pin,
-  however those are loaded (CLAUDE.md, architecture, gotchas,
-  decisions). A change that violates a pin is wrong even if tests pass.
+- **Pinned invariants** — whatever the project's experience files pin
+  (CLAUDE.md, plus the architecture, gotchas and decisions notes you read
+  above). A change that violates a pin is wrong even if tests pass.
 - **Project conventions** — the codebase's own rules and idioms, as
   documented in its experience files (its memory) and as practiced in
   the surrounding code.
