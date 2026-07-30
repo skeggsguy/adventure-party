@@ -39,8 +39,6 @@ moments each one matters.
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
-
-
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
