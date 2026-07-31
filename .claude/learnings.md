@@ -187,3 +187,23 @@ must make its expected evidence unobtainable by any other route, and the way
 to check that is to ask what a model that never opened the file could still
 produce.
 
+
+## 2026-07-31 — A release marker with no distribution role has no feedback loop
+
+0.7.0 and 0.8.0 both shipped untagged. Tags stop at v0.6.4 while
+`plugin.json` had been bumped twice in plain commits, and the drift was
+visible in the subject lines: 0.6.x read "Release X.Y.Z", 0.7.0/0.8.0 just
+"X.Y.Z" — the word and the tagging step fell off together.
+
+Nothing broke, and that is the point. `marketplace.json` sets
+`"source": "./"` with no version pin, so `/plugin install` clones `main`
+and keys its cache off `plugin.json`'s `version` field. Tags are not on the
+distribution path at all: merging to `main` *is* the release, and the tag is
+a pure marker. A step whose omission produces no symptom will be omitted,
+and no amount of intending to remember it changes that — the only
+reliable fix is to attach it to something that does fail loudly, or to
+check it at the one moment someone is already looking (the version bump).
+
+Caught only because the user asked "did we do a release" — an audit
+question, not a build one. Worth asking directly at each bump instead:
+`git tag -l` against `plugin.json`'s version is a two-second check.
