@@ -76,7 +76,8 @@ wielding it.
    (a UI challenge, a database-design challenge…).
 3. **The party musters and executes** — on your command or your
    approved plan. Fighter builds, cleric reviews and heals, wizard
-   advises on the hard calls.
+   advises on the hard calls. Any of the three seats can be filled by
+   another vendor's coding CLI instead (`/party:hire`).
 4. **Results come back to you** — review and feedback before you sign
    off the commit.
 5. **New adventure, new session** — and the experience system carries
@@ -125,6 +126,39 @@ most. Solves for try and fail re-attempts.
 **The party musters on command, not by default.** The Guide does
 ordinary work itself. The party rides out only if you summon it,
 you accept a suggestion from the guide, or on execution of plan mode.
+
+### Hirelings
+
+You may already pay for another vendor's coding CLI. Any of the three party
+roles can be **hired out** to one: `/party:hire fighter <cli>`, and from the
+next muster fighter's quests run through that command instead. `/party:hire
+fighter` releases it. One command each way.
+
+A hire is standing configuration, not a one-off summons — it is recorded in
+your repo's `.claude/party.json` and read at muster time, so it holds across
+sessions until you release it. Nothing else about the party changes: the
+`party:hireling` adapter carries your project's experience files into the
+prompt the foreign CLI receives, reads the real diff afterwards instead of
+trusting the CLI's own account, and reports back in that role's own handoff
+contract — so a hired fighter still hands off to cleric, and cleric reviews
+it exactly as before. If the hired command breaks, the quest stops and the
+finding comes back to you with `/party:hire` as the repair — falling back to
+the party's own member is your call, never the Guide's.
+
+`/party:hire` verifies the binary, probes how to run it non-interactively
+with write access, and smoke-tests it end to end — with your say-so, since
+it costs a real call on your subscription — before writing any config. It
+will never tell you which CLI or model to hire; that call is yours.
+
+Two things it tells you once, at hire time, and they are worth repeating
+here:
+
+- The hired command writes to your repo **outside Claude Code's permission
+  prompts**. You are approving the tool, not each edit it makes.
+- Hiring **wizard** trades a guarantee for a promise: the party's wizard is
+  read-only because it holds no write tools at all, while a hired wizard is
+  read-only because a flag says so — the hireling checks afterwards for
+  writes and reports any it finds.
 
 ## Session Zero
 

@@ -114,6 +114,10 @@ underlying cause is fixed.
   haiku, which names `gotchas.md` correctly when asked yet edits without
   reading it — the *case* is disputed, not the rule, and neither stronger
   wording nor hoisting the section moved it (0/4 vs 3/3, 2026-07-30).
+- `git grep` searches tracked files only, so a "zero hits" check over a
+  change that *adds* shipped files passes vacuously until they're staged —
+  CLAUDE.md's trademark grep now carries `--untracked`; any ad-hoc repo
+  grep in a session has the same hole.
 - A grep proves the *name* is gone, never that the *promise* is: prose
   that describes a removed feature contains none of its tokens. After
   deleting a section, read the referring files end to end.

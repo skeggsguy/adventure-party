@@ -32,19 +32,21 @@ between approaches.
   `hooks/instructions.md`; anything else means the hook didn't inject):
   `claude --plugin-dir . -p 'Quote the sentence containing "lantern" from your instructions, or say NONE.'`
 - Dogfood locally: `claude --plugin-dir .` (agents
-  `party:fighter/cleric/wizard`, skills `/party:session-zero` and
-  `/party:long-rest` should list)
+  `party:fighter/cleric/wizard/hireling`, skills `/party:session-zero`,
+  `/party:long-rest` and `/party:hire` should list)
 
 ## Layout
 
 - `.claude-plugin/` — plugin + marketplace manifests
 - `agents/` — the party: fighter (builder), cleric (reviewer/fixer),
-  wizard (read-only advisor)
+  wizard (read-only advisor), hireling (adapter that runs a hired
+  foreign coding CLI in a party role)
 - `hooks/` — `hooks.json` (SessionStart) and `instructions.md`, the
   party protocol injected into every session; it is also where the rules
   for reading the `.claude/` experience files live (the files themselves
   are not injected)
-- `skills/` — session-zero, long-rest (distills the learnings inbox)
+- `skills/` — session-zero, long-rest (distills the learnings inbox),
+  hire (hires a foreign coding CLI into a party role, or releases one)
 
 ## Conventions
 
@@ -75,9 +77,10 @@ between approaches.
   shipped script that runs on every user's machine is the most
   bug-prone thing in the repo).
 - Naming: no trademarked tabletop terms in anything shipped. Check:
-  `git grep -riE 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills hooks .claude-plugin LICENSE`
-  must return zero hits (pattern is self-escaping; the repo's own
-  `.claude/` memory may name the terms when recording why we avoid
-  them). The main session is "the Guide".
+  `git grep -riE --untracked 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills hooks .claude-plugin LICENSE`
+  must return zero hits (pattern is self-escaping; `--untracked` because
+  plain `git grep` skips not-yet-added files — exactly the new agents and
+  skills a feature adds; the repo's own `.claude/` memory may name the
+  terms when recording why we avoid them). The main session is "the Guide".
 - `*.sh` stays LF (`.gitattributes` enforces) — `party.sh` is executed
   by a POSIX shell, which chokes on CRLF from a Windows checkout.

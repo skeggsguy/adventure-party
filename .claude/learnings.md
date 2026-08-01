@@ -207,3 +207,53 @@ check it at the one moment someone is already looking (the version bump).
 Caught only because the user asked "did we do a release" — an audit
 question, not a build one. Worth asking directly at each bump instead:
 `git tag -l` against `plugin.json`'s version is a two-second check.
+
+## 2026-08-01 — A skill can flip a switch but cannot be one
+
+Session-zero argument for the foreign-CLI ("hireling") design, recorded
+before any build. The user's ask — swap a party member for another vendor's
+coding CLI (codex, kimi, …) via a skill — hides a timing constraint:
+`/party:long-rest`-style skills work because the user invokes them at the
+moment the work happens, but the muster happens in a later turn or session,
+when the skill body is inert. So the skill can only *write state*
+(`party.json`), and something in context at muster time — the muster
+sentence, or an agent body — must read it. The skill is a setup wizard whose
+real job is the precondition check: verify the binary, probe its
+non-interactive/write flags, smoke-test end-to-end at hire time, so failure
+surfaces before a quest, not mid-build.
+
+Second shape: wrapping any foreign CLI in any role is one job (read
+experience files → build prompt → run binary in background past the 10-min
+Bash cap → translate output into that role's handoff contract), so it is one
+generic adapter agent parameterized by role at spawn — not an agent per tool
+or per role. The role contracts are the party's interfaces; if the hireling
+honors them, cleric never knows the hands changed. Per-CLI flag knowledge is
+probed at hire time and stored in config, never shipped — a shipped flag
+table is xp.sh in prose. Disclosure, not judgment: hiring wizard converts a
+structural read-only guarantee (tool grant) into a sandbox flag, said once
+at hire time.
+
+## 2026-08-01 — A shipped prohibition gets lawyered at its adjective
+
+Cleric's live find while running the hireling build's behavioral check: with
+fighter hired to a broken command, the muster→hireling wire worked (hireling
+spawned, refused, reported exit 127), but the Guide then spawned the native
+fighter and built anyway — overriding the user's standing config. The first
+fix, "never a *silent* fallback", failed the second headless run in the most
+instructive way possible: the Guide fell back *loudly*. The prohibition was
+obeyed at its adjective and violated at its verb. The wording that went
+green bans the act and names whose call it is: "A hire whose command fails
+ends the quest — report it and stop; falling back to the native member is
+the user's call to make, never yours." Rule for shipped prose: a behavioral
+ban must land on the act itself and assign the decision to a person; any
+qualifier ("silent", "unnecessary", "routine") becomes the loophole.
+
+## 2026-08-01 — disable-model-invocation skills are headlessly testable
+
+They never appear in the model's skill list (known, correct), which had left
+"absent from the list" as their only smoke signal. Fighter found the real
+check: `claude --plugin-dir . -p '/party:hire'` invokes the skill and runs
+its actual body headlessly — used this release to verify hire's status path
+end to end, and it generalizes to long-rest. The list-absence gotcha and the
+test technique are two halves: you can't ask *about* the skill, but you can
+still *run* it.

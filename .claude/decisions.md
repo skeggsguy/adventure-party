@@ -7,6 +7,19 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-08-01 — Foreign coding CLIs stand in for party members via one generic
+hireling agent + `/party:hire` skill + a `hired` map in `party.json` — over
+per-tool/per-role agents (duplicate always-loaded descriptions) or
+re-skinning fighter (theme lies, mode is global). See learnings 2026-08-01.
+
+2026-08-01 — `/party:hire` probes the CLI's flags at hire time, smoke-tests,
+and stores the resolved command in `party.json`; unknown CLIs fall back to a
+user-supplied command — over a shipped flag table, which rots as CLIs
+change. See learnings 2026-08-01.
+
+2026-08-01 — Hires are standing config state; the Guide is never hireable —
+over per-task summons, one more path to explain for marginal gain.
+
 2026-07-30 — The `.claude/` experience files are read on demand against
 per-file triggers carried in `hooks/instructions.md`, not injected — over
 one hook entry per file policed under the 10,000-char cap, because that cap

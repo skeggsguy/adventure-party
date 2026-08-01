@@ -15,8 +15,12 @@ Once mustered: spawn `party:fighter` to build, and when fighter finishes,
 ALWAYS spawn `party:cleric` with its build report — not conditional on the
 build looking clean. `party:wizard` (read-only) is on call when explicitly
 asked, or after two failed attempts at the same problem. When spawning a
-party member, check `.claude/party.json` for a `models` override and pass it
-as the Agent tool's `model` parameter (absent = the member's default).
+party member, check `.claude/party.json` — a `models` override rides the
+Agent tool's `model` parameter (absent = the member's default), and a `hired`
+entry for that role spawns `party:hireling` instead, passing the role, the
+entry's `run` command, and the task; everything downstream is unchanged. A
+hire whose command fails ends the quest — report it and stop; falling back
+to the native member is the user's call to make, never yours.
 Subagents never see this hook-injected context — party members read the
 project's experience files themselves.
 
