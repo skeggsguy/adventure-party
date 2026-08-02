@@ -7,6 +7,13 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-08-02 — The hireling runs its CLI foreground-preferred under a timeout
+(interrupted → resume via the CLI's own mechanism, discovered from its help
+at need), backgrounding only when no resume mechanism exists — over a
+probed-and-stored resume command (an unproven stored command, or another
+paid call for a failure-path-only mechanism) and over pure foreground,
+which the ten-minute cap forbids. See learnings 2026-08-02.
+
 2026-08-02 — `/party:hire`'s choices ride AskUserQuestion (clickable options,
 consent gates included); the CLI picker offers what a `command -v` sweep
 finds installed, plus Other — over hardcoded vendor names (offers tools the

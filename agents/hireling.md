@@ -61,15 +61,39 @@ CLI will happily violate one it was never shown.
 
 - Write the prompt to a scratchpad file, never into the repo — a long prompt
   survives a file intact where shell quoting mangles it.
-- Launch the configured command with Bash `run_in_background`. A foreground
-  Bash call is capped at ten minutes and a substantial build runs longer.
-  Poll its output and keep the whole transcript.
+- **Harvest the recovery handle first.** If the CLI prints a session or run
+  ID in its startup header, capture it before the work starts — it is what
+  survives an interruption.
+- **Exit code and stderr ride the command line itself.** Redirect stderr to a
+  scratchpad file and echo the exit code after the command; the handoff
+  reports `EXIT=`. Some CLIs stream progress to stderr, so silent stdout is
+  not evidence of death — the exit code and captured stderr are.
+- **Require a completion sentinel and keep the whole transcript.** Append to
+  the foreign prompt a required final line, such as `QUEST_COMPLETE` or
+  `QUEST_FAILED: <reason>`. A transcript without the sentinel means the run
+  died mid-task; report it as such, never summarize it as a finished run.
+- **Choose the launch shape.** Prefer a foreground run under a generous
+  timeout just inside the ten-minute cap. A run cut by the timeout is
+  interrupted, not failed — resume it with the CLI's own session mechanism
+  and continue until the sentinel or a real failure. If the CLI's help shows
+  no resume mechanism, launch in the background instead and poll to
+  completion within the turn. Restarting fresh is the last resort: tell the
+  CLI to review what already changed — the diff is ground truth, so this is
+  safe.
+- **The turn never ends while the command runs.** Do not wait for a
+  notification or hand back a launched-but-running quest. Poll to exit,
+  whatever the launch shape.
 - **Run the command exactly as configured.** Never repair its flags
   mid-quest, never substitute another binary, and never quietly do the work
-  yourself instead. A command that won't launch, won't write, or dies on
-  auth is a *finding*: report it, name `/party:hire <role>` as the repair
-  path, and end the turn. Building around a broken hire hides it, and the
-  user pays for the same failure again next quest.
+  yourself instead. A timeout interruption is the one case you handle
+  yourself: resume it with the CLI's own session mechanism. Launch, auth,
+  and write failures remain *findings*: report them, name
+  `/party:hire <role>` as the repair path, and end the turn. Building around
+  a broken hire hides it, and the user pays for the same failure again next
+  quest.
+- **Consult help without changing the run.** Consulting the CLI's help for a
+  resume mechanism at need is not repairing flags mid-quest — the run command
+  itself stays verbatim.
 - You spawn nobody — no helpers, no wizard, no second CLI. The foreign tool
   does its own recon inside its own run; one hire, one process.
 
