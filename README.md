@@ -131,8 +131,9 @@ you accept a suggestion from the guide, or on execution of plan mode.
 
 You may already pay for another vendor's coding CLI. Any of the three party
 roles can be **hired out** to one: `/party:hire fighter <cli>`, and from the
-next muster fighter's quests run through that command instead. `/party:hire
-fighter` releases it. One command each way.
+next muster fighter's quests run through that command instead. Leave out one
+or both arguments and it walks you through the missing choices with
+clickable options. `/party:hire fighter` releases it. One command each way.
 
 A hire is standing configuration, not a one-off summons — it is recorded in
 your repo's `.claude/party.json` and read at muster time, so it holds across
@@ -145,10 +146,14 @@ it exactly as before. If the hired command breaks, the quest stops and the
 finding comes back to you with `/party:hire` as the repair — falling back to
 the party's own member is your call, never the Guide's.
 
-`/party:hire` verifies the binary, probes how to run it non-interactively
-with write access, and smoke-tests it end to end — with your say-so, since
-it costs a real call on your subscription — before writing any config. It
-will never tell you which CLI or model to hire; that call is yours.
+`/party:hire` guides you through clickable choices rather than typed
+answers. The CLIs offered are the ones actually installed on your machine;
+model names come from the CLI's own listing, with a web search only if it
+has no listing. With your say-so, each smoke test makes a real call on your
+subscription; it pins the model and, when the CLI offers one, reasoning
+effort into the stored command by default — you can decline either — and
+smoke-tests the exact final command before writing config. It will never
+tell you which CLI or model to hire; that call is yours.
 
 Two things it tells you once, at hire time, and they are worth repeating
 here:
