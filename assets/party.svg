@@ -13,8 +13,8 @@
   <g fill="#9A7724">
     <rect x="10" y="10" width="12" height="12" transform="rotate(45 16 16)"/>
     <rect x="1178" y="10" width="12" height="12" transform="rotate(45 1184 16)"/>
-    <rect x="10" y="598" width="12" height="12" transform="rotate(45 16 604)"/>
-    <rect x="1178" y="598" width="12" height="12" transform="rotate(45 1184 604)"/>
+    <rect x="10" y="608" width="12" height="12" transform="rotate(45 16 614)"/>
+    <rect x="1178" y="608" width="12" height="12" transform="rotate(45 1184 614)"/>
   </g>
 
   <!-- ============ d20 ============ -->
