@@ -7,6 +7,11 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-08-02 — A hired CLI's `QUEST_FAILED` is read against the diff (adapter
+re-runs sandbox-blocked checks itself) — over adding a third `QUEST_BLOCKED`
+sentinel, since the foreign CLI's failure classification is itself a claim
+the diff settles. See learnings 2026-08-02.
+
 2026-08-02 — The hireling runs its CLI foreground-preferred under a timeout
 (interrupted → resume via the CLI's own mechanism, discovered from its help
 at need), backgrounding only when no resume mechanism exists — over a

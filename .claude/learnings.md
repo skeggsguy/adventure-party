@@ -67,3 +67,27 @@ automatically. The quest continued only because the Guide noticed and resumed
 it via SendMessage. Candidate fix in `agents/hireling.md`: run the hired
 command in the foreground (or poll it to completion) and never end the turn
 while the command is still running.
+
+## 2026-08-02 — Codex's sandbox makes "curl X and commit it" an adapter job
+
+First fully clean hired build (chess app quest): codex under `--sandbox
+workspace-write` blocks both network and `.git` writes, so any plan step of
+the shape "fetch artifact, commit result" must be split — the adapter
+pre-fetches the artifact before launch and runs the commit after verifying
+the diff, with the hired run command itself unaltered. Budget for that at
+launch, not as a mid-run rescue. Corollary: a `QUEST_FAILED` sentinel can be
+honest about the *sandbox* (blocked socket bind, read-only `.git`) rather
+than the build — read the named reason before treating the run as a failed
+build; here the diff was complete and every blocked check passed when re-run
+outside. (Hireling's LEARNED lines, chess build.)
+
+## 2026-08-02 — No-runtime review: audit call shapes against the vendored source
+
+Cleric's find on the same quest: with no node/deno on the box and installs
+off-limits, the highest-value substitute for executing client code against a
+vendored library is (1) auditing every call's shape — signatures and return
+fields, not just method names — against the vendored source itself, and (2)
+an independent sha256 check against the upstream artifact. The audit caught a
+real bug greps missed: en passant's destination square is empty, so
+occupancy-based capture highlighting lies — `Move.captured` is the truth.
+(Cleric's LEARNED line, chess build review.)

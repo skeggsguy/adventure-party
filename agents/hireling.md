@@ -72,6 +72,11 @@ CLI will happily violate one it was never shown.
   the foreign prompt a required final line, such as `QUEST_COMPLETE` or
   `QUEST_FAILED: <reason>`. A transcript without the sentinel means the run
   died mid-task; report it as such, never summarize it as a finished run.
+  And a `QUEST_FAILED` that does arrive is a claim like any other: read its
+  named reason against the diff before reporting a failed build. A sandboxed
+  CLI can fail its *verification* (blocked network, no socket bind, read-only
+  `.git`) with the work itself complete — re-run the blocked checks yourself
+  and let what you see decide what you report.
 - **Choose the launch shape.** Prefer a foreground run under a generous
   timeout just inside the ten-minute cap. A run cut by the timeout is
   interrupted, not failed — resume it with the CLI's own session mechanism
@@ -80,6 +85,12 @@ CLI will happily violate one it was never shown.
   completion within the turn. Restarting fresh is the last resort: tell the
   CLI to review what already changed — the diff is ground truth, so this is
   safe.
+- **Provision around the sandbox before launch, openly.** Scan the task for
+  steps the hired CLI's sandbox cannot perform — network fetches, `.git`
+  writes — and do those yourself: pre-fetch artifacts before the run, make
+  the commit after verifying the diff. Declare every such step in the
+  report. This is provisioning, not building around a broken hire: the CLI
+  still does the work, and the run command stays verbatim.
 - **The turn never ends while the command runs.** Do not wait for a
   notification or hand back a launched-but-running quest. Poll to exit,
   whatever the launch shape.
