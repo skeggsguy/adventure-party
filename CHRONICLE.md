@@ -137,3 +137,57 @@ file's own 3–5 line budget while still being entirely true — compressing
 those is a separate call, not a prune. The `*Distilled through
 2026-07-26.*` line above is left as Level 2's record; it is now inert,
 since the inbox it bounded is empty.*
+
+## Level 4 — Vanguards of the Ashen Spire — 2026-08-02
+
+The level the party learned to measure what it says, and hired its first
+outside hand.
+
+**What was built.** The hireling system, end to end: any of the three
+party roles can now be stood in for by another vendor's coding CLI, hired
+through a skill that earns its keep before writing a word of config — it
+finds the binary, proves what answers to the name, probes the tool's own
+help for how to run it, and pays for a real smoke test before anything is
+recorded. The first live hire happened this level: the fighter's post is
+now held by an outside CLI, its command proven and its model pinned. The
+release itself closed two quieter failures — a sharper Session Zero and a
+one-step install.
+
+**What was conquered.** The biggest trap of the level was invisible by
+design: past a hard size cap, the text the plugin serves at session start
+is quietly moved to disk instead of injected, while every cheap check
+still passes — the hook exits cleanly, the file exists, the sentinel
+phrase answers. The party's own memory files had been silently failing to
+arrive, and the fix reshaped the whole system: memory is now read at
+named moments instead of injected wholesale. The cost of that trade
+surfaced immediately — reading-on-demand only works if the reader
+complies, and one budget model demonstrably doesn't — and a test built to
+watch for it turned out to leak its own answer and had to be rebuilt.
+Elsewhere, two releases had shipped untagged because tags sit off the
+distribution path and their omission produces no symptom; a prohibition
+written with an adjective in it was obeyed at the adjective and violated
+at the verb; and the first live hire proved that a model's public name is
+not the string its API answers to — "luna" cost one throwaway call, which
+is exactly the price the smoke-test-before-write ordering was designed to
+pay.
+
+**What the player learned.** Words that must act later have to be placed
+where they will be read later: a skill can flip a switch but cannot be
+one, so standing behavior lives in state files and the always-loaded
+protocol, never in a skill body that leaves context when it ends. Bans
+must name the act and the decider, because any qualifier becomes the
+loophole. And guidance works better as offered choices than open
+questions — the level's last learning is the user's own feedback that the
+hire flow should guide with question boxes rather than lean on typed
+text, with the unpinnable "luna" as the evidence.
+
+*Notes: 13 entries archived, all newly distilled — 7 new gotchas, 1 gotcha
+extended, 1 new architecture note; 3 entries distilled to nothing new
+(already curated at write time). No junk flagged. Nothing pruned — every
+gotcha re-verified still true (`gh`/`jq` still absent,
+`disable-model-invocation` still shipped). Compacted: the relocation-cap
+gotcha (verbatim text archived first), two decisions entries and one
+architecture note, all with resolving pointers. Left over budget
+knowingly: several older decisions entries already carry claim +
+alternative + pointer and would lose meaning, not fat. Pending work item,
+not yet a decision: rework hire's choice points as question boxes.*

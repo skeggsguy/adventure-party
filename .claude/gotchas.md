@@ -26,7 +26,32 @@ underlying cause is fixed.
   insight rides its `LEARNED:` line into the experience files instead.
 - Skills with `disable-model-invocation: true` don't appear in the
   model's skill list — a headless "list your skills" smoke test shows
-  only session-zero; that's correct, not a packaging bug.
+  only session-zero; that's correct, not a packaging bug. But
+  `claude --plugin-dir . -p '/party:<skill>'` still runs the body
+  headlessly — that's the real smoke test. See learnings 2026-08-01.
+- The built-in tool roster varies per install (server-side bucketing), so
+  shipped prose names the *outcome*, never a tool — "count without reading
+  it", not "use Grep"; a frontmatter `tools:` list IS honored and
+  resurrects a pruned tool. See learnings 2026-07-29.
+- When a helper reports a diff, ask "against what" before "is it true" — a
+  dirty tree makes `HEAD` the wrong baseline, and this repo's `.claude/`
+  files are dirty more often than not. See learnings 2026-07-29.
+- Renumbering a skill's ceremony breaks prose *outside* the list —
+  invariants like "happens last" carry no step number, so grep can't find
+  them; re-read the whole file. See learnings 2026-07-29.
+- A fixture testing whether a file was *consulted* must make its evidence
+  unobtainable any other way — ask what a model that never opened the file
+  could still produce. See learnings 2026-07-30.
+- Tags are off the distribution path (merging to `main` is the release), so
+  an untagged release shows no symptom — check `git tag -l` against
+  `plugin.json`'s version at every bump. See learnings 2026-07-31.
+- A behavioral ban must land on the act and assign the decision to a person
+  — any qualifier ("silent", "unnecessary") becomes the loophole and gets
+  obeyed instead of the verb. See learnings 2026-08-01.
+- A user-supplied model name is a claim to verify, not config to record:
+  marketing tier names ("luna") aren't API strings (`gpt-5.6-luna`), and a
+  pinned model needs its own smoke test — `-m` changes the command under
+  test. See learnings 2026-08-02.
 - No `gh` in this WSL, and git pushes go over SSH (an HTTPS remote can't
   prompt for credentials mid-session).
 - A documented dev command is only real if it runs on a stock machine:
@@ -99,13 +124,9 @@ underlying cause is fixed.
   and "omitted matcher fires on every source" is proven only for `startup`,
   since `compact`/`clear` are interactive-only.
 - SessionStart stdout is injected verbatim only up to **10,000 characters,
-  inclusive, PER HOOK ENTRY**; at 10,001 the entry is replaced by
-  `Output too large … saved to …/tool-results/hook-*.txt` and a ~2k preview,
-  while the hook still exits 0 — so it fails silently and every cheap check
-  passes. Characters, not bytes or tokens: size checks here use `wc -m`,
-  never `wc -c`. Bisected 2026-07-30; this replaces an earlier "not
-  truncated at ~22k chars" entry, which aimed at a clipping ceiling an order
-  of magnitude above the real relocation threshold.
+  inclusive, per hook entry** — past it the whole entry is relocated to
+  `tool-results/` while the hook still exits 0, so every cheap check passes.
+  Characters, not bytes: `wc -m`, never `wc -c`. See learnings 2026-07-30.
 - `@`-imports do not resolve in hook stdout — relative and absolute alike
   arrive as literal text while the surrounding payload loads fine. A hook
   has no include primitive, so referencing another file must be prose that
@@ -114,6 +135,10 @@ underlying cause is fixed.
   haiku, which names `gotchas.md` correctly when asked yet edits without
   reading it — the *case* is disputed, not the rule, and neither stronger
   wording nor hoisting the section moved it (0/4 vs 3/3, 2026-07-30).
+- `git grep` searches tracked files only, so a "zero hits" check over a
+  change that *adds* shipped files passes vacuously until they're staged —
+  CLAUDE.md's trademark grep now carries `--untracked`; any ad-hoc repo
+  grep in a session has the same hole.
 - A grep proves the *name* is gone, never that the *promise* is: prose
   that describes a removed feature contains none of its tokens. After
   deleting a section, read the referring files end to end.

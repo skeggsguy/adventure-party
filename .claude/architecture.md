@@ -54,12 +54,15 @@ parts fit. Remove entries that stop being true.
   counter drifts on hand edits, merges and Long Rest rewrites. A level is
   an event, so `CHRONICLE.md` stores it as `## Level N`, which the next
   rest parses. See learnings 2026-07-28.
+- **A skill body is in context only while it is being invoked.** Anything
+  that must act at a *later* moment — a hire honored at next muster — can
+  only be state the skill writes (`party.json`) plus a reader guaranteed in
+  context at that moment (the muster sentence in `hooks/instructions.md`).
+  A skill is a setup wizard; standing behavior lives in the always-loaded
+  tier. See learnings 2026-08-01.
 - **A text budget only holds where the argument is no longer in context.**
-  `decisions.md` has inflow from two rules and an outflow gated on "stopped
-  being true", which a decision never does — and a write-time budget is no
-  fix either: that shipped 2026-07-27 and was violated the same day, in the
-  file defining it, because a writer still holding the argument finds every
-  clause load-bearing. So the bound is the Long Rest's compact step, which
-  moves the entry to `learnings-archive.md` verbatim before cutting it to
-  its claim; its gauge is the only thing that makes the read cost of the
-  curated three visible. See learnings 2026-07-27, 2026-07-29.
+  A write-time budget shipped 2026-07-27 and was violated the same day, in
+  the file defining it — a writer still holding the argument finds every
+  clause load-bearing. So the bound is the Long Rest's compact step
+  (move to the archive verbatim, then cut), and its gauge is what makes the
+  curated files' read cost visible. See learnings 2026-07-27, 2026-07-29.

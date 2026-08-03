@@ -7,11 +7,58 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-08-02 — A hired CLI's `QUEST_FAILED` is read against the diff (adapter
+re-runs sandbox-blocked checks itself) — over adding a third `QUEST_BLOCKED`
+sentinel, since the foreign CLI's failure classification is itself a claim
+the diff settles. See learnings 2026-08-02.
+
+2026-08-02 — The hireling runs its CLI foreground-preferred under a timeout
+(interrupted → resume via the CLI's own mechanism, discovered from its help
+at need), backgrounding only when no resume mechanism exists — over a
+probed-and-stored resume command (an unproven stored command, or another
+paid call for a failure-path-only mechanism) and over pure foreground,
+which the ten-minute cap forbids. See learnings 2026-08-02.
+
+2026-08-02 — `/party:hire`'s choices ride AskUserQuestion (clickable options,
+consent gates included); the CLI picker offers what a `command -v` sweep
+finds installed, plus Other — over hardcoded vendor names (offers tools the
+user may not have; a shipped list that rots visibly) or free-typed commands
+(the flow this replaces, where Enter sends the message mid-thought).
+
+2026-08-02 — Model names for the pin menu come from the CLI's own listing
+first, WebSearch only as fallback, and search results populate the *menu*
+only — the value written to `party.json` is what the smoke test proved runs
+— over web-search-first, which reports last month's blog post, not this
+install.
+
+2026-08-02 — The probe also settles a reasoning-effort flag, offered at pin
+time only when the CLI has one and stored as just another flag in `run` —
+over a `party.json` schema field or skipping effort, which benchmarks show
+changes real capability rank across vendors; the smoke test validates the
+model+effort combo.
+
+2026-08-02 — `/party:hire` pins a model into the stored run command by
+default (user's choice of model, decline allowed) — over inheriting the
+CLI's own config, under which a CLI update silently changes what a standing
+hire means and the party can't see or manage it from `party.json`.
+
+2026-08-01 — Foreign coding CLIs stand in for party members via one generic
+hireling agent + `/party:hire` skill + a `hired` map in `party.json` — over
+per-tool/per-role agents (duplicate always-loaded descriptions) or
+re-skinning fighter (theme lies, mode is global). See learnings 2026-08-01.
+
+2026-08-01 — `/party:hire` probes the CLI's flags at hire time, smoke-tests,
+and stores the resolved command in `party.json`; unknown CLIs fall back to a
+user-supplied command — over a shipped flag table, which rots as CLIs
+change. See learnings 2026-08-01.
+
+2026-08-01 — Hires are standing config state; the Guide is never hireable —
+over per-task summons, one more path to explain for marginal gain.
+
 2026-07-30 — The `.claude/` experience files are read on demand against
-per-file triggers carried in `hooks/instructions.md`, not injected — over
-one hook entry per file policed under the 10,000-char cap, because that cap
-relocates the entry to disk while the hook still exits 0, so managing it
-means policing a silent failure forever. See learnings 2026-07-30.
+per-file triggers in `hooks/instructions.md`, not injected — over per-file
+hook entries under the 10,000-char cap, a silent failure policed forever.
+See learnings 2026-07-30.
 
 2026-07-29 — Instructions are served live from a SessionStart hook and
 nothing is copied into a repo — over the template plus better migration
@@ -19,11 +66,9 @@ tooling, since the drift that tooling manages is created by the copying.
 See learnings 2026-07-29.
 
 2026-07-29 — The hook is one SessionStart block of one-line `cat`s on
-plain stdout, matcher omitted — over JSON `additionalContext` or one
-entry per file, elaborations the spike proved bought nothing. *Amended
-2026-07-30:* one `cat`, not two — the experience-file entry was silently
-over the 10,000-char cap and is now read on demand. See learnings
-2026-07-29.
+plain stdout, matcher omitted — over JSON `additionalContext` or one entry
+per file, elaborations the spike proved bought nothing. *Amended
+2026-07-30:* one `cat`, not two. See learnings 2026-07-29.
 
 2026-07-28 — The XP statusline and banner are dropped, the level-up
 nudge moving to the moment the Guide appends a learning — over patching

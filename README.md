@@ -76,7 +76,8 @@ wielding it.
    (a UI challenge, a database-design challenge…).
 3. **The party musters and executes** — on your command or your
    approved plan. Fighter builds, cleric reviews and heals, wizard
-   advises on the hard calls.
+   advises on the hard calls. Any of the three seats can be filled by
+   another vendor's coding CLI instead (`/party:hire`).
 4. **Results come back to you** — review and feedback before you sign
    off the commit.
 5. **New adventure, new session** — and the experience system carries
@@ -125,6 +126,25 @@ most. Solves for try and fail re-attempts.
 **The party musters on command, not by default.** The Guide does
 ordinary work itself. The party rides out only if you summon it,
 you accept a suggestion from the guide, or on execution of plan mode.
+
+### Hirelings(Beta)
+
+You may already pay for another vendor's coding CLI. Any of the three party
+roles can be **hired out** to one: `/party:hire fighter <cli>`, and from the
+next muster fighter's quests run through that command instead. Leave out one
+or both arguments and it walks you through the missing choices with
+clickable options. `/party:hire fighter` releases it. One command each way.
+
+`/party:hire` guides you through clickable choices rather than typed
+answers. The CLIs offered are the ones actually installed on your machine;
+model names come from the CLI's own listing, with a web search only if it
+has no listing. With your say-so, each smoke test makes a real call on your
+subscription; it pins the model and, when the CLI offers one, reasoning
+effort into the stored command by default — you can decline either — and
+smoke-tests the exact final command before writing config. It will never
+tell you which CLI or model to hire; that call is yours.
+
+This has been tested to date with codex to much success.
 
 ## Session Zero
 
