@@ -1,3 +1,9 @@
+2026-08-03 — When a probed knob (effort, model names) has no enumerable
+help text, `/party:hire` asks the CLI itself for a candidate key/value list
+then verifies it live — a deliberate invalid value's error message, when it
+enumerates, over trusting the self-report, since codex's own JSON answer
+for effort values silently dropped `none`/`max`. See gotchas 2026-08-03.
+
 # Decisions
 
 Why A over B, for choices below plan level. Read before choosing between

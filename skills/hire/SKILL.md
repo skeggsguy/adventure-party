@@ -67,18 +67,39 @@ exists to make a later, more expensive failure impossible.
    reasoning effort if the CLI has that knob.
 
    Propose the base command with a one-line reason for each
-   probe-confirmed flag. If the effort knob is absent, do not offer an
-   effort choice later. If the help is unreadable or the tool is
-   unfamiliar, say so and ask the user for the command that runs it
-   non-interactively with write access — the one choice with no options
-   to click.
+   probe-confirmed flag. If the help text neither names a dedicated effort
+   flag nor enumerates values for a generic override (codex: `-c
+   model_reasoning_effort=<value>`, no dedicated flag, no listed values),
+   don't conclude the knob is absent — ask, then verify, same shape as
+   model discovery in step 4:
+   - **Ask** the CLI itself for the config key name and its candidate value
+     list, as JSON for clean parsing. Treat the answer as a lead, not a
+     fact — asked this way, codex named its own key correctly but its value
+     list silently dropped two real values (`none`, `max`); see
+     `.claude/gotchas.md`, 2026-08-03.
+   - **Verify the key** by running the real probe command with one
+     candidate value and confirming the CLI's own output echoes that the
+     value took effect — a silently-ignored key is indistinguishable from
+     a working one any other way.
+   - **Verify the values** by feeding one deliberately invalid value
+     through the same real command; many CLIs' resulting error enumerates
+     every valid value in the message itself, which is the complete,
+     authoritative list — more complete than what the CLI volunteered when
+     asked politely. Only fall back to the self-reported list if the error
+     doesn't enumerate.
+   If the effort knob is absent even after asking, do not offer an effort
+   choice later. If the help is unreadable or the tool is unfamiliar, say
+   so and ask the user for the command that runs it non-interactively with
+   write access — the one choice with no options to click.
    Never write a flag from memory or from a table: what a CLI's flags were
-   last release is not what they are today. The probe is the source of truth;
-   use its verified spellings and level names below.
+   last release is not what they are today. The probe (plus the ask-then-
+   verify fallback above) is the source of truth; use its verified
+   spellings and level names below.
 4. **Discover model names.** Prefer the CLI's own listing — help text or a
    models subcommand found during the probe. Only when the CLI offers no
-   listing, fall back to a web search for current model names. These names
-   populate the model menu only. A discovered or user-supplied model name is
+   listing, fall back to asking the CLI itself (ask-then-verify, step 3's
+   shape) or a web search for current model names. These names populate the
+   model menu only. A discovered or user-supplied model name is
    a claim to verify, not configuration to record; the value written later
    is the model string that the smoke test proves runs. Do not rank the
    names.
