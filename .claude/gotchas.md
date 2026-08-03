@@ -151,3 +151,14 @@ underlying cause is fixed.
   `decisions.md` and the prune step drops only what stopped being true, so
   its compact step is the sole drain and its gauge the only thing measuring
   what those files cost to read.
+- A CLI's effort/reasoning knob can hide behind a generic override flag
+  (codex: `-c model_reasoning_effort=<value>`, not a dedicated flag) with no
+  enumerable values in `--help` at all — asking the CLI to self-report the
+  key name and value list (even as clean JSON) is a fine candidate source
+  but silently undercounts: codex's own JSON self-report named
+  `model_reasoning_effort` correctly but listed only
+  `minimal/low/medium/high/xhigh`, dropping the real `none` and `max`.
+  Feeding one deliberately invalid value through the actual probe command
+  surfaces the *complete* authoritative list in the resulting error message
+  (`"Supported values are: ..."`) — that error text, not the CLI's
+  self-report, is the source to record from. Verified 2026-08-03.
