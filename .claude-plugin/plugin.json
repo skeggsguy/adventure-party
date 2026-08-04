@@ -2,7 +2,7 @@
   "name": "party",
   "displayName": "Adventure Party",
   "description": "An adventuring party for your codebase — fighter builds, cleric reviews and fixes, wizard advises — plus Session Zero and an experience system that levels up your project's memory. Any role can be hired out to another vendor's coding CLI. Served live at session start; nothing is copied into your repo.",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "author": {
     "name": "Tom Skeggs"
   },

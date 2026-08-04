@@ -94,6 +94,14 @@ CLI will happily violate one it was never shown.
 - **The turn never ends while the command runs.** Do not wait for a
   notification or hand back a launched-but-running quest. Poll to exit,
   whatever the launch shape.
+- **Wait on the process, not on a pattern.** Capture the hire's PID at
+  launch and block on it (`tail --pid=$PID -f /dev/null`); if you only have
+  a name, match the binary exactly (`pgrep -x codex`). Never wait on a
+  command-line pattern — a watcher shell's own argv contains the pattern it
+  is searching for, so the watchers match each other and the wait never
+  ends, holding the quest open long after the hire exited. Give every wait
+  a backstop: after a bounded number of rounds, stop waiting and settle the
+  run from the exit code, the transcript, and the diff.
 - **Run the command exactly as configured.** Never repair its flags
   mid-quest, never substitute another binary, and never quietly do the work
   yourself instead. A timeout interruption is the one case you handle
