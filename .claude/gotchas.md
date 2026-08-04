@@ -162,3 +162,8 @@ underlying cause is fixed.
   surfaces the *complete* authoritative list in the resulting error message
   (`"Supported values are: ..."`) — that error text, not the CLI's
   self-report, is the source to record from. Verified 2026-08-03.
+- A `pgrep -f "<cmdline>"` wait loop deadlocks against itself: `pgrep`
+  excludes only its own process, so each watcher shell's `bash -c` argv
+  (which contains the pattern) keeps every other watcher's condition true
+  forever. Wait on a PID, or match the binary with `pgrep -x`. Observed
+  2026-08-03 — the hireling stayed blocked 30+ min after codex exited.

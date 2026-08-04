@@ -91,3 +91,19 @@ an independent sha256 check against the upstream artifact. The audit caught a
 real bug greps missed: en passant's destination square is empty, so
 occupancy-based capture highlighting lies — `Move.captured` is the truth.
 (Cleric's LEARNED line, chess build review.)
+
+## 2026-08-03 — `pgrep -f` wait loops deadlock on their own watchers
+
+Running a hired codex fighter in `~/projects/ai`, the wait pattern was
+`until ! pgrep -f "codex exec -s workspace-write"; do sleep 10; done`. `pgrep`
+excludes its own process but not sibling watchers, and each watcher shell's
+`/bin/bash -c ...` argv contains the search string verbatim — five watchers
+alive meant each matched the other four and no condition ever went false.
+Codex exited at ~19:41; the quest stayed blocked 30+ minutes until the
+watchers were manually killed. The general shape: any "wait until this
+command-line pattern disappears" loop is self-referential, because the waiter
+is a process whose command line holds the pattern. Wait on a captured PID
+(`tail --pid=$PID -f /dev/null`, which works for non-children) or match the
+binary exactly (`pgrep -x`); and give every wait a bounded backstop so a
+future variant can't hang a turn indefinitely. Fixed in `agents/hireling.md`
+run mechanics.
