@@ -8,6 +8,10 @@ An adventuring party and experience system for
 [Claude Code](https://claude.com/claude-code), packaged as the **`party`
 plugin**. You bring the quest; the party ships it.
 
+## Note from the Creator
+
+This plugin is actively updated from learnings made via a outer harness evaluation blog [Fresh Worktree](https://fresh-worktree.ghost.io/). Check it out if interested!
+
 ## Install
 
 One step. Installing the plugin gets you the party, session zero, and the
@@ -69,8 +73,7 @@ wielding it.
 1. **Session Zero** — a real multi-turn conversation shapes every
    change that involves choosing an approach, before any code: what the
    options actually are, plain-language trade-offs, options with a
-   recommendation, you make the calls (`/party:session-zero`). It runs
-   as long as you're still thinking.
+   recommendation, you make the calls (`/party:session-zero`). At time of writing it is recomended to use either Fable or Opus4.6 for session 0.
 2. **Plan mode** — "let's plan mode this." The technical design, where
    you can and should orchestrate adversarial agents to challenge it
    (a UI challenge, a database-design challenge…).
