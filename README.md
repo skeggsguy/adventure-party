@@ -193,26 +193,26 @@ Agents are only as good as what the project tells them — so the party's
 memory is its **experience**, and it levels up. Four files under
 `.claude/` in your own repo hold it:
 
-- `architecture.md` — how the system actually fits together (curated; read
-  before planning, or before changing how parts fit)
+- `architecture.md` — how the system actually fits together
 - `gotchas.md` — non-obvious traps, 1–2 lines each, deleted when fixed
-  (curated; read before the first edit, a one-line one included)
-- `decisions.md` — why A over B, ~2 lines each, newest first (curated; read
-  before choosing between approaches; the full argument lives in the archive)
-- `learnings.md` — the **inbox**: an append-only log of surprises, read only
-  when the curated three don't answer it, emptied by the Long Rest (below)
+- `decisions.md` — why A over B, ~2 lines each, newest first
+- `learnings.md` — the **inbox**: surprises logged as they happen, emptied
+  by the Long Rest (below)
 
-Nothing is force-fed into the session — each file is read at the moment it
-can change what happens next. The split still matters: the curated three stay
-small because they are read often and every read costs context, while the
-inbox can grow because nothing opens it until something asks for it.
+None of them is loaded automatically; each is read at the moment it can
+change what happens next:
 
-Nothing here is scaffolded into your repo up front and nothing is copied
-out of the plugin: the party's own instructions come from the plugin at
-the start of every session — so upgrading the plugin upgrades every
-project — and those instructions are what point the party at your curated
-files once they exist. The Guide creates each file the first time it has
-something to write there.
+| File              | The Guide                                   | Fighter                         | Cleric                                  | Wizard         |
+| ----------------- | ------------------------------------------- | ------------------------------- | --------------------------------------- | -------------- |
+| `gotchas.md`      | before its first edit                       | before its first edit           | always                                  | every consult  |
+| `architecture.md` | before planning, or changing how parts fit  | before changing how parts fit   | when the build changed how parts fit    | every consult  |
+| `decisions.md`    | before choosing an approach (and Session Zero) | before choosing an approach  | when the build chose between approaches | every consult  |
+| `learnings.md`    | when the other three don't answer           | when the other three don't answer | when the other three don't answer     | every consult  |
+
+The Guide is the only writer: it creates each file the first time it has
+something to put there, adds gotchas and decisions as they come up, and
+appends learnings — including the ones party members report back.
+`/party:long-rest` then distills the inbox into the other three.
 
 ## Leveling up — the Long Rest
 
