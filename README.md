@@ -88,9 +88,9 @@ talk it through   steps, measures, Autonomous: yes/no
       ┌───────────────▼─ each step ───────────────┐
       │  fighter builds ───► cleric reviews       │
       │     ▲                    │                │
-      │     └──── hand-back ─────┤                │
-      │                          ▼                │
-      │  checkpoint commit + a few lines to you   │
+      │     └──── hand-back ─────┤                │ ◄──► wizard (read-only)
+      │                          ▼                │      hard bugs, approach calls,
+      │  checkpoint commit + a few lines to you   │      a hand-back stuck twice
       └─────────────────────┬─────────────────────┘
                             │ after the last step
                             ▼
