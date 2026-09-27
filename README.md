@@ -77,25 +77,33 @@ wielding it.
 Talk it through, plan it, let the party build and review it step by step,
 get the results back — and every session leaves the project a bit smarter.
 
-```mermaid
-flowchart TD
-    you([You]) -->|small change| guide[The Guide just does it]
-    you -->|bigger work| sz[Session Zero<br/>talk it through]
-    sz --> plan[Plan mode<br/>steps, measures, Autonomous yes/no]
-    plan --> fighter[Fighter builds a step]
-    fighter --> cleric[Cleric reviews against the plan]
-    cleric -->|clean, or fixed| commit[Checkpoint commit<br/>+ a few lines to you]
-    cleric -->|needs a redesign| auto{Autonomous?}
-    auto -->|yes: retry, then wizard,<br/>then set aside| fighter
-    auto -->|no| you
-    commit -->|next step| fighter
-    commit -->|last step| debrief[Debrief]
-    debrief --> you
-    debrief -. learnings .-> inbox[(learnings inbox)]
-    inbox -->|/party:long-rest| exp[(experience files<br/>.claude/)]
-    exp -. read when it matters .-> fighter
-    exp -.-> cleric
-    exp -.-> sz
+```text
+You ─── small change ───► the Guide just does it
+ │
+ │ bigger work
+ ▼
+Session Zero ───► Plan mode
+talk it through   steps, measures, Autonomous: yes/no
+                      │
+      ┌───────────────▼─ each step ───────────────┐
+      │  fighter builds ───► cleric reviews       │
+      │     ▲                    │                │
+      │     └──── hand-back ─────┤                │
+      │                          ▼                │
+      │  checkpoint commit + a few lines to you   │
+      └─────────────────────┬─────────────────────┘
+                            │ after the last step
+                            ▼
+                         Debrief ───► You
+                            │
+                            ▼
+                     learnings inbox
+                            │ /party:long-rest
+                            ▼
+               experience files (.claude/)
+                            │
+                            ▼
+             read by the party members (see The party)
 ```
 
 ## The party
