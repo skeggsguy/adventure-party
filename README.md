@@ -209,10 +209,12 @@ change what happens next:
 | `decisions.md`    | before choosing an approach (and Session Zero) | before choosing an approach  | when the build chose between approaches | every consult  |
 | `learnings.md`    | when the other three don't answer           | when the other three don't answer | when the other three don't answer     | every consult  |
 
-The Guide is the only writer: it creates each file the first time it has
+Mostly the Guide writes them: it creates each file the first time it has
 something to put there, adds gotchas and decisions as they come up, and
-appends learnings — including the ones party members report back.
-`/party:long-rest` then distills the inbox into the other three.
+appends learnings. Party members report theirs in a `LEARNED` line for the
+Guide to add, and write a gotcha or decision directly only when the plan
+asks them to. `/party:long-rest` then distills the inbox into the other
+three.
 
 ## Leveling up — the Long Rest
 
