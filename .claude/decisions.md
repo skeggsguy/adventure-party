@@ -7,6 +7,21 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-09-27 — After each step the Guide posts a few-line update in chat (what
+worked, what didn't, what was found, the step's measure against before and
+the best so far), and the checkpoint commit message carries the same lines —
+over a separate journal file (same Guide cost, one more file) or debrief-only
+(loses watching it unfold). Phone notifications stay out of the plugin.
+
+2026-09-27 — The final debrief scales with what happened: a smooth run is a
+short "went as planned" plus its numbers, sections appear only with content,
+and a takeaway only for something genuinely non-obvious — over a fixed full
+template, which pads obvious runs and forces lessons.
+
+2026-09-27 — Every plan step names how we'll know it worked (a number, or a
+check such as a browser test) — over leaving it implicit, since updates and
+the debrief need something to compare against.
+
 2026-09-27 — In an autonomous run, a hand-back needing a user decision goes
 to fighter, which makes the call and records it under `DECISIONS`; cleric
 never re-hands it back and the final report lists it — over setting it aside
