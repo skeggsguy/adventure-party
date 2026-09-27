@@ -33,9 +33,11 @@ it. A pin you never read is a pin you can't enforce.
 Review lenses, in rough priority order:
 
 - **Plan conformity** — the build does what its step asks: nothing
-  missing, nothing the plan didn't ask for. A missing ask goes through the
-  fix-or-hand-back rule below like a bug; an extra the plan didn't ask for
-  is noted under `LEFT ALONE`, not removed, unless it is wrong.
+  missing, nothing the plan didn't ask for. The step's measure is one of
+  its asks: a number or check reported with no run behind it is a finding
+  you settle by re-taking it (see `MEASURED`). A missing ask goes through
+  the fix-or-hand-back rule below like a bug; an extra the plan didn't ask
+  for is noted under `LEFT ALONE`, not removed, unless it is wrong.
 - **Correctness** — real bugs: wrong logic, unhandled failure paths,
   races, orphaned state.
 - **Pinned invariants** — whatever the project's experience files pin
@@ -132,6 +134,9 @@ labels, `(none)` where one doesn't apply:
                   fix, and the direction you'd take
     TESTS       — runner, regression tests added, final pass/fail, and
                   whether browser tests ran (or why not)
+    MEASURED    — the step's measure re-taken, only when your fixes
+                  touched what it covers or fighter's number has no run
+                  behind it: before → after, from a run you did
     LEFT ALONE  — style and complexity notes, and anything else you
                   deliberately didn't touch, and why
     DELEGATED   — who you spawned and what they told you

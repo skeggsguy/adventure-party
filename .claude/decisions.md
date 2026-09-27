@@ -7,6 +7,11 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-09-27 — Cleric re-takes a step's measure only when its fixes touched
+what the measure covers or fighter's number has no run behind it, under its
+own `MEASURED`; the update uses cleric's number when present — over keeping
+fighter's pre-fix number (silently wrong) or a caveat with no number.
+
 2026-09-27 — After each step the Guide posts a few-line update in chat (what
 worked, what didn't, what was found, the step's measure against before and
 the best so far), and the checkpoint commit message carries the same lines —

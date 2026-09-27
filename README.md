@@ -82,13 +82,15 @@ wielding it.
    you can and should orchestrate adversarial agents to challenge it
    (a UI challenge, a database-design challenge…). The plan also says
    whether the party runs through to the end on its own (the default) or
-   checks in with you when cleric hands something back.
+   checks in with you when cleric hands something back, and each step names
+   how we'll know it worked — a number, or a check like a browser test.
 3. **The party musters and executes** — on your command or your
    approved plan. Fighter builds, cleric reviews and heals, wizard
    advises on the hard calls.
 4. **Results come back to you** — review and feedback before you sign
-   off. On a multi-step plan the party commits each step to a branch as it
-   goes, and merging that branch is your sign-off.
+   off. On a multi-step plan you get a few lines after each step, and the
+   party commits each step to a branch as it goes — merging that branch is
+   your sign-off. Every run ends with a debrief sized to what happened.
 5. **New adventure, new session** — and the experience system carries
    what was learned.
 6. **Long rest** — learnings are captured in every session. When enough
@@ -150,12 +152,12 @@ cleric hands something back:
 - `Autonomous: no` — the Guide pauses and brings it to you.
 - `Autonomous: yes` — fighter takes it, then cleric again, up to two
   rounds; then wizard gives a verdict and fighter gets one more pass. If
-  it's still stuck, it's set aside for the final report and the run carries
+  it's still stuck, it's set aside for the debrief and the run carries
   on with the steps that don't depend on it, stopping only when every
   remaining step does.
 
 In an autonomous run, a hand-back that needs a decision from you goes to
-fighter too: fighter makes the call and records it, and the final report
+fighter too: fighter makes the call and records it, and the debrief
 lists every call made on your behalf so you can reverse any of them.
 
 **Checkpoints.** On a multi-step plan the Guide commits after each step
@@ -164,6 +166,17 @@ your default branch — so each cleric reviews just its own step. A set-aside
 issue's half-done rework is stashed, not deleted (`git stash list` shows
 it), and the tree goes back to the last good step. Start the run from a
 clean tree; the Guide asks if it isn't.
+
+**Updates and the debrief.** On a multi-step plan, after each step the
+Guide posts a few lines: what worked, what didn't, what was found, and the
+step's measure (a number against before and the best so far, or a check's
+result — re-taken by cleric if its fixes touched what was measured) — the
+same lines go in the commit that closes the step; an uneventful step gets
+one line. When the run ends you get a debrief sized to what happened: a
+smooth run is a line and its numbers; the rest appears only when there's
+something to say — what didn't work, what was found, what was set aside,
+calls made on your behalf, what's next. A takeaway only when something was
+genuinely non-obvious; never a forced lesson.
 
 ### Pinning models
 

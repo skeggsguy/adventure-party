@@ -109,6 +109,10 @@ summary. These labels, `(none)` where one doesn't apply:
     CHANGED     — files, and what changed in each
     TESTS       — runner, tests added, which you saw fail first, final
                   pass/fail
+    MEASURED    — the step's measure as the plan names it: before (the
+                  last checkpoint's number, else a run you did) → after
+                  (a run you did), or the check's result — never an
+                  estimate
     DECISIONS   — calls the user should know about, with the why
     DELEGATED   — who you spawned and what they told you, so cleric knows
                   which parts are second-hand
