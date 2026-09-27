@@ -1,9 +1,3 @@
-2026-08-03 — When a probed knob (effort, model names) has no enumerable
-help text, `/party:hire` asks the CLI itself for a candidate key/value list
-then verifies it live — a deliberate invalid value's error message, when it
-enumerates, over trusting the self-report, since codex's own JSON answer
-for effort values silently dropped `none`/`max`. See gotchas 2026-08-03.
-
 # Decisions
 
 Why A over B, for choices below plan level. Read before choosing between
@@ -13,52 +7,116 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
-2026-08-02 — A hired CLI's `QUEST_FAILED` is read against the diff (adapter
+2026-09-27 — In an autonomous run, a hand-back needing a user decision goes
+to fighter, which makes the call and records it under `DECISIONS`; cleric
+never re-hands it back and the final report lists it — over setting it aside
+at once, since the run keeps moving and the user can reverse it afterwards.
+
+2026-09-27 — Multi-step plan runs commit a checkpoint after each cleric pass
+that leaves the tree green (on `party/<plan-name>` if started on the default
+branch; clean tree required up front); set-aside rework is stashed, never
+discarded — over no commits, where each cleric re-reads earlier steps and
+half-done rework lingers. Cost: the party commits before the user reviews, so
+sign-off becomes the merge.
+
+2026-09-27 — Hirelings retired (agent, `/party:hire`, the `hired` map);
+`party.json`'s `models` stays, and a router user pins a local model by
+mapping a tier to it — over keeping the adapter, since harnesses now take a
+key or router directly and native mixed-model subagents beat a CLI wrapper.
+
+2026-09-27 — Cleric fixes whatever keeps fighter's design (small and medium
+bugs, plus missing tests for new logic), hands back anything needing a
+redesign, and only notes style/complexity — over fixing everything whatever
+its size, whose on-the-spot redesigns were most of a long run's overhead.
+
+2026-09-27 — Every plan's Execution section states `Autonomous: yes/no` —
+over a `party.json` switch (no per-task control) or saying it in chat (lost
+when a 10-hour run is summarized). *Amended same day:* default `yes`, the
+Guide saying so in one line when it presents the plan — over asking every
+time.
+
+2026-09-27 — A cleric hand-back pauses for the user when the plan says
+`Autonomous: no`; otherwise fighter gets two rounds, wizard's verdict and one more
+pass, and a still-stuck issue is set aside and reported while independent
+steps run on — over stopping the run (idle hours) or letting wizard decide
+skip-vs-stop (a judgment call inside a stuck loop).
+
+2026-09-27 — Front-end checks are browser tests fighter writes as real files
+(the project's own tool, else Playwright) and cleric reruns, only when the change has a browser front end —
+over a live-browser Playwright MCP (user install, nothing persists) or
+"drive it the way a user would", which in practice meant reading HTML.
+
+2026-09-27 — Fighter and cleric get the plan by its file location ("read it
+all; step N is yours"), never pasted — a plan not yet in a file is saved to
+one first; a plan-less muster writes the task out — over pasting, which grows the Guide's context ~4k tokens per spawn
+for the same information; the Guide already did this unprompted at its best.
+
+2026-09-27 — Cleric receives the whole plan, not just its step — over
+passing only its step, since checking conformity needs the plan's full
+context. *Amended same day:* delivered by file location (above), so the
+~4k tokens land in cleric's own context, not the Guide's.
+
+2026-09-27 — Cleric reads `gotchas.md` always but `architecture.md` only
+when the build changed how parts fit — over always reading both, saving
+~1.1k tokens per cleric spawn for local-model runs.
+
+2026-09-27 — Report length stays uncapped — over a cap, since measured
+reports are already compact (fighter ~800 tokens, cleric ~290 across 21
+runs); the Guide's spawn prompts, not reports, are the larger per-step cost.
+
+2026-08-03 — *Superseded 2026-09-27 (hirelings retired):* When a probed
+knob (effort, model names) has no enumerable
+help text, `/party:hire` asks the CLI itself for a candidate key/value list
+then verifies it live — a deliberate invalid value's error message, when it
+enumerates, over trusting the self-report, since codex's own JSON answer
+for effort values silently dropped `none`/`max`. See gotchas 2026-08-03.
+
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* A hired CLI's `QUEST_FAILED` is read against the diff (adapter
 re-runs sandbox-blocked checks itself) — over adding a third `QUEST_BLOCKED`
 sentinel, since the foreign CLI's failure classification is itself a claim
 the diff settles. See learnings 2026-08-02.
 
-2026-08-02 — The hireling runs its CLI foreground-preferred under a timeout
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* The hireling runs its CLI foreground-preferred under a timeout
 (interrupted → resume via the CLI's own mechanism, discovered from its help
 at need), backgrounding only when no resume mechanism exists — over a
 probed-and-stored resume command (an unproven stored command, or another
 paid call for a failure-path-only mechanism) and over pure foreground,
 which the ten-minute cap forbids. See learnings 2026-08-02.
 
-2026-08-02 — `/party:hire`'s choices ride AskUserQuestion (clickable options,
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* `/party:hire`'s choices ride AskUserQuestion (clickable options,
 consent gates included); the CLI picker offers what a `command -v` sweep
 finds installed, plus Other — over hardcoded vendor names (offers tools the
 user may not have; a shipped list that rots visibly) or free-typed commands
 (the flow this replaces, where Enter sends the message mid-thought).
 
-2026-08-02 — Model names for the pin menu come from the CLI's own listing
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* Model names for the pin menu come from the CLI's own listing
 first, WebSearch only as fallback, and search results populate the *menu*
 only — the value written to `party.json` is what the smoke test proved runs
 — over web-search-first, which reports last month's blog post, not this
 install.
 
-2026-08-02 — The probe also settles a reasoning-effort flag, offered at pin
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* The probe also settles a reasoning-effort flag, offered at pin
 time only when the CLI has one and stored as just another flag in `run` —
 over a `party.json` schema field or skipping effort, which benchmarks show
 changes real capability rank across vendors; the smoke test validates the
 model+effort combo.
 
-2026-08-02 — `/party:hire` pins a model into the stored run command by
+2026-08-02 — *Superseded 2026-09-27 (hirelings retired):* `/party:hire` pins a model into the stored run command by
 default (user's choice of model, decline allowed) — over inheriting the
 CLI's own config, under which a CLI update silently changes what a standing
 hire means and the party can't see or manage it from `party.json`.
 
-2026-08-01 — Foreign coding CLIs stand in for party members via one generic
+2026-08-01 — *Superseded 2026-09-27 (hirelings retired):* Foreign coding CLIs stand in for party members via one generic
 hireling agent + `/party:hire` skill + a `hired` map in `party.json` — over
 per-tool/per-role agents (duplicate always-loaded descriptions) or
 re-skinning fighter (theme lies, mode is global). See learnings 2026-08-01.
 
-2026-08-01 — `/party:hire` probes the CLI's flags at hire time, smoke-tests,
+2026-08-01 — *Superseded 2026-09-27 (hirelings retired):* `/party:hire` probes the CLI's flags at hire time, smoke-tests,
 and stores the resolved command in `party.json`; unknown CLIs fall back to a
 user-supplied command — over a shipped flag table, which rots as CLIs
 change. See learnings 2026-08-01.
 
-2026-08-01 — Hires are standing config state; the Guide is never hireable —
+2026-08-01 — *Superseded 2026-09-27 (hirelings retired):* Hires are standing config state; the Guide is never hireable —
 over per-task summons, one more path to explain for marginal gain.
 
 2026-07-30 — The `.claude/` experience files are read on demand against
@@ -118,7 +176,7 @@ learnings 2026-07-26.
 — a subagent's context dies with its turn, so the final message is the
 only carrier. See learnings 2026-07-26.
 
-2026-07-26 — Cleric's repair scope is the change and its blast radius,
+2026-07-26 — *Superseded 2026-09-27 (design now gates, not size: a fix needing a redesign is handed back):* Cleric's repair scope is the change and its blast radius,
 `NEEDS_REBUILD:` a high bar — over an unbounded "fix everything you
 find", which lets a reviewer redo working code to taste. Defect vs.
 preference is the gate, never size. See learnings 2026-07-26.

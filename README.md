@@ -43,6 +43,10 @@ moments each one matters.
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
+**Upgrading from 0.10 or earlier** — hirelings are retired. A `hired` entry
+in `.claude/party.json` is now ignored and that role's own party member runs
+instead; to put a role on another model, see Pinning models below.
+
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
@@ -76,13 +80,15 @@ wielding it.
    recommendation, you make the calls (`/party:session-zero`). At time of writing it is recomended to use either Fable or Opus4.6 for session 0.
 2. **Plan mode** — "let's plan mode this." The technical design, where
    you can and should orchestrate adversarial agents to challenge it
-   (a UI challenge, a database-design challenge…).
+   (a UI challenge, a database-design challenge…). The plan also says
+   whether the party runs through to the end on its own (the default) or
+   checks in with you when cleric hands something back.
 3. **The party musters and executes** — on your command or your
    approved plan. Fighter builds, cleric reviews and heals, wizard
-   advises on the hard calls. Any of the three seats can be filled by
-   another vendor's coding CLI instead (`/party:hire`).
+   advises on the hard calls.
 4. **Results come back to you** — review and feedback before you sign
-   off the commit.
+   off. On a multi-step plan the party commits each step to a branch as it
+   goes, and merging that branch is your sign-off.
 5. **New adventure, new session** — and the experience system carries
    what was learned.
 6. **Long rest** — learnings are captured in every session. When enough
@@ -110,14 +116,17 @@ is the only one that talks to you.
 **Fighter** ships a substantial implementation end-to-end —
 implementation and tests, running the project's suite as it goes. In
 a repo with no suite at all it writes the first test file and records
-the command in your CLAUDE.md. Deliberately loose otherwise — it's a 
-powerhorse, not a checklist-follower.
+the command in your CLAUDE.md. When the change has a browser front end
+it tests it through a real browser — your project's browser test tool, or
+Playwright if there isn't one — as test files you keep. Deliberately loose
+otherwise — it's a powerhorse, not a checklist-follower.
 
-**Cleric** always runs after fighter, it reviews the actual diff
-and the report from fighter, then directly heals what it finds — 
-bugs, pinned-invariant violations, test gaps, convention drift, 
-needless complexity — and leaves the tree green, driving any user-facing 
-surface the way a user would. 
+**Cleric** always runs after fighter. It reads the plan and checks the
+actual diff and fighter's report against it, then heals the bugs whose fix
+keeps fighter's design — small or medium — writes any missing tests, and
+leaves the tree green. Anything that needs a redesign or a decision from
+you it hands back instead of reworking on the spot; style and complexity
+it notes rather than fixes.
 
 **Wizard** is the party's high-effort judgment: deep review, hard
 debugging (2+ failed attempts), and which-approach calls. Wizard
@@ -129,25 +138,69 @@ most. Solves for try and fail re-attempts.
 **The party musters on command, not by default.** The Guide does
 ordinary work itself. The party rides out only if you summon it,
 you accept a suggestion from the guide, or on execution of plan mode.
+Fighter and cleric are pointed at the plan file rather than handed a copy,
+so each reads the whole plan while the Guide's own context stays lean on
+long runs.
 
-### Hirelings(Beta)
+**Hand-backs and autonomous runs.** Every plan says `Autonomous: yes` or
+`no` — yes by default, and the Guide tells you so when it presents the
+plan. When
+cleric hands something back:
 
-You may already pay for another vendor's coding CLI. Any of the three party
-roles can be **hired out** to one: `/party:hire fighter <cli>`, and from the
-next muster fighter's quests run through that command instead. Leave out one
-or both arguments and it walks you through the missing choices with
-clickable options. `/party:hire fighter` releases it. One command each way.
+- `Autonomous: no` — the Guide pauses and brings it to you.
+- `Autonomous: yes` — fighter takes it, then cleric again, up to two
+  rounds; then wizard gives a verdict and fighter gets one more pass. If
+  it's still stuck, it's set aside for the final report and the run carries
+  on with the steps that don't depend on it, stopping only when every
+  remaining step does.
 
-`/party:hire` guides you through clickable choices rather than typed
-answers. The CLIs offered are the ones actually installed on your machine;
-model names come from the CLI's own listing, with a web search only if it
-has no listing. With your say-so, each smoke test makes a real call on your
-subscription; it pins the model and, when the CLI offers one, reasoning
-effort into the stored command by default — you can decline either — and
-smoke-tests the exact final command before writing config. It will never
-tell you which CLI or model to hire; that call is yours.
+In an autonomous run, a hand-back that needs a decision from you goes to
+fighter too: fighter makes the call and records it, and the final report
+lists every call made on your behalf so you can reverse any of them.
 
-This has been tested to date with codex to much success.
+**Checkpoints.** On a multi-step plan the Guide commits after each step
+cleric leaves green — on a `party/<plan-name>` branch if you started on
+your default branch — so each cleric reviews just its own step. A set-aside
+issue's half-done rework is stashed, not deleted (`git stash list` shows
+it), and the tree goes back to the last good step. Start the run from a
+clean tree; the Guide asks if it isn't.
+
+### Pinning models
+
+Each party member's model can be pinned per project in
+`.claude/party.json`:
+
+```json
+{ "models": { "fighter": "opus", "cleric": "sonnet", "wizard": "fable" } }
+```
+
+Values are tier names — `opus`, `sonnet`, `haiku` or `fable` — never model
+IDs, because tier names are all Claude Code's agent-spawning tool accepts.
+Leave a member out to keep its default.
+
+Running a local or third-party model through a router? Point a tier name
+at your model, then pin that tier to the member you want on it. Claude Code
+remaps each tier with an environment variable —
+`ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL`,
+`ANTHROPIC_DEFAULT_HAIKU_MODEL` or `ANTHROPIC_DEFAULT_FABLE_MODEL` — set in
+your shell or the `env` block of a settings file. For example, to run
+cleric on your router's model, in `.claude/settings.json`:
+
+```json
+{ "env": { "ANTHROPIC_DEFAULT_SONNET_MODEL": "<your-router-model-id>" } }
+```
+
+and in `.claude/party.json`:
+
+```json
+{ "models": { "cleric": "sonnet" } }
+```
+
+A remapped tier moves everything in the session that uses that tier, not
+just the party — and the haiku tier also runs Claude Code's own background
+tasks. To put every agent on one model instead, set
+`CLAUDE_CODE_SUBAGENT_MODEL` plus `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`;
+that overrides `party.json` entirely.
 
 ## Session Zero
 
@@ -220,9 +273,13 @@ whole framework exists to build.
 
 ## Requirements & caveats
 
-- Claude Code with plugin support and subagents; `model:`/`effort:`
-  frontmatter values are Anthropic model tiers (`opus`, `fable`) —
-  change them in `.claude/party.json` to match what your plan offers.
+- Claude Code with plugin support and subagents; `model:` frontmatter
+  values are Anthropic model tiers (`opus`, `fable`) — pin other tiers in
+  `.claude/party.json` to match what your plan offers (see Pinning
+  models); `effort:` has no per-project override.
+- In a project with a browser front end and no browser test tool, the
+  first browser test adds Playwright to the project and downloads its
+  browsers — a few hundred MB, shared across projects on that machine.
 - The session-start hook runs a single one-line `cat` through a POSIX shell.
 
 ## Roadmap
