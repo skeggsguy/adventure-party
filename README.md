@@ -167,16 +167,29 @@ clean tree; the Guide asks if it isn't.
 
 ### Pinning models
 
-Each party member's model can be pinned per project in
-`.claude/party.json`:
+Out of the box — no `party.json` needed — the party runs on these defaults:
+
+| Member  | Default model |
+| ------- | ------------- |
+| fighter | `opus`        |
+| cleric  | `fable`       |
+| wizard  | `fable`       |
+
+To change one, pin it per project in `.claude/party.json`, listing only the
+members you're changing — anyone left out keeps their default. For example,
+moving cleric from Fable to Sonnet:
 
 ```json
-{ "models": { "fighter": "opus", "cleric": "sonnet", "wizard": "fable" } }
+{ "models": { "cleric": "sonnet" } }
 ```
+
+What that changes: Sonnet is generally cheaper and faster than Fable, so
+each review costs less and a long run finishes sooner — but it is a lighter
+reviewer, so expect it to catch fewer of the subtle bugs. A fair trade on
+routine work; keep Fable where the review matters most.
 
 Values are tier names — `opus`, `sonnet`, `haiku` or `fable` — never model
 IDs, because tier names are all Claude Code's agent-spawning tool accepts.
-Leave a member out to keep its default.
 
 Running a local or third-party model through a router? Point a tier name
 at your model, then pin that tier to the member you want on it. Claude Code
