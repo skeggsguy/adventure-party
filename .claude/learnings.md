@@ -107,3 +107,15 @@ is a process whose command line holds the pattern. Wait on a captured PID
 binary exactly (`pgrep -x`); and give every wait a bounded backstop so a
 future variant can't hang a turn indefinitely. Fixed in `agents/hireling.md`
 run mechanics.
+
+## 2026-09-27 — Router models reach party members through tier remaps
+
+Verified live: with `ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-sonnet-5`, a
+subagent spawned with `model: "haiku"` reported `claude-sonnet-5` in its own
+system prompt — so `party.json`'s tier pins plus the four
+`ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU,FABLE}_MODEL` variables are the whole
+router story, no adapter needed. Two traps from the sub-agents docs: the
+Agent tool's per-invocation `model` takes aliases only (frontmatter also
+takes full IDs), and `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` silently overrides
+every `party.json` pin. Also: the haiku tier drives Claude Code's background
+tasks, so remapping it moves those too.

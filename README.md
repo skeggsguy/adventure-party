@@ -43,6 +43,10 @@ moments each one matters.
 in Claude marketplace for this plugin. OR (2) periodically refresh the
 marketplace directly and then refresh the plugin as a second step.
 
+**Upgrading from 0.10 or earlier** — hirelings are retired. A `hired` entry
+in `.claude/party.json` is now ignored and that role's own party member runs
+instead; to put a role on another model, see Pinning models below.
+
 ## The premise
 
 Adventure Party is built for people who are smart and intellectually
@@ -68,86 +72,100 @@ written down with its reasons.
 You are the main success lever. The system's job is to make you better at
 wielding it.
 
-## The workflow
+## How it fits together
 
-1. **Session Zero** — a real multi-turn conversation shapes every
-   change that involves choosing an approach, before any code: what the
-   options actually are, plain-language trade-offs, options with a
-   recommendation, you make the calls (`/party:session-zero`). At time of writing it is recomended to use either Fable or Opus4.6 for session 0.
-2. **Plan mode** — "let's plan mode this." The technical design, where
-   you can and should orchestrate adversarial agents to challenge it
-   (a UI challenge, a database-design challenge…).
-3. **The party musters and executes** — on your command or your
-   approved plan. Fighter builds, cleric reviews and heals, wizard
-   advises on the hard calls. Any of the three seats can be filled by
-   another vendor's coding CLI instead (`/party:hire`).
-4. **Results come back to you** — review and feedback before you sign
-   off the commit.
-5. **New adventure, new session** — and the experience system carries
-   what was learned.
-6. **Long rest** — learnings are captured in every session. When enough
-   have piled up you take a Long Rest, and they are sorted into
-   architecture, decisions and gotchas which are readable by Claude. You
-   level up, AI levels up.
+Talk it through, plan it, let the party build and review it step by step,
+get the results back — and every session leaves the project a bit smarter.
+
+```text
+You ── small change ──► the Guide just does it
+ │
+ │ bigger work
+ ▼
+Session Zero — talk it through
+ │
+ ▼
+Plan mode — steps, measures, Autonomous: yes/no
+ │
+┌▼─────────────────── each step ──────────────┐
+│ fighter builds ───► cleric reviews          │
+│   ▲      ▲             ▲     │              │
+│   │      └── wizard ───┘     │              │
+│   │        (read-only)       │              │
+│   └─── hand-back ────────────┤              │
+│       (×2, then wizard)      ▼              │
+│ checkpoint commit + a few lines to you      │
+└───────────────────┬─────────────────────────┘
+                    │ after the last step
+                    ▼
+                 Debrief ───► You
+                    │
+                    ▼
+             learnings inbox
+                    │ /party:long-rest
+                    ▼
+       experience files (.claude/)
+                    │
+                    ▼
+     read by the party members (see The party)
+```
 
 ## The party
 
-One agent doing everything means one context doing everything: the model
-that wrote the code reviews the code, believes its own report, and moves
-on. Splitting the work across specialized agents buys real separation —
-the reviewer reads the actual diff instead of trusting the builder's
-summary.
+One agent doing everything means the model that wrote the code also
+reviews it and believes its own report. Splitting the roles means the
+reviewer reads the actual diff. The main session is **the Guide**: it runs
+the conversation, hands out the work, and is the only one that talks to you.
 
-The main session is **the Guide**: it runs the dialogue, assigns the quests, and 
-is the only one that talks to you.
+| Agent           | Job                                                                 | Default model | Effort |
+| --------------- | ------------------------------------------------------------------- | ------------- | ------ |
+| `party:fighter` | Builds each step, tests included                                    | `opus`        | high   |
+| `party:cleric`  | Reviews each build against the plan; fixes what keeps the design, hands back the rest | `fable`       | high   |
+| `party:wizard`  | Read-only second opinion for hard bugs and approach calls           | `fable`       | xhigh  |
 
-| Agent           | Role                    | Model | Effort | Access                 | May call                                          |
-| --------------- | ----------------------- | ----- | ------ | ---------------------- | ------------------------------------------------- |
-| `party:fighter` | Builder                 | Opus  | high   | full tools             | `Explore` recon, `party:wizard`, verifiers        |
-| `party:cleric`  | Reviewer + fixer        | Fable | high   | full tools             | a verifier per finding, `party:wizard`, `Explore` |
-| `party:wizard`  | Advisor (deep judgment) | Fable | xhigh  | read-only (no writes)  | nobody — deliberately                             |
+The full instructions are short — read them in [`agents/`](agents/).
 
-**Fighter** ships a substantial implementation end-to-end —
-implementation and tests, running the project's suite as it goes. In
-a repo with no suite at all it writes the first test file and records
-the command in your CLAUDE.md. Deliberately loose otherwise — it's a 
-powerhorse, not a checklist-follower.
+### Party or Guide
 
-**Cleric** always runs after fighter, it reviews the actual diff
-and the report from fighter, then directly heals what it finds — 
-bugs, pinned-invariant violations, test gaps, convention drift, 
-needless complexity — and leaves the tree green, driving any user-facing 
-surface the way a user would. 
+A simple change? The Guide just does it. For bigger work you summon the
+party, accept the Guide's one-line suggestion, or approve a plan — plans use
+the party by default.
 
-**Wizard** is the party's high-effort judgment: deep review, hard
-debugging (2+ failed attempts), and which-approach calls. Wizard
-is expensive and slow but valuable exactly when the repo needs it
-most. Solves for try and fail re-attempts.
+Every plan says **`Autonomous: yes`** (the default) or **`no`**. With yes,
+the party runs to the end on its own: anything cleric can't fix goes back
+to fighter, then to wizard, and if it's still stuck it is set aside and the
+run carries on; calls made on your behalf are listed in the debrief. With
+no, it pauses and asks you whenever cleric hands something back. On a
+multi-step plan each step is committed to a branch as it goes — merging
+that branch is your sign-off.
 
-### The muster protocol
+### Pinning models
 
-**The party musters on command, not by default.** The Guide does
-ordinary work itself. The party rides out only if you summon it,
-you accept a suggestion from the guide, or on execution of plan mode.
+Defaults are in the table above. Pin a different tier per member in
+`.claude/party.json` — for example cheaper, faster, lighter reviews:
 
-### Hirelings(Beta)
+```json
+{ "models": { "cleric": "sonnet" } }
+```
 
-You may already pay for another vendor's coding CLI. Any of the three party
-roles can be **hired out** to one: `/party:hire fighter <cli>`, and from the
-next muster fighter's quests run through that command instead. Leave out one
-or both arguments and it walks you through the missing choices with
-clickable options. `/party:hire fighter` releases it. One command each way.
+Values are tier names — `opus`, `sonnet`, `haiku` or `fable` — never model
+names, because Claude Code's agent-spawning tool only accepts tiers. So to
+put one member on another model (a local one, say), point a spare tier at
+that model and pin the member to the tier.
 
-`/party:hire` guides you through clickable choices rather than typed
-answers. The CLIs offered are the ones actually installed on your machine;
-model names come from the CLI's own listing, with a web search only if it
-has no listing. With your say-so, each smoke test makes a real call on your
-subscription; it pins the model and, when the CLI offers one, reasoning
-effort into the stored command by default — you can decline either — and
-smoke-tests the exact final command before writing config. It will never
-tell you which CLI or model to hire; that call is yours.
+**Use `sonnet` as the spare tier.** No party member uses it by default,
+while `haiku` also runs Claude Code's own background tasks, and `opus` and
+`fable` are already the party's (and often your main session's) models —
+repointing any of those moves more than the one member. For example, with
+`ANTHROPIC_DEFAULT_SONNET_MODEL` set to your model's name, the `cleric`
+pin above puts cleric on it.
 
-This has been tested to date with codex to much success.
+Pointing a tier at a model, or sending traffic through a gateway or router,
+is Claude Code's own
+[model configuration](https://code.claude.com/docs/en/model-config) and
+[LLM gateway](https://code.claude.com/docs/en/llm-gateway) setup; the party
+follows whatever a tier points to. (Anthropic doesn't support non-Claude
+models through a gateway.)
 
 ## Session Zero
 
@@ -167,62 +185,58 @@ every term defined the first time it appears; clarifying questions batched
 early and only when the answer changes something; musings answered with 
 assessment rather than action.
 
+At the time of writing, Opus 5.5 is recommended for Session Zero.
+
 ## The experience system
 
 Agents are only as good as what the project tells them — so the party's
 memory is its **experience**, and it levels up. Four files under
 `.claude/` in your own repo hold it:
 
-- `architecture.md` — how the system actually fits together (curated; read
-  before planning, or before changing how parts fit)
+- `architecture.md` — how the system actually fits together
 - `gotchas.md` — non-obvious traps, 1–2 lines each, deleted when fixed
-  (curated; read before the first edit, a one-line one included)
-- `decisions.md` — why A over B, ~2 lines each, newest first (curated; read
-  before choosing between approaches; the full argument lives in the archive)
-- `learnings.md` — the **inbox**: an append-only log of surprises, read only
-  when the curated three don't answer it, emptied by the Long Rest (below)
+- `decisions.md` — why A over B, ~2 lines each, newest first
+- `learnings.md` — the **inbox**: surprises logged as they happen, emptied
+  by the Long Rest (below)
 
-Nothing is force-fed into the session — each file is read at the moment it
-can change what happens next. The split still matters: the curated three stay
-small because they are read often and every read costs context, while the
-inbox can grow because nothing opens it until something asks for it.
+None of them is loaded automatically; each is read at the moment it can
+change what happens next:
 
-Nothing here is scaffolded into your repo up front and nothing is copied
-out of the plugin: the party's own instructions come from the plugin at
-the start of every session — so upgrading the plugin upgrades every
-project — and those instructions are what point the party at your curated
-files once they exist. The Guide creates each file the first time it has
-something to write there.
+| File              | The Guide                                   | Fighter                         | Cleric                                  | Wizard         |
+| ----------------- | ------------------------------------------- | ------------------------------- | --------------------------------------- | -------------- |
+| `gotchas.md`      | before its first edit                       | before its first edit           | always                                  | every consult  |
+| `architecture.md` | before planning, or changing how parts fit  | before changing how parts fit   | when the build changed how parts fit    | every consult  |
+| `decisions.md`    | before choosing an approach (and Session Zero) | before choosing an approach  | when the build chose between approaches | every consult  |
+| `learnings.md`    | when the other three don't answer           | when the other three don't answer | when the other three don't answer     | every consult  |
+
+Mostly the Guide writes them: it creates each file the first time it has
+something to put there, adds gotchas and decisions as they come up, and
+appends learnings. Party members report theirs in a `LEARNED` line for the
+Guide to add, and write a gotcha or decision directly only when the plan
+asks them to. `/party:long-rest` then distills the inbox into the other
+three.
 
 ## Leveling up — the Long Rest
 
-`/party:long-rest` is the ceremony, and it is not fireworks: a Long
-Rest is the moment the party *trains*. When the inbox reaches ten
-entries the Guide mentions it, once — resting is always your call.
+`/party:long-rest` is when the party trains. When the learnings inbox
+reaches ten entries the Guide mentions it once; resting is your call.
 
-1. It distills the inbox into the curated files the party reads at their
-   triggers, prunes what has stopped being true, compacts what has outgrown
-   its budget — the full argument moves to `learnings-archive.md`, the live
-   entry keeps the claim — then archives the processed entries and leaves
-   the inbox empty. It also tells you what those curated files now cost to
-   read, every rest: distilling grows them, so the same ceremony is what
-   bounds them. A leveled-up party is literally a better-informed party.
-2. It appends the level to **`CHRONICLE.md`**: your project's saga in
-   plain language — what was built, what was conquered, what *you*
-   learned. Every rest is a level; the chronicle is the record of them.
-3. It awards the party a title — seeded from your repo's name and the
-   level: *your* project's Level 3 party is always, say, the Wardens of
-   the Unbroken Build.
-
-The player levels up too: the chronicle plus the decisions file is a
-growing, readable record of your own understanding — the thing this
-whole framework exists to build.
+A rest distills the inbox into the curated files, trims what's stopped
+being true or outgrown its budget (telling you what those files now cost
+to read), and archives the rest. It then adds a level to **`CHRONICLE.md`**
+— your project's saga: what was built, what *you* learned — and awards the
+party a title seeded from your repo's name. The chronicle and the decisions
+file together are a readable record of your own understanding.
 
 ## Requirements & caveats
 
-- Claude Code with plugin support and subagents; `model:`/`effort:`
-  frontmatter values are Anthropic model tiers (`opus`, `fable`) —
-  change them in `.claude/party.json` to match what your plan offers.
+- Claude Code with plugin support and subagents; `model:` frontmatter
+  values are Anthropic model tiers (`opus`, `fable`) — pin other tiers in
+  `.claude/party.json` to match what your plan offers (see Pinning
+  models); `effort:` has no per-project override.
+- In a project with a browser front end and no browser test tool, the
+  first browser test adds Playwright to the project and downloads its
+  browsers — a few hundred MB, shared across projects on that machine.
 - The session-start hook runs a single one-line `cat` through a POSIX shell.
 
 ## Roadmap

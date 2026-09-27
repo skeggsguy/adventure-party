@@ -48,10 +48,6 @@ underlying cause is fixed.
 - A behavioral ban must land on the act and assign the decision to a person
   — any qualifier ("silent", "unnecessary") becomes the loophole and gets
   obeyed instead of the verb. See learnings 2026-08-01.
-- A user-supplied model name is a claim to verify, not config to record:
-  marketing tier names ("luna") aren't API strings (`gpt-5.6-luna`), and a
-  pinned model needs its own smoke test — `-m` changes the command under
-  test. See learnings 2026-08-02.
 - No `gh` in this WSL, and git pushes go over SSH (an HTTPS remote can't
   prompt for credentials mid-session).
 - A documented dev command is only real if it runs on a stock machine:
@@ -151,19 +147,9 @@ underlying cause is fixed.
   `decisions.md` and the prune step drops only what stopped being true, so
   its compact step is the sole drain and its gauge the only thing measuring
   what those files cost to read.
-- A CLI's effort/reasoning knob can hide behind a generic override flag
-  (codex: `-c model_reasoning_effort=<value>`, not a dedicated flag) with no
-  enumerable values in `--help` at all — asking the CLI to self-report the
-  key name and value list (even as clean JSON) is a fine candidate source
-  but silently undercounts: codex's own JSON self-report named
-  `model_reasoning_effort` correctly but listed only
-  `minimal/low/medium/high/xhigh`, dropping the real `none` and `max`.
-  Feeding one deliberately invalid value through the actual probe command
-  surfaces the *complete* authoritative list in the resulting error message
-  (`"Supported values are: ..."`) — that error text, not the CLI's
-  self-report, is the source to record from. Verified 2026-08-03.
-- A `pgrep -f "<cmdline>"` wait loop deadlocks against itself: `pgrep`
-  excludes only its own process, so each watcher shell's `bash -c` argv
-  (which contains the pattern) keeps every other watcher's condition true
-  forever. Wait on a PID, or match the binary with `pgrep -x`. Observed
-  2026-08-03 — the hireling stayed blocked 30+ min after codex exited.
+- A wait loop with no time limit is a hang waiting to happen: its condition
+  can stop being reachable (a `pgrep -f` pattern matching its own watchers;
+  a log line a restarted run never prints). Give every wait a backstop and
+  stop background loops before handing back — now a rule in fighter and
+  cleric. Seen twice: the hireling's 30+ min hang (2026-08-03) and fighter's
+  three orphaned `until grep` loops on `~/dev/ai` (2026-09-27).

@@ -32,21 +32,19 @@ between approaches.
   `hooks/instructions.md`; anything else means the hook didn't inject):
   `claude --plugin-dir . -p 'Quote the sentence containing "lantern" from your instructions, or say NONE.'`
 - Dogfood locally: `claude --plugin-dir .` (agents
-  `party:fighter/cleric/wizard/hireling`, skills `/party:session-zero`,
-  `/party:long-rest` and `/party:hire` should list)
+  `party:fighter/cleric/wizard`, skills `/party:session-zero` and
+  `/party:long-rest` should list)
 
 ## Layout
 
 - `.claude-plugin/` — plugin + marketplace manifests
 - `agents/` — the party: fighter (builder), cleric (reviewer/fixer),
-  wizard (read-only advisor), hireling (adapter that runs a hired
-  foreign coding CLI in a party role)
+  wizard (read-only advisor)
 - `hooks/` — `hooks.json` (SessionStart) and `instructions.md`, the
   party protocol injected into every session; it is also where the rules
   for reading the `.claude/` experience files live (the files themselves
   are not injected)
-- `skills/` — session-zero, long-rest (distills the learnings inbox),
-  hire (hires a foreign coding CLI into a party role, or releases one)
+- `skills/` — session-zero, long-rest (distills the learnings inbox)
 
 ## Conventions
 

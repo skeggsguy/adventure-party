@@ -43,7 +43,16 @@ parts fit. Remove entries that stop being true.
   failure mode of workflow plugins is the ceremony tax, and a reviewer
   earns its cost only where it isn't ceremonial. Hence fighter → cleric
   always, and wizard only on request or after two failed attempts — an
-  advisor pushed by default stops being an advisor.
+  advisor pushed by default stops being an advisor. The reviewer fixes
+  what keeps the build's design and hands back the rest, so review cost
+  stays bounded per step.
+- **A long run's anchor is the plan file.** Fighter and cleric read it by
+  path, so the Guide's context grows a line per spawn, not a plan's worth;
+  the plan's `Autonomous:` line (default yes) decides what a hand-back
+  does, the two-rounds-then-wizard cap bounds what a stuck issue can cost
+  before it is set aside, and a checkpoint commit per cleared step keeps
+  each cleric's diff to one step. Measured 2026-09-27: ~4.4k tokens of party
+  traffic per step in the Guide's context.
 - **When an always-loaded rule doesn't fire, establish whether the model
   disputed the rule or the case.** Only the second is fixed by rewriting
   the rule, and it is fixed by making the rule *decide the case* rather
@@ -55,8 +64,8 @@ parts fit. Remove entries that stop being true.
   an event, so `CHRONICLE.md` stores it as `## Level N`, which the next
   rest parses. See learnings 2026-07-28.
 - **A skill body is in context only while it is being invoked.** Anything
-  that must act at a *later* moment — a hire honored at next muster — can
-  only be state the skill writes (`party.json`) plus a reader guaranteed in
+  that must act at a *later* moment — a model pin honored at next spawn —
+  can only be state on disk (`party.json`) plus a reader guaranteed in
   context at that moment (the muster sentence in `hooks/instructions.md`).
   A skill is a setup wizard; standing behavior lives in the always-loaded
   tier. See learnings 2026-08-01.
