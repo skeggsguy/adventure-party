@@ -78,32 +78,36 @@ Talk it through, plan it, let the party build and review it step by step,
 get the results back — and every session leaves the project a bit smarter.
 
 ```text
-You ─── small change ───► the Guide just does it
+You ── small change ──► the Guide just does it
  │
  │ bigger work
  ▼
-Session Zero ───► Plan mode
-talk it through   steps, measures, Autonomous: yes/no
-                      │
-      ┌───────────────▼─ each step ───────────────┐
-      │  fighter builds ───► cleric reviews       │
-      │     ▲                    │                │
-      │     └──── hand-back ─────┤                │ ◄──► wizard (read-only)
-      │                          ▼                │      hard bugs, approach calls,
-      │  checkpoint commit + a few lines to you   │      a hand-back stuck twice
-      └─────────────────────┬─────────────────────┘
-                            │ after the last step
-                            ▼
-                         Debrief ───► You
-                            │
-                            ▼
-                     learnings inbox
-                            │ /party:long-rest
-                            ▼
-               experience files (.claude/)
-                            │
-                            ▼
-             read by the party members (see The party)
+Session Zero — talk it through
+ │
+ ▼
+Plan mode — steps, measures, Autonomous: yes/no
+ │
+┌▼─────────────────── each step ──────────────┐
+│ fighter builds ───► cleric reviews          │
+│   ▲      ▲             ▲     │              │
+│   │      └── wizard ───┘     │              │
+│   │        (read-only)       │              │
+│   └─── hand-back ────────────┤              │
+│       (×2, then wizard)      ▼              │
+│ checkpoint commit + a few lines to you      │
+└───────────────────┬─────────────────────────┘
+                    │ after the last step
+                    ▼
+                 Debrief ───► You
+                    │
+                    ▼
+             learnings inbox
+                    │ /party:long-rest
+                    ▼
+       experience files (.claude/)
+                    │
+                    ▼
+     read by the party members (see The party)
 ```
 
 ## The party
