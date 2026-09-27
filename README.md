@@ -174,7 +174,7 @@ every term defined the first time it appears; clarifying questions batched
 early and only when the answer changes something; musings answered with 
 assessment rather than action.
 
-At the time of writing, Fable or Opus 4.6 is recommended for Session Zero.
+At the time of writing, Opus 5.5 is recommended for Session Zero.
 
 ## The experience system
 
