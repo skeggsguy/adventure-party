@@ -148,13 +148,24 @@ Defaults are in the table above. Pin a different tier per member in
 { "models": { "cleric": "sonnet" } }
 ```
 
-Values are tier names: `opus`, `sonnet`, `haiku` or `fable`. To change what
-a tier actually runs — a different model, or traffic through a gateway or
-router — use Claude Code's own
+Values are tier names — `opus`, `sonnet`, `haiku` or `fable` — never model
+names, because Claude Code's agent-spawning tool only accepts tiers. So to
+put one member on another model (a local one, say), point a spare tier at
+that model and pin the member to the tier.
+
+**Use `sonnet` as the spare tier.** No party member uses it by default,
+while `haiku` also runs Claude Code's own background tasks, and `opus` and
+`fable` are already the party's (and often your main session's) models —
+repointing any of those moves more than the one member. For example, with
+`ANTHROPIC_DEFAULT_SONNET_MODEL` set to your model's name, the `cleric`
+pin above puts cleric on it.
+
+Pointing a tier at a model, or sending traffic through a gateway or router,
+is Claude Code's own
 [model configuration](https://code.claude.com/docs/en/model-config) and
-[LLM gateway](https://code.claude.com/docs/en/llm-gateway) settings; the
-party follows whatever a tier points to. (Anthropic doesn't support
-non-Claude models through a gateway.)
+[LLM gateway](https://code.claude.com/docs/en/llm-gateway) setup; the party
+follows whatever a tier points to. (Anthropic doesn't support non-Claude
+models through a gateway.)
 
 ## Session Zero
 
