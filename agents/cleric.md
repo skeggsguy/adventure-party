@@ -124,6 +124,11 @@ Rules on delegating:
 
 ## Final report
 
+Before your final message, stop every background task you started — long
+runs, watchers, `until … sleep` loops — and never leave a wait without a
+time limit: a loop still polling after you hand back keeps your task open,
+and one whose condition can no longer come true polls forever.
+
 Your final message is the return value for the main session. These
 labels, `(none)` where one doesn't apply:
 

@@ -147,3 +147,9 @@ underlying cause is fixed.
   `decisions.md` and the prune step drops only what stopped being true, so
   its compact step is the sole drain and its gauge the only thing measuring
   what those files cost to read.
+- A wait loop with no time limit is a hang waiting to happen: its condition
+  can stop being reachable (a `pgrep -f` pattern matching its own watchers;
+  a log line a restarted run never prints). Give every wait a backstop and
+  stop background loops before handing back — now a rule in fighter and
+  cleric. Seen twice: the hireling's 30+ min hang (2026-08-03) and fighter's
+  three orphaned `until grep` loops on `~/dev/ai` (2026-09-27).
