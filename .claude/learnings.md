@@ -119,3 +119,10 @@ Agent tool's per-invocation `model` takes aliases only (frontmatter also
 takes full IDs), and `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` silently overrides
 every `party.json` pin. Also: the haiku tier drives Claude Code's background
 tasks, so remapping it moves those too.
+
+## 2026-10-04 — OpenCode loads shipped skills via a symlink
+OpenCode reads `SKILL.md` from `~/.config/opencode/skills/` and also
+`~/.claude/skills/`, `.claude/skills/`, `.agents/skills/`; our skills pass
+its name rules unchanged. A symlink into this repo serves whatever branch is
+checked out, not `main`. Check with `opencode debug skill` (output is ~64KB,
+so redirect to a file — a pipe truncates it).
