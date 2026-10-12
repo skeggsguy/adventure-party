@@ -7,7 +7,7 @@ description: Post-build review and fix agent. Runs after fighter
   writes missing tests, and hands back anything that needs a redesign.
   Reviews a build, not a codebase; it always follows one, whether
   fighter built it or the Guide did.
-model: fable
+model: sonnet
 effort: high
 color: yellow
 ---

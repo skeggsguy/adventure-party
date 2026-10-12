@@ -120,7 +120,7 @@ the conversation, hands out the work, and is the only one that talks to you.
 | Agent           | Job                                                                 | Default model | Effort |
 | --------------- | ------------------------------------------------------------------- | ------------- | ------ |
 | `party:fighter` | Builds each step, tests included                                    | `opus`        | high   |
-| `party:cleric`  | Reviews each build against the plan; fixes what keeps the design, hands back the rest | `fable`       | high   |
+| `party:cleric`  | Reviews each build against the plan; fixes what keeps the design, hands back the rest | `sonnet`      | high   |
 | `party:wizard`  | Read-only second opinion for hard bugs and approach calls           | `fable`       | xhigh  |
 
 The full instructions are short — read them in [`agents/`](agents/).
@@ -142,10 +142,10 @@ that branch is your sign-off.
 ### Pinning models
 
 Defaults are in the table above. Pin a different tier per member in
-`.claude/party.json` — for example cheaper, faster, lighter reviews:
+`.claude/party.json` — for example heavier reviews on a hard project:
 
 ```json
-{ "models": { "cleric": "sonnet" } }
+{ "models": { "cleric": "fable" } }
 ```
 
 Values are tier names — `opus`, `sonnet`, `haiku` or `fable` — never model
@@ -153,12 +153,14 @@ names, because Claude Code's agent-spawning tool only accepts tiers. So to
 put one member on another model (a local one, say), point a spare tier at
 that model and pin the member to the tier.
 
-**Use `sonnet` as the spare tier.** No party member uses it by default,
-while `haiku` also runs Claude Code's own background tasks, and `opus` and
-`fable` are already the party's (and often your main session's) models —
-repointing any of those moves more than the one member. For example, with
-`ANTHROPIC_DEFAULT_SONNET_MODEL` set to your model's name, the `cleric`
-pin above puts cleric on it.
+**Use `sonnet` as the spare tier.** Only cleric uses it by default, while
+`haiku` also runs Claude Code's own background tasks, and `opus` and `fable`
+are fighter's and wizard's (and often your main session's) models —
+repointing any of those moves more than the one member. Repointing `sonnet`
+moves cleric with it: with `ANTHROPIC_DEFAULT_SONNET_MODEL` set to your
+model's name, cleric runs on it with no pin at all, and pinning another
+member to `sonnet` adds that member. To keep cleric on Claude meanwhile, pin
+it to another tier.
 
 Pointing a tier at a model, or sending traffic through a gateway or router,
 is Claude Code's own
@@ -231,7 +233,7 @@ file together are a readable record of your own understanding.
 ## Requirements & caveats
 
 - Claude Code with plugin support and subagents; `model:` frontmatter
-  values are Anthropic model tiers (`opus`, `fable`) — pin other tiers in
+  values are Anthropic model tiers (`opus`, `sonnet`, `fable`) — pin other tiers in
   `.claude/party.json` to match what your plan offers (see Pinning
   models); `effort:` has no per-project override.
 - In a project with a browser front end and no browser test tool, the
