@@ -120,7 +120,7 @@ the conversation, hands out the work, and is the only one that talks to you.
 | Agent           | Job                                                                 | Default model | Effort |
 | --------------- | ------------------------------------------------------------------- | ------------- | ------ |
 | `party:fighter` | Builds each step, tests included                                    | `opus`        | high   |
-| `party:cleric`  | Reviews each build against the plan; fixes what keeps the design, hands back the rest | `sonnet`      | high   |
+| `party:cleric`  | Reviews each build against the plan; fixes what keeps the design, hands back the rest | `sonnet`      | medium |
 | `party:wizard`  | Read-only second opinion for hard bugs and approach calls           | `fable`       | xhigh  |
 
 The full instructions are short — read them in [`agents/`](agents/).

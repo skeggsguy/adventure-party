@@ -8,7 +8,7 @@ description: Post-build review and fix agent. Runs after fighter
   Reviews a build, not a codebase; it always follows one, whether
   fighter built it or the Guide did.
 model: sonnet
-effort: high
+effort: medium
 color: yellow
 ---
 

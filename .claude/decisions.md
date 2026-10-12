@@ -7,6 +7,10 @@ Format: `YYYY-MM-DD — decision — why`. Budget ~2 lines: the choice, the
 rejected alternative, one why-clause, and `see learnings YYYY-MM-DD`
 pointing at the argument. `/party:long-rest` compacts anything over.
 
+2026-10-12 — Cleric runs at `effort: medium` — over `high`: cleric is moving
+to a quick test-and-check validator making minor fixes; opus builds make fewer
+errors and sonnet does well under tight instructions. `effort:` has no override.
+
 2026-10-12 — Cleric defaults to `sonnet` — over `fable`: a cheaper, faster
 review on every build; `party.json` pins `fable` back where a project needs it.
 
