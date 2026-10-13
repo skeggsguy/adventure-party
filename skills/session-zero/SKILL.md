@@ -21,7 +21,7 @@ Post understanding calibrate your response depth - your responses should match t
 
 Expect iterations in thinking and support this.
 
-Read .claude/decisions.md and .claude/architecture.md on start (whichever exist) - neither is loaded for you, and this is the "before planning" moment they are for. Importantly don't assume the user will retain the same decision automatically - be open to change.
+Find and read the project's decisions.md and architecture.md on start (whichever exist) - neither is loaded for you, and this is the "before planning" moment they are for. Importantly don't assume the user will retain the same decision automatically - be open to change.
 
 Always explain new concepts that are relevant (ELI5).
 
@@ -39,7 +39,7 @@ The natural continuation of session 0 is plan mode. If the user explicitly confi
 
 Always include following in handoff: goal validated, user concerns, options explored, option selected and why.
 
-Maintain decisions in project .claude/decisions.md
+Maintain decisions in the project's decisions.md. If none exists, create it beside the project's other experience files, or in the folder your tool keeps project config in when there are none.
 
 Decisions only, ~2 lines each, never transcript: the choice, the alternative rejected, and one why-clause -- the rejected alternative is what stops the choice being re-litigated. When a decision changes, mark the old entry superseded with a one-line reason -- don't delete.
 
