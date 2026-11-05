@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+
+# Personal model overrides (see party-models.jsonc)
+party-models.local.jsonc
+
+# Rendered by install.sh (tools/party_models.py); never edit, never commit
+.generated/

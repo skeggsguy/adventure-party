@@ -1,0 +1,68 @@
+// A starter ~/.config/opencode/opencode.jsonc for Adventure Party (OpenCode 2.x).
+//
+// install.sh never touches this file. Copy the parts you want into your own
+// opencode.jsonc. It sets the things party-models.jsonc doesn't: the model a
+// new session starts on (chat, Session Zero), and the helper agents.
+//
+// After editing opencode.jsonc, run `opencode service restart`.
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // The model every new session starts on: chat and Session Zero. /plan and
+  // /party then switch the session to the planner's and Guide's models from
+  // party-models.jsonc. This one is the planner's model, so brainstorming and
+  // planning feel the same.
+  "model": "openrouter/xiaomi/mimo-v2.6-pro",
+
+  "providers": {
+    "openrouter": {
+      "models": {
+        // Anthropic models on OpenRouter don't use prompt caching unless you
+        // add this line (OpenCode adds no cache breakpoints on OpenRouter
+        // routes). Every openrouter/anthropic/* model you use needs it.
+        // DeepSeek, Qwen and MiMo cache without it.
+        "anthropic/claude-haiku-5.5": {
+          "settings": { "cache_control": { "type": "ephemeral" } }
+        }
+      }
+    }
+
+    // Optional: a model on your own machine, served by anything with an
+    // OpenAI-compatible API (llama.cpp's llama-server, LM Studio, Ollama, …).
+    // Uncomment, set baseURL and the model name your server uses, then name it
+    // in party-models.local.jsonc as "local/my-model" (with "effort": "deep"
+    // to use the variant below). Put a comma after the "openrouter" block above.
+    //
+    // "local": {
+    //   "package": "aisdk:@ai-sdk/openai-compatible",
+    //   "name": "Local",
+    //   "settings": { "baseURL": "http://127.0.0.1:8080/v1" },
+    //   "models": {
+    //     "my-model": {
+    //       "name": "My local model",
+    //       "limit": { "context": 200000, "output": 32000 },
+    //       // A model you define only has the variants (effort names) you give it.
+    //       "variants": [
+    //         { "id": "fast", "settings": { "reasoningEffort": "low" } },
+    //         { "id": "deep", "settings": { "reasoningEffort": "xhigh" } }
+    //       ]
+    //     }
+    //   }
+    // }
+  },
+
+  "agents": {
+    // Must be the same as "model" above. The TUI starts a new session on the
+    // default agent's model, ahead of the root "model", so if the two differ
+    // you'll get this one.
+    "build": { "model": "openrouter/xiaomi/mimo-v2.6-pro" },
+
+    // OpenCode's own helpers: read-only recon (explore, general) and
+    // background upkeep (titles, summaries, compaction). A small, cheap model.
+    "explore":    { "model": "openrouter/anthropic/claude-haiku-5.5#low" },
+    "general":    { "model": "openrouter/anthropic/claude-haiku-5.5#low" },
+    "title":      { "model": "openrouter/anthropic/claude-haiku-5.5#low" },
+    "summary":    { "model": "openrouter/anthropic/claude-haiku-5.5#low" },
+    "compaction": { "model": "openrouter/anthropic/claude-haiku-5.5#low" }
+  }
+}

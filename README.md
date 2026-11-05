@@ -17,6 +17,9 @@ This plugin is actively updated from learnings made via a outer harness evaluati
 One step. Installing the plugin gets you the party, session zero, and the
 experience system.
 
+Using OpenCode? See [`opencode/`](opencode/) for the OpenCode edition and its
+own installer.
+
 Within the Claude session, add the marketplace and install the plugin:
 
 ```

@@ -45,6 +45,12 @@ between approaches.
   for reading the `.claude/` experience files live (the files themselves
   are not injected)
 - `skills/` — session-zero, long-rest (distills the learnings inbox)
+- `opencode/` — the OpenCode edition: its own agents, commands, skills,
+  installer and tests (`python3 -m unittest discover opencode/tests`), and
+  its own `opencode/.claude/` experience files. Not part of the Claude Code
+  plugin — nothing at the root loads it — so "this repo" above means the
+  plugin. Working in `opencode/`, apply the same read triggers to
+  `opencode/.claude/` (its `gotchas.md` before your first edit there).
 
 ## Conventions
 

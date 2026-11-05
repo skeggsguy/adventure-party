@@ -1,0 +1,66 @@
+// Adventure Party: which model runs each role, and how hard it thinks.
+//
+// Don't edit this file. It's the shipped default and `git pull` will update it.
+// Make your changes in party-models.local.jsonc instead (git ignores it). List
+// only the roles you want to change; anything you leave out keeps the value here:
+//
+//   { "cleric": { "model": "openrouter/~deepseek/deepseek-pro-latest", "effort": "high" } }
+//
+// Then run ./install.sh (and `opencode service restart`) to apply.
+//
+// ── How a line works ─────────────────────────────────────────────────────────
+//   "model"   provider/model-id, exactly as OpenCode names it, e.g.
+//             "openrouter/qwen/qwen3.8-flash". The `provider/` part is the
+//             provider's name in OpenCode: "openrouter/…" for OpenRouter, or
+//             one you defined in opencode.jsonc (see opencode.example.jsonc).
+//   "effort"  how hard the model thinks. This is the name of one of that MODEL's
+//             variants, and every model has its own set of names. The installer
+//             writes it as `model#effort`; if the model has no variant by that
+//             name, the installer stops and lists the ones it does have.
+//             Leave "effort" out to use the model's own default.
+//
+// Effort choices for some OpenRouter models (OpenCode 2.0.20, checked 2026-11-06):
+//   qwen/qwen3.8-flash               none | high | max
+//                                      No effort levels, just thinking on or off
+//                                      plus a limit on thinking tokens:
+//                                      none = off, high = up to 64k, max = up to 128k
+//   ~deepseek/deepseek-flash-latest  none | low | high | max
+//   ~deepseek/deepseek-pro-latest    none | low | high | max
+//   xiaomi/mimo-v2.6-pro             none | thinking   (only on or off)
+//   anthropic/claude-sonnet-5.5      low | medium | high | xhigh | max
+//   ~google/gemini-flash-latest      low | medium | high
+//   ~moonshotai/kimi-latest          none | low | high | max
+// To list every model's choices, run (with OpenCode running):
+//   opencode api get /api/model     → each model's "variants" list
+// A model you define yourself only has the variants you give it in opencode.jsonc.
+//
+// ── Where the cost is ────────────────────────────────────────────────────────
+// The Guide (/party) and Fighter use by far the most tokens: the Guide is in
+// the loop for the whole run, and the Fighter writes every step. If you have a
+// local model, those two seats save the most. Cleric runs every step but is
+// cheap; Wizard and Planner are rare and want the strongest model you have.
+//
+// This file doesn't set your everyday chat model or the helper agents
+// (explore, title, …). Those live in your own opencode.jsonc ("model" and "agents").
+{
+  // /party: switches the session to this model and runs the plan. Long, mostly
+  // orchestration, so it needs a model that follows rules reliably.
+  "guide":     { "model": "openrouter/qwen/qwen3.8-flash",               "effort": "high" },
+
+  // Builds each plan step: implementation and tests. Most of the run's tokens.
+  "fighter":   { "model": "openrouter/qwen/qwen3.8-flash",               "effort": "high" },
+
+  // Reviews every build. Runs every step, so it's kept on a cheap model.
+  // "~…-latest" tracks the newest DeepSeek Flash automatically.
+  "cleric":    { "model": "openrouter/~deepseek/deepseek-flash-latest",  "effort": "high" },
+
+  // Hard debugging and "which approach?" calls. Rare, so it gets a strong model.
+  // No "effort": MiMo runs at its own default (choices: none | thinking).
+  "wizard":    { "model": "openrouter/xiaomi/mimo-v2.6-pro" },
+
+  // /plan: writes the plan file that /party runs. Model default effort, as above.
+  "planner":   { "model": "openrouter/xiaomi/mimo-v2.6-pro" },
+
+  // /long-rest: turns learnings.md into the project's curated memory.
+  "long-rest": { "model": "openrouter/qwen/qwen3.8-flash",               "effort": "high" }
+}
