@@ -3,9 +3,11 @@
 This is the source repo for **Adventure Party** (`party` plugin) — a
 fantasy-flavored agent-party and experience-system framework for Claude
 Code, aimed at smart, driven users who weren't full-stack devs before
-2024. Everything shipped is markdown (agents, skills, one hook payload)
-plus a one-command `hooks/hooks.json` — no runtime code, no build. The repo
-doubles as its own marketplace (`.claude-plugin/marketplace.json`).
+2024. Everything the plugin ships is markdown (agents, skills, one hook
+payload) plus a one-command `hooks/hooks.json` — no runtime code, no build.
+(The separate OpenCode edition in `opencode/` does carry a user-run
+installer and a Python tool; see Layout.) The repo doubles as its own
+marketplace (`.claude-plugin/marketplace.json`).
 
 Dogfooding this repo loads the shipped instructions through the plugin's
 own SessionStart hook, so the party protocol arrives that way rather than
@@ -68,7 +70,11 @@ between approaches.
   muster rules (`hooks/instructions.md`, README) and the per-file
   experience-read triggers (`hooks/instructions.md`, README,
   `agents/fighter.md`, `agents/cleric.md`, `skills/session-zero/SKILL.md`,
-  and this file's intro).
+  and this file's intro). The OpenCode edition carries its own copies of
+  both: `opencode/AGENTS.fragment.md`, `opencode/skills/party-run/SKILL.md`,
+  `opencode/commands/plan.md`, `opencode/agents/fighter.md` and
+  `opencode/agents/cleric.md` — when a rule changes, decide whether it
+  applies there too.
 - A SessionStart hook entry's stdout is injected verbatim only up to
   **10,000 characters, inclusive, per entry**; at 10,001 the whole thing is
   replaced by an `Output too large … saved to …/tool-results/` marker plus a
@@ -77,11 +83,13 @@ between approaches.
   never `wc -c`** (bytes overstate this repo's prose by ~1%). Measured
   2026-07-30; see `.claude/gotchas.md`.
 - Shipped hook commands stay one line each, with no logic beyond
-  `cd`/`cat`/`exit` — no `.sh` file ships (the 0.7.0 xp.sh lesson: a
-  shipped script that runs on every user's machine is the most
-  bug-prone thing in the repo).
+  `cd`/`cat`/`exit` — no `.sh` file ships in the plugin (the 0.7.0 xp.sh
+  lesson: a shipped script that runs on every user's machine is the most
+  bug-prone thing in the repo). `opencode/install.sh` is the one exception
+  in the repo, and it is no hook: OpenCode users run it themselves, and
+  `opencode/tests` covers it.
 - Naming: no trademarked tabletop terms in anything shipped. Check:
-  `git grep -riE --untracked 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills hooks .claude-plugin LICENSE`
+  `git grep -riE --untracked 'd[&]d|dunge[o]n|\bD[M]\b' -- README.md agents skills hooks .claude-plugin LICENSE opencode ':!opencode/.claude'`
   must return zero hits (pattern is self-escaping; `--untracked` because
   plain `git grep` skips not-yet-added files — exactly the new agents and
   skills a feature adds; the repo's own `.claude/` memory may name the
